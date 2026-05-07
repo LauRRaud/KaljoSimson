@@ -12,6 +12,13 @@ function getRule(selector) {
   return match[1];
 }
 
+function getTopLevelRule(selector) {
+  const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = css.match(new RegExp(`(?:^|\\n)${escapedSelector}\\s*\\{([\\s\\S]*?)\\}`));
+  assert.ok(match, `Missing top-level CSS rule for ${selector}`);
+  return match[1];
+}
+
 function getRules(selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const matches = [...css.matchAll(new RegExp(`${escapedSelector}\\s*\\{([\\s\\S]*?)\\}`, "g"))];
@@ -49,6 +56,18 @@ test("artist carousel cards center short metadata while keeping bio left aligned
   assert.match(metaRule, /align-items:\s*center;/);
   assert.match(bioRule, /text-align:\s*left;/);
   assert.match(pillRowRule, /justify-content:\s*center;/);
+});
+
+test("artist carousel and platform copy use expanded letter spacing", () => {
+  const carouselHeadingRule = getRule(".artist-card--carousel h3");
+  const bodyRule = getTopLevelRule("body");
+  const paragraphRule = getTopLevelRule("p");
+
+  assert.match(bodyRule, /letter-spacing:\s*var\(--tracking-body\);/);
+  assert.match(paragraphRule, /letter-spacing:\s*var\(--tracking-copy\);/);
+  assert.match(carouselHeadingRule, /letter-spacing:\s*var\(--tracking-display\);/);
+  assert.match(css, /h1,\s*h2,\s*h3,\s*h4\s*\{[\s\S]*?letter-spacing:\s*var\(--tracking-heading\);/);
+  assert.doesNotMatch(css, /letter-spacing:\s*-/);
 });
 
 test("artist carousel hides only location metadata on homepage artist cards", () => {

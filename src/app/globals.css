@@ -26,14 +26,19 @@
   --content-width: min(1180px, calc(100vw - 40px));
   --font-heading: "Cormorant Garamond", serif;
   --font-body: "Manrope", sans-serif;
+  --tracking-body: 0.014em;
+  --tracking-copy: 0.018em;
+  --tracking-heading: 0.012em;
+  --tracking-display: 0.016em;
+  --tracking-label: 0.12em;
 }
 
 html[data-theme="dark"] {
-  --bg: #0b0b0e;
-  --bg-soft: #151519;
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.08);
-  --surface-muted: rgba(255, 255, 255, 0.02);
+  --bg: #181511;
+  --bg-soft: #231f1a;
+  --surface: rgba(255, 250, 242, 0.055);
+  --surface-strong: rgba(255, 250, 242, 0.095);
+  --surface-muted: rgba(255, 250, 242, 0.028);
   --border: rgba(246, 235, 217, 0.14);
   --border-strong: rgba(246, 235, 217, 0.24);
   --text: #f5efe5;
@@ -70,7 +75,9 @@ body {
   -ms-overflow-style: none;
   color: var(--text);
   font-family: var(--font-body);
-  letter-spacing: 0.012em;
+  font-kerning: normal;
+  letter-spacing: var(--tracking-body);
+  text-rendering: optimizeLegibility;
   background:
     radial-gradient(circle at top left, rgba(205, 170, 122, 0.22), transparent 28%),
     radial-gradient(circle at 82% 12%, rgba(141, 101, 61, 0.14), transparent 22%),
@@ -152,13 +159,13 @@ img {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 2.8rem);
   line-height: 0.9;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-display);
 }
 
 .brand-lockup__domain {
   color: var(--text-faint);
   font-size: 0.9rem;
-  letter-spacing: 0.2em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -182,7 +189,7 @@ img {
 .site-nav a {
   color: var(--text-soft);
   font-size: 0.94rem;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--tracking-body);
   transition: color 180ms ease, opacity 180ms ease;
 }
 
@@ -269,7 +276,7 @@ img {
   cursor: pointer;
   font: inherit;
   font-size: 1rem;
-  letter-spacing: 0;
+  letter-spacing: var(--tracking-body);
   line-height: 1;
   opacity: 0.76;
   transition: opacity 180ms ease, color 180ms ease;
@@ -358,7 +365,7 @@ img {
   color: var(--text);
   font-size: clamp(4.45rem, 12.7vw, 9.15rem);
   line-height: 0.84;
-  letter-spacing: 0;
+  letter-spacing: var(--tracking-display);
   text-shadow: 0 18px 48px rgba(75, 52, 28, 0.1);
   isolation: isolate;
 }
@@ -518,7 +525,7 @@ img {
   margin: 0;
   color: var(--gold);
   font-size: 0.8rem;
-  letter-spacing: 0.28em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -529,7 +536,7 @@ h4 {
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--tracking-heading);
 }
 
 h1 {
@@ -550,7 +557,7 @@ h3 {
 
 p {
   margin: 0;
-  letter-spacing: 0.018em;
+  letter-spacing: var(--tracking-copy);
 }
 
 .hero-panel__lede,
@@ -668,7 +675,7 @@ p {
 .detail-metric span {
   color: var(--text-faint);
   font-size: 0.82rem;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -679,7 +686,7 @@ p {
   font-family: var(--font-heading);
   font-size: clamp(1.45rem, 2.3vw, 1.9rem);
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-heading);
 }
 
 .metric-card p,
@@ -748,7 +755,7 @@ p {
 .section-title--feature {
   font-size: clamp(3rem, 6vw, 5rem);
   line-height: 0.94;
-  letter-spacing: -0.05em;
+  letter-spacing: var(--tracking-display);
 }
 
 .note-grid,
@@ -1166,17 +1173,16 @@ p {
 
 .artist-card--carousel {
   padding: 18px 18px 22px;
+  border: none;
   border-radius: 30px;
   isolation: isolate;
   text-align: center;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 250, 242, 0.76) 58%, rgba(240, 229, 213, 0.86)) padding-box,
-    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(141, 101, 61, 0.28) 35%, rgba(63, 128, 123, 0.2) 72%, rgba(255, 255, 255, 0.9) 100%) border-box;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.86) 58%, rgba(245, 238, 226, 0.9));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(63, 128, 123, 0.1),
     0 10px 18px rgba(75, 52, 28, 0.12),
-    0 24px 54px rgba(75, 52, 28, 0.16);
+    0 24px 48px rgba(75, 52, 28, 0.14);
 }
 
 .artist-card--carousel::before,
@@ -1189,11 +1195,11 @@ p {
 .artist-card--carousel::before {
   inset: 10px;
   z-index: -1;
-  border: 1px solid rgba(112, 76, 38, 0.12);
+  border: none;
   border-radius: 23px;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.74), transparent) 50% 0 / 62% 1px no-repeat,
-    linear-gradient(180deg, rgba(141, 101, 61, 0.08), transparent 34%, rgba(63, 128, 123, 0.07));
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.56), transparent) 50% 0 / 62% 1px no-repeat,
+    linear-gradient(180deg, rgba(141, 101, 61, 0.045), transparent 38%, rgba(141, 101, 61, 0.035));
 }
 
 .artist-card--carousel::after {
@@ -1201,16 +1207,15 @@ p {
   z-index: -2;
   background:
     linear-gradient(132deg, transparent 0 38%, rgba(255, 255, 255, 0.42) 48%, transparent 58% 100%),
-    linear-gradient(180deg, rgba(141, 101, 61, 0.05), rgba(63, 128, 123, 0.04));
-  opacity: 0.74;
+    linear-gradient(180deg, rgba(141, 101, 61, 0.035), rgba(141, 101, 61, 0.025));
+  opacity: 0.58;
 }
 
 .artist-card--carousel:hover {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(63, 128, 123, 0.1),
     0 12px 22px rgba(75, 52, 28, 0.13),
-    0 30px 64px rgba(75, 52, 28, 0.18);
+    0 28px 58px rgba(75, 52, 28, 0.16);
 }
 
 .artist-card__meta {
@@ -1243,14 +1248,14 @@ p {
   color: rgba(112, 76, 38, 0.82);
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
 .artist-card--carousel h3 {
   font-size: clamp(2.15rem, 3.4vw, 3rem);
   line-height: 0.9;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--tracking-display);
 }
 
 .artist-card--carousel .artist-card__role {
@@ -1334,19 +1339,15 @@ p {
 
 .artist-card--carousel .portrait-shell {
   aspect-ratio: 5 / 4;
-  border: 1px solid rgba(45, 37, 29, 0.1);
+  border: none;
   border-radius: 22px;
-  background: rgba(255, 250, 242, 0.92);
+  background: rgba(255, 252, 246, 0.68);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.78),
-    0 14px 28px rgba(75, 52, 28, 0.12);
+    0 12px 24px rgba(75, 52, 28, 0.1);
 }
 
 .artist-card--carousel .portrait-shell::after {
-  display: block;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 32%, rgba(24, 21, 18, 0.12)),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 22%, transparent 78%, rgba(24, 21, 18, 0.1));
+  display: none;
 }
 
 .portrait-shell__image,
@@ -1518,7 +1519,7 @@ p {
 .site-footer__year {
   color: var(--text-faint);
   font-size: 0.9rem;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-label);
   margin-top: 18px;
   text-transform: uppercase;
 }
@@ -1548,14 +1549,19 @@ p {
   height: auto;
   min-height: unset;
   aspect-ratio: 1.2 / 1;
+  border-radius: 24px;
   background:
-    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.12), transparent 46%),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.32), rgba(255, 252, 246, 0.08)),
     var(--portrait-bg, linear-gradient(180deg, #31271f, #161315));
 }
 
 .profile-hero > .portrait-shell .portrait-shell__image {
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
+}
+
+.profile-hero > .portrait-shell--image::after {
+  display: none;
 }
 
 .profile-copy,
@@ -1850,9 +1856,9 @@ p {
 }
 
 .lightbox__close {
-  position: fixed;
-  top: clamp(18px, 3vw, 34px);
-  right: clamp(18px, 3vw, 34px);
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 2;
   display: inline-flex;
   align-items: center;
@@ -1960,7 +1966,7 @@ p {
 .admin-login__label {
   color: var(--text-faint);
   font-size: 0.92rem;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -2146,7 +2152,7 @@ p {
 .localized-field__locale {
   color: var(--gold);
   font-size: 0.78rem;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
@@ -2223,7 +2229,7 @@ p {
   font-family: var(--font-heading);
   font-size: 1.5rem;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-heading);
 }
 
 .admin-card-body {
@@ -2349,9 +2355,10 @@ p {
 
 html[data-theme="dark"] body {
   background:
-    radial-gradient(circle at top left, rgba(209, 182, 146, 0.16), transparent 28%),
-    radial-gradient(circle at 82% 12%, rgba(126, 98, 74, 0.18), transparent 22%),
-    linear-gradient(180deg, #0c0c10 0%, #070708 100%);
+    radial-gradient(circle at top left, rgba(209, 182, 146, 0.22), transparent 30%),
+    radial-gradient(circle at 82% 12%, rgba(82, 164, 158, 0.12), transparent 24%),
+    radial-gradient(circle at 48% 54%, rgba(126, 98, 74, 0.12), transparent 34%),
+    linear-gradient(180deg, #1b1713 0%, #171411 54%, #131416 100%);
 }
 
 html[data-theme="dark"] body::before {
@@ -2390,8 +2397,8 @@ html[data-theme="dark"] .section,
 html[data-theme="dark"] .admin-shell,
 html[data-theme="dark"] .admin-login {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
-    rgba(8, 8, 11, 0.6);
+    linear-gradient(180deg, rgba(255, 250, 242, 0.06), rgba(255, 250, 242, 0.02)),
+    rgba(31, 27, 23, 0.56);
 }
 
 html[data-theme="dark"] .hero-panel::after,
@@ -2489,35 +2496,31 @@ html[data-theme="dark"] .artist-card {
 
 html[data-theme="dark"] .artist-card--carousel {
   background:
-    linear-gradient(180deg, rgba(25, 25, 29, 0.96), rgba(10, 10, 13, 0.92) 58%, rgba(13, 14, 15, 0.96)) padding-box,
-    linear-gradient(145deg, rgba(246, 235, 217, 0.28) 0%, rgba(209, 182, 146, 0.22) 34%, rgba(82, 164, 158, 0.24) 74%, rgba(246, 235, 217, 0.14) 100%) border-box;
+    linear-gradient(180deg, rgba(33, 29, 25, 0.96), rgba(22, 19, 17, 0.92) 58%, rgba(18, 18, 19, 0.96));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.075),
-    inset 0 -1px 0 rgba(82, 164, 158, 0.1),
     0 10px 18px rgba(0, 0, 0, 0.28),
-    0 30px 84px rgba(0, 0, 0, 0.32);
+    0 30px 76px rgba(0, 0, 0, 0.3);
 }
 
 html[data-theme="dark"] .artist-card--carousel::before {
-  border-color: rgba(246, 235, 217, 0.1);
   background:
-    linear-gradient(90deg, transparent, rgba(246, 235, 217, 0.18), transparent) 50% 0 / 62% 1px no-repeat,
-    linear-gradient(180deg, rgba(209, 182, 146, 0.055), transparent 36%, rgba(82, 164, 158, 0.055));
+    linear-gradient(90deg, transparent, rgba(246, 235, 217, 0.12), transparent) 50% 0 / 62% 1px no-repeat,
+    linear-gradient(180deg, rgba(209, 182, 146, 0.04), transparent 40%, rgba(209, 182, 146, 0.03));
 }
 
 html[data-theme="dark"] .artist-card--carousel::after {
   background:
     linear-gradient(132deg, transparent 0 40%, rgba(246, 235, 217, 0.08) 49%, transparent 58% 100%),
-    linear-gradient(180deg, rgba(209, 182, 146, 0.035), rgba(82, 164, 158, 0.035));
-  opacity: 1;
+    linear-gradient(180deg, rgba(209, 182, 146, 0.028), rgba(209, 182, 146, 0.024));
+  opacity: 0.72;
 }
 
 html[data-theme="dark"] .artist-card--carousel:hover {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.075),
-    inset 0 -1px 0 rgba(82, 164, 158, 0.1),
     0 10px 18px rgba(0, 0, 0, 0.28),
-    0 34px 90px rgba(0, 0, 0, 0.36);
+    0 32px 84px rgba(0, 0, 0, 0.34);
 }
 
 html[data-theme="dark"] .artist-card__location {
@@ -2533,17 +2536,13 @@ html[data-theme="dark"] .artist-card--carousel .artist-card__bio {
 }
 
 html[data-theme="dark"] .artist-card--carousel .portrait-shell {
-  border-color: rgba(246, 235, 217, 0.11);
-  background: rgba(8, 8, 11, 0.8);
+  background: rgba(18, 18, 20, 0.7);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.055),
-    0 18px 32px rgba(0, 0, 0, 0.34);
+    0 18px 32px rgba(0, 0, 0, 0.3);
 }
 
 html[data-theme="dark"] .artist-card--carousel .portrait-shell::after {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 32%, rgba(0, 0, 0, 0.18)),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035), transparent 22%, transparent 78%, rgba(0, 0, 0, 0.16));
+  display: none;
 }
 
 html[data-theme="dark"] .pill {
@@ -2560,6 +2559,15 @@ html[data-theme="dark"] .artist-card--carousel .pill {
 html[data-theme="dark"] .section--contact {
   background: transparent;
   box-shadow: none;
+}
+
+html[data-theme="dark"] .section--contact::after {
+  background:
+    linear-gradient(90deg, transparent, var(--frame-light) 20%, transparent 70%) 6% 16% / 22% 1px no-repeat,
+    linear-gradient(180deg, transparent, var(--frame-light) 20%, transparent 70%) 92% 20% / 1px 22% no-repeat,
+    linear-gradient(270deg, transparent, var(--frame-light) 20%, transparent 72%) 68% 82% / 24% 1px no-repeat,
+    linear-gradient(0deg, transparent, var(--frame-light) 20%, transparent 72%) 12% 58% / 1px 22% no-repeat;
+  opacity: 0.58;
 }
 
 html[data-theme="dark"] .contact-inline__line {

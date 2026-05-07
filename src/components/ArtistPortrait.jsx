@@ -37,7 +37,10 @@ export default function ArtistPortrait({ artist, priority = false }) {
 
   if (artist.portraitImage) {
     return (
-      <div className="portrait-shell" style={{ "--portrait-bg": preset.background }}>
+      <div
+        className="portrait-shell portrait-shell--image"
+        style={{ "--portrait-bg": preset.background }}
+      >
         <Image
           alt={artist.name}
           className="portrait-shell__image"
@@ -52,7 +55,10 @@ export default function ArtistPortrait({ artist, priority = false }) {
   }
 
   return (
-    <div className="portrait-shell" style={{ "--portrait-bg": preset.background }}>
+    <div
+      className="portrait-shell portrait-shell--generated"
+      style={{ "--portrait-bg": preset.background }}
+    >
       <svg
         aria-label={`${artist.name} portree`}
         className="portrait-shell__art"

@@ -12,7 +12,7 @@ function getSessionSecret() {
 }
 
 export function getAdminPassword() {
-  return process.env.BEYONDFRAMES_ADMIN_PASSWORD || "beyondframes-admin";
+  return process.env.ADMIN_PASSWORD || "beyondframes-admin";
 }
 
 function buildCookieValue() {
