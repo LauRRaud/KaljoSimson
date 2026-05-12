@@ -63,6 +63,10 @@ function normalizeArtist(artist, index) {
       ? artist.portraitPresetId
       : base.portraitPresetId,
     portraitImage: stringOrFallback(artist?.portraitImage),
+    portraitPosition: stringOrFallback(
+      artist?.portraitPosition,
+      base.portraitPosition || "center center",
+    ),
     role: normalizeText(artist?.role, base.role),
     shortBio: normalizeText(artist?.shortBio, base.shortBio),
     biography: normalizeText(artist?.biography, base.biography),

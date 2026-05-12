@@ -68,6 +68,7 @@ export function createEmptyArtist(index = 0) {
     practiceSince: "2026",
     portraitPresetId: portraitPreset.id,
     portraitImage: "",
+    portraitPosition: "center center",
     role: createEmptyLocalizedText(
       "Kaasaegne maalikunstnik",
       "Contemporary painter",

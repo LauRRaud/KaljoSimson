@@ -25,11 +25,6 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
       return;
     }
 
-    if (artists.length < 3) {
-      setCurrentIndex((current) => wrapIndex(current + direction, artists.length));
-      return;
-    }
-
     const nextDirection = direction > 0 ? 1 : -1;
     setAnimationDirection(nextDirection);
     setCurrentIndex((current) => wrapIndex(current + nextDirection, artists.length));
@@ -41,7 +36,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
     animationTimeoutRef.current = window.setTimeout(() => {
       setAnimationDirection(0);
       animationTimeoutRef.current = null;
-    }, 360);
+    }, 260);
   }
 
   function handlePointerDown(event) {
@@ -88,12 +83,12 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
   function handleKeyDown(event) {
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      move(-1);
+      move(1);
     }
 
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      move(1);
+      move(-1);
     }
   }
 
@@ -166,7 +161,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             className="artist-stage__arrow artist-stage__arrow--left"
             onClick={(event) => {
               event.stopPropagation();
-              move(-1);
+              move(1);
             }}
             onPointerDown={(event) => event.stopPropagation()}
             type="button"
@@ -218,7 +213,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             className="artist-stage__arrow artist-stage__arrow--right"
             onClick={(event) => {
               event.stopPropagation();
-              move(1);
+              move(-1);
             }}
             onPointerDown={(event) => event.stopPropagation()}
             type="button"

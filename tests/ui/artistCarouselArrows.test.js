@@ -48,12 +48,15 @@ test("artist carousel arrows stay near the screen edge with a soft hover treatme
 
 test("artist carousel cards center short metadata while keeping bio left aligned", () => {
   const cardRule = getRules(".artist-card--carousel");
+  const buttonCardRule = getRules(".artist-card:is(button).artist-card--carousel");
   const metaRule = getRules(".artist-card--carousel .artist-card__meta");
   const bioRule = getRules(".artist-card--carousel .artist-card__bio");
   const pillRowRule = getRules(".artist-card--carousel .pill-row");
 
   assert.match(cardRule, /text-align:\s*center;/);
+  assert.match(buttonCardRule, /text-align:\s*center;/);
   assert.match(metaRule, /align-items:\s*center;/);
+  assert.match(metaRule, /text-align:\s*center;/);
   assert.match(bioRule, /text-align:\s*left;/);
   assert.match(pillRowRule, /justify-content:\s*center;/);
 });
@@ -77,7 +80,7 @@ test("artist carousel portraits and titles use a calmer profile-style crop", () 
   const headingRule = getRule(".artist-card--carousel h3");
 
   assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
-  assert.match(portraitImageRule, /object-position:\s*center\s+center;/);
+  assert.match(portraitImageRule, /object-position:\s*var\(--portrait-position,\s*center\s+center\);/);
   assert.match(headingRule, /max-width:\s*9\.5ch;/);
   assert.match(headingRule, /font-size:\s*clamp\(1\.9rem,\s*2\.7vw,\s*2\.6rem\);/);
 });
@@ -88,4 +91,19 @@ test("artist carousel hides only location metadata on homepage artist cards", ()
 
 test("artist carousel arrow buttons do not render duplicate chevron glyphs", () => {
   assert.doesNotMatch(carousel, /&#8249;|&#8250;/);
+});
+
+test("artist carousel mobile arrows sit higher and farther apart", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow\s*\{[\s\S]*?bottom:\s*44px;[\s\S]*?width:\s*58px;[\s\S]*?height:\s*58px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*calc\(50% - 118px\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*calc\(50% - 118px\);/,
+  );
 });

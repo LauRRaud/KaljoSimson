@@ -6,6 +6,24 @@ import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
 import { getLocaleFromSearchParams } from "@/lib/locale";
 
+function renderContactCopy(copy) {
+  const noBreakTerm = "e-posti";
+
+  if (!copy.includes(noBreakTerm)) {
+    return copy;
+  }
+
+  const [before, ...after] = copy.split(noBreakTerm);
+
+  return (
+    <>
+      {before}
+      <span className="text-nowrap">{noBreakTerm}</span>
+      {after.join(noBreakTerm)}
+    </>
+  );
+}
+
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
@@ -21,6 +39,7 @@ export default async function HomePage({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
   const content = await getSiteContent();
+  const contactText = getCopy(content.site.contactText, locale);
 
   return (
     <PageShell
@@ -50,7 +69,7 @@ export default async function HomePage({ searchParams }) {
         <div className="section-heading">
           <h2>{getCopy(content.site.contactTitle, locale)}</h2>
           <p className="section-copy">
-            {getCopy(content.site.contactText, locale)}
+            {renderContactCopy(contactText)}
           </p>
           <div className="contact-inline">
             <a className="contact-inline__line" href={`mailto:${content.contact.email}`}>

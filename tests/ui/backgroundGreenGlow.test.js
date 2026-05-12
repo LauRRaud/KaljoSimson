@@ -22,3 +22,25 @@ test("shared page backgrounds do not include green light glows", () => {
   assert.doesNotMatch(darkHomeGlowRule, /rgba\(82,\s*164,\s*158,\s*0\.16\)/);
   assert.doesNotMatch(pageLineWaves, /#10b981/i);
 });
+
+test("glass panels do not add their own radial light spot", () => {
+  assert.match(
+    css,
+    /\.hero-panel::after,\s*\.section::after,\s*\.admin-shell::after,\s*\.admin-login::after\s*\{[\s\S]*?content:\s*none;/,
+  );
+});
+
+test("artist profile gallery panel blocks background line glow", () => {
+  assert.match(
+    css,
+    /\.profile-hero \+ \.section\s*\{[\s\S]*?--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);[\s\S]*?background:\s*var\(--glass-panel-bg\);/,
+  );
+  assert.match(
+    css,
+    /\.profile-hero::before,\s*\.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*rgba\(255,\s*252,\s*246,\s*0\.16\);[\s\S]*?backdrop-filter:\s*blur\(22px\);/,
+  );
+  assert.match(
+    css,
+    /html\[data-theme="dark"\] \.profile-hero::before,\s*html\[data-theme="dark"\] \.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*rgba\(18,\s*18,\s*20,\s*0\.16\);/,
+  );
+});

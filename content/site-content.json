@@ -224,6 +224,7 @@
       "practiceSince": "1880",
       "portraitPresetId": "ember",
       "portraitImage": "/Profiilid/Van%20Gogh/van-gogh-portrait.jpg",
+      "portraitPosition": "center 24%",
       "role": {
         "et": "Maalikunstnik",
         "en": "Painter"

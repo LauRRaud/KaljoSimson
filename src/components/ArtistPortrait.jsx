@@ -39,7 +39,10 @@ export default function ArtistPortrait({ artist, priority = false }) {
     return (
       <div
         className="portrait-shell portrait-shell--image"
-        style={{ "--portrait-bg": preset.background }}
+        style={{
+          "--portrait-bg": preset.background,
+          "--portrait-position": artist.portraitPosition || "center center",
+        }}
       >
         <Image
           alt={artist.name}

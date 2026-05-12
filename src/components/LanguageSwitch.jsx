@@ -26,7 +26,7 @@ export default function LanguageSwitch({ locale }) {
       <Link
         className="language-switch__item"
         href={getHref(nextLocale)}
-        title={switchText}
+        aria-label={switchText}
       >
         <span
           className={`language-switch__flag language-switch__flag--${locale}`}
