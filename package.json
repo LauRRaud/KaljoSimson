@@ -5,7 +5,8 @@
   "scripts": {
     "prisma:generate": "prisma generate",
     "predev": "npm run prisma:generate",
-    "dev": "next dev",
+    "dev": "next dev --webpack",
+    "dev:turbo": "next dev --turbopack",
     "prebuild": "npm run prisma:generate",
     "build": "next build",
     "postinstall": "npm run prisma:generate",

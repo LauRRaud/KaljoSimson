@@ -1,5 +1,4 @@
 import HomeArtistCarousel from "@/components/HomeArtistCarousel";
-import HomeHeroEffects from "@/components/HomeHeroEffects";
 import HomeScrollCue from "@/components/HomeScrollCue";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
@@ -49,7 +48,6 @@ export default async function HomePage({ searchParams }) {
       showHeader
     >
       <section className="home-title">
-        <HomeHeroEffects />
         <div className="home-title__inner">
           <h1 className="home-title__brand">{content.site.title}</h1>
           <div className="home-title__story">

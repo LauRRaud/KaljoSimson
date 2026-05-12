@@ -3186,12 +3186,12 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .artist-stage__arrow--left {
-    left: calc(50% - 118px);
+    left: calc(50% - 136px);
     transform: none;
   }
 
   .artist-stage__arrow--right {
-    right: calc(50% - 118px);
+    right: calc(50% - 136px);
     transform: none;
   }
 
@@ -3297,8 +3297,12 @@ html[data-theme="dark"] .admin-divider {
   .page-line-waves {
     inset: -6vh -32vw auto;
     height: 120vh;
-    opacity: 0.28;
+    opacity: 0.22;
     filter: blur(0.5px);
+  }
+
+  html[data-theme="dark"] .page-line-waves {
+    opacity: 0.26;
   }
 
   .home-scroll-cue {
@@ -3365,6 +3369,20 @@ html[data-theme="dark"] .admin-divider {
     font-size: 1.08rem;
     line-height: 1.82;
     text-align: center;
+  }
+
+  .section--artists {
+    width: calc(100% + 36px);
+    margin-inline: -18px;
+  }
+
+  .artist-card--carousel {
+    padding: 12px 12px 18px;
+    border-radius: 26px;
+  }
+
+  .artist-card--carousel .portrait-shell {
+    border-radius: 20px;
   }
 
   .button,

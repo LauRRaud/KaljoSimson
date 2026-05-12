@@ -100,10 +100,10 @@ test("artist carousel mobile arrows sit higher and farther apart", () => {
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*calc\(50% - 118px\);/,
+    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*calc\(50% - 136px\);/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*calc\(50% - 118px\);/,
+    /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*calc\(50% - 136px\);/,
   );
 });
