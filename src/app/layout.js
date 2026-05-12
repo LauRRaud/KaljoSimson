@@ -21,6 +21,16 @@ export const metadata = {
   },
   description:
     "A minimalist and refined web gallery for presenting contemporary painters and their works.",
+  icons: {
+    icon: [
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
