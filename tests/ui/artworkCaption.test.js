@@ -27,3 +27,19 @@ test("artwork captions show title, year, and size in one centered row", () => {
   assert.match(artworkFrame, /<span>\{artwork\.year\}<\/span>/);
   assert.match(artworkFrame, /<span>\{artwork\.size\}<\/span>/);
 });
+
+test("artwork frame variants swap between light and dark themes", () => {
+  const obsidianRule = getRule(".artwork-frame__window--obsidian");
+  const ivoryRule = getRule(".artwork-frame__window--ivory");
+  const darkObsidianRule = getRule("html[data-theme=\"dark\"] .artwork-frame__window--obsidian");
+
+  assert.match(obsidianRule, /#17181d/);
+  assert.match(ivoryRule, /#f6f1e7/);
+  assert.doesNotMatch(ivoryRule, /#c9a979|#d7b98d/);
+  assert.match(darkObsidianRule, /#f6f1e7/);
+  assert.doesNotMatch(darkObsidianRule, /#c9a979|#d7b98d/);
+  assert.match(
+    css,
+    /html\[data-theme="dark"\]\s+\.artwork-frame__window--ivory\s*\{[\s\S]*?#0d0d10/,
+  );
+});

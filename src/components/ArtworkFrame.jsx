@@ -1,4 +1,5 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
+
 import { getCopy } from "@/lib/content-helpers";
 import { getArtworkPreset } from "@/lib/visuals";
 
@@ -42,11 +43,9 @@ export default function ArtworkFrame({
               }
             >
               {artwork.image ? (
-                <Image
-                  alt={getCopy(artwork.title, locale)}
+                <img
+                  alt={artwork.altText || getCopy(artwork.title, locale)}
                   className="artwork-frame__image"
-                  fill
-                  sizes="(max-width: 1100px) 100vw, 50vw"
                   src={artwork.image}
                 />
               ) : null}

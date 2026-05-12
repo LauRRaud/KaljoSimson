@@ -4,8 +4,28 @@ import ArtistPortrait from "@/components/ArtistPortrait";
 import GalleryClient from "@/components/GalleryClient";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
+import { artworkToGalleryItem, getPublishedArtworks } from "@/lib/artworks";
 import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
 import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
+
+async function getProfileGalleryArtworks(artist) {
+  if (!process.env.DATABASE_URL) {
+    return artist.artworks;
+  }
+
+  try {
+    const artworks = await getPublishedArtworks();
+    return artworks.map(artworkToGalleryItem);
+  } catch (error) {
+    if (process.env.NODE_ENV === "production") {
+      throw error;
+    }
+
+    return artist.artworks;
+  }
+}
 
 export async function generateMetadata({ params, searchParams }) {
   const { slug } = await params;
@@ -37,6 +57,7 @@ export default async function ArtistPage({ params, searchParams }) {
     notFound();
   }
 
+  const artworks = await getProfileGalleryArtworks(artist);
   const biographyParagraphs = getCopy(artist.biography, locale)
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
@@ -58,28 +79,30 @@ export default async function ArtistPage({ params, searchParams }) {
           <p className="profile-copy__lead">{getCopy(artist.role, locale)}</p>
           <p className="section-copy">{getCopy(artist.shortBio, locale)}</p>
 
-          <div className="profile-biography">
-            <p className="eyebrow">{locale === "en" ? "Biography" : "Biograafia"}</p>
-            {biographyParagraphs.map((paragraph) => (
-              <p className="section-copy" key={paragraph}>
-                {paragraph}
-              </p>
-            ))}
-          </div>
+          <div className="profile-tags-actions">
+            <div className="pill-row">
+              {artist.focus.map((focus) => (
+                <span className="pill" key={focus}>
+                  {focus}
+                </span>
+              ))}
+            </div>
 
-          <div className="pill-row">
-            {artist.focus.map((focus) => (
-              <span className="pill" key={focus}>
-                {focus}
-              </span>
-            ))}
+            <div className="profile-actions">
+              <a className="button button--ghost" href={`mailto:${content.contact.email}`}>
+                {locale === "en" ? "Ask about works" : "Küsi teoste kohta"}
+              </a>
+            </div>
           </div>
+        </div>
 
-          <div className="profile-actions">
-            <a className="button button--ghost" href={`mailto:${content.contact.email}`}>
-              {locale === "en" ? "Ask about works" : "Küsi teoste kohta"}
-            </a>
-          </div>
+        <div className="profile-biography">
+          <p className="eyebrow">{locale === "en" ? "Biography" : "Biograafia"}</p>
+          {biographyParagraphs.map((paragraph) => (
+            <p className="section-copy" key={paragraph}>
+              {paragraph}
+            </p>
+          ))}
         </div>
       </section>
 
@@ -88,7 +111,13 @@ export default async function ArtistPage({ params, searchParams }) {
           <h2>{locale === "en" ? "Gallery" : "Galerii"}</h2>
         </div>
 
-        <GalleryClient artist={artist} locale={locale} />
+        <GalleryClient
+          artist={{
+            ...artist,
+            artworks,
+          }}
+          locale={locale}
+        />
       </section>
     </PageShell>
   );

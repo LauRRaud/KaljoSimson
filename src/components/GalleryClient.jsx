@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
@@ -100,29 +101,30 @@ export default function GalleryClient({ artist, locale = "et" }) {
             className="lightbox__sheet"
             onClick={(event) => event.stopPropagation()}
           >
-            <button
-              aria-label={locale === "en" ? "Close artwork view" : "Sulge teose vaade"}
-              className="lightbox__close"
-              onClick={() => setActiveIndex(null)}
-              type="button"
-            >
-              x
-            </button>
-
             <div className="lightbox__grid">
               <figure className="lightbox__figure">
                 <div className="lightbox__image-window">
                   {activeArtwork.image ? (
-                    <Image
-                      alt={getCopy(activeArtwork.title, locale)}
-                      className="lightbox__image"
-                      fill
-                      sizes="(max-width: 900px) 94vw, 70vw"
-                      src={activeArtwork.image}
-                      style={{ objectFit: "contain" }}
-                    />
+                    <div
+                      className={`lightbox__artwork-frame ${
+                        activeArtwork.frame === "ivory"
+                          ? "lightbox__artwork-frame--ivory"
+                          : "lightbox__artwork-frame--obsidian"
+                      }`}
+                    >
+                      <div className="lightbox__artwork-mount">
+                        <img
+                          alt={
+                            activeArtwork.altText ||
+                            getCopy(activeArtwork.title, locale)
+                          }
+                          className="lightbox__artwork-image"
+                          src={activeArtwork.image}
+                        />
+                      </div>
+                    </div>
                   ) : (
-                    <div className="lightbox__fallback">
+                    <div className="lightbox__artwork-frame lightbox__artwork-frame--fallback">
                       <ArtworkFrame
                         artwork={activeArtwork}
                         locale={locale}
@@ -134,6 +136,15 @@ export default function GalleryClient({ artist, locale = "et" }) {
               </figure>
 
               <aside className="lightbox__aside">
+                <button
+                  aria-label={locale === "en" ? "Close artwork view" : "Sulge teose vaade"}
+                  className="lightbox__close"
+                  onClick={() => setActiveIndex(null)}
+                  type="button"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+
                 <div className="lightbox__caption">
                   <p className="eyebrow">{artist.name}</p>
                   <h2>{getCopy(activeArtwork.title, locale)}</h2>
@@ -142,15 +153,26 @@ export default function GalleryClient({ artist, locale = "et" }) {
                   </p>
                 </div>
 
-                <p className="lightbox__details">
-                  {[
-                    activeArtwork.year,
-                    getCopy(activeArtwork.medium, locale),
-                    activeArtwork.size,
-                  ]
-                    .filter(Boolean)
-                    .join(" / ")}
-                </p>
+                <dl className="lightbox__details">
+                  {activeArtwork.year ? (
+                    <div>
+                      <dt>{locale === "en" ? "Year" : "Aasta"}</dt>
+                      <dd>{activeArtwork.year}</dd>
+                    </div>
+                  ) : null}
+                  {getCopy(activeArtwork.medium, locale) ? (
+                    <div>
+                      <dt>{locale === "en" ? "Medium" : "Tehnika"}</dt>
+                      <dd>{getCopy(activeArtwork.medium, locale)}</dd>
+                    </div>
+                  ) : null}
+                  {activeArtwork.size ? (
+                    <div>
+                      <dt>{locale === "en" ? "Size" : "Mõõdud"}</dt>
+                      <dd>{activeArtwork.size}</dd>
+                    </div>
+                  ) : null}
+                </dl>
 
                 <div className="lightbox__actions">
                   <button

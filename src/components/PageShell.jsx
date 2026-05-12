@@ -1,18 +1,21 @@
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import SplashCursorEffect from "@/components/SplashCursorEffect";
+import PageLineWaves from "@/components/PageLineWaves";
+import SplashCursor from "@/components/SplashCursor";
 
 export default function PageShell({
   content,
   children,
   locale = "et",
   showHeader = false,
+  mainClassName = "",
 }) {
   return (
     <div className="page-shell">
-      <SplashCursorEffect />
+      <PageLineWaves />
+      <SplashCursor />
       {showHeader ? <SiteHeader locale={locale} /> : null}
-      <main className="page-main">{children}</main>
+      <main className={`page-main ${mainClassName}`.trim()}>{children}</main>
       <SiteFooter content={content} />
     </div>
   );

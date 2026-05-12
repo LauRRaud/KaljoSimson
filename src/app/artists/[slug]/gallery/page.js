@@ -3,8 +3,11 @@ import GalleryClient from "@/components/GalleryClient";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
+import { artworkToGalleryItem, getPublishedArtworks } from "@/lib/artworks";
 import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
 import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params, searchParams }) {
   const { slug } = await params;
@@ -49,7 +52,13 @@ export default async function ArtistGalleryPage({ params, searchParams }) {
           <h1>{locale === "en" ? "Gallery" : "Galerii"}</h1>
         </div>
 
-        <GalleryClient artist={artist} locale={locale} />
+        <GalleryClient
+          artist={{
+            ...artist,
+            artworks: artworks.map(artworkToGalleryItem),
+          }}
+          locale={locale}
+        />
       </section>
     </PageShell>
   );

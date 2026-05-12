@@ -1,4 +1,5 @@
 import AdminStudio from "@/components/AdminStudio";
+import Link from "next/link";
 import { loginAction, logoutAction } from "@/app/admin/actions";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getDemoContent, getSiteContent } from "@/lib/content-store";
@@ -7,6 +8,8 @@ export const metadata = {
   title: "Admin",
   description: "BeyondFrames sisuhaldus",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminPage({ searchParams }) {
   const params = await searchParams;
@@ -60,11 +63,16 @@ export default async function AdminPage({ searchParams }) {
             <p className="admin-login__label">Sisuhaldus</p>
           </div>
 
+          <div className="admin-actions-inline">
+          <Link className="button button--ghost button--admin-ghost" href="/admin/artworks">
+            Kunstiteosed
+          </Link>
           <form action={logoutAction}>
             <button className="button button--ghost button--admin-ghost" type="submit">
               Logi välja
             </button>
           </form>
+          </div>
         </div>
 
         <AdminStudio initialContent={content} demoContent={demoContent} />

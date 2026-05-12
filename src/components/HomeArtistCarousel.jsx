@@ -190,7 +190,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             onPointerDown={(event) => event.stopPropagation()}
             type="button"
           >
-            <span aria-hidden="true">&#8249;</span>
+            <span aria-hidden="true" />
           </button>
         ) : null}
 
@@ -242,7 +242,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             onPointerDown={(event) => event.stopPropagation()}
             type="button"
           >
-            <span aria-hidden="true">&#8250;</span>
+            <span aria-hidden="true" />
           </button>
         ) : null}
       </div>

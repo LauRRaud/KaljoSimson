@@ -1,4 +1,5 @@
 import HomeArtistCarousel from "@/components/HomeArtistCarousel";
+import HomeHeroEffects from "@/components/HomeHeroEffects";
 import HomeScrollCue from "@/components/HomeScrollCue";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
@@ -22,13 +23,21 @@ export default async function HomePage({ searchParams }) {
   const content = await getSiteContent();
 
   return (
-    <PageShell content={content} locale={locale} showHeader>
+    <PageShell
+      content={content}
+      locale={locale}
+      mainClassName="page-main--home"
+      showHeader
+    >
       <section className="home-title">
+        <HomeHeroEffects />
         <div className="home-title__inner">
           <h1 className="home-title__brand">{content.site.title}</h1>
-          <p className="home-title__copy">
-            {getCopy(content.site.heroText, locale)}
-          </p>
+          <div className="home-title__story">
+            <p className="home-title__copy">
+              {getCopy(content.site.heroText, locale)}
+            </p>
+          </div>
         </div>
         <HomeScrollCue locale={locale} />
       </section>

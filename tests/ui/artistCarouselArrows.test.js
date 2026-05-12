@@ -73,3 +73,7 @@ test("artist carousel and platform copy use expanded letter spacing", () => {
 test("artist carousel hides only location metadata on homepage artist cards", () => {
   assert.match(carousel, /showLocation=\{false\}/);
 });
+
+test("artist carousel arrow buttons do not render duplicate chevron glyphs", () => {
+  assert.doesNotMatch(carousel, /&#8249;|&#8250;/);
+});

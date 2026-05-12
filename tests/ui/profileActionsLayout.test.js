@@ -11,15 +11,20 @@ function getRule(selector) {
   return match[1];
 }
 
-test("artist profile enquiry action anchors to the lower right of the copy column", () => {
-  const heroRule = getRule(".profile-hero");
-  const copyRule = getRule(".profile-copy");
+test("artist profile biography spans the page width below the portrait row", () => {
+  const biographyRule = getRule(".profile-biography");
+
+  assert.match(biographyRule, /grid-column:\s*1\s*\/\s*-1;/);
+});
+
+test("artist profile enquiry action sits on the right side of the tag row", () => {
+  const tagsActionsRule = getRule(".profile-tags-actions");
+  const tagsRule = getRule(".profile-tags-actions .pill-row");
   const actionsRule = getRule(".profile-actions");
 
-  assert.match(heroRule, /align-items:\s*stretch;/);
-  assert.match(copyRule, /align-self:\s*stretch;/);
-  assert.match(copyRule, /min-height:\s*100%;/);
-  assert.match(actionsRule, /align-self:\s*stretch;/);
+  assert.match(tagsActionsRule, /display:\s*flex;/);
+  assert.match(tagsActionsRule, /justify-content:\s*space-between;/);
+  assert.match(tagsRule, /flex:\s*1\s+1\s+auto;/);
   assert.match(actionsRule, /justify-content:\s*flex-end;/);
-  assert.match(actionsRule, /margin-top:\s*auto;/);
+  assert.match(actionsRule, /margin-left:\s*auto;/);
 });

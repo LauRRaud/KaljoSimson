@@ -9,14 +9,20 @@ export default function SiteHeader({ locale = "et" }) {
       <div className="site-header__inner">
         <nav
           className="site-nav"
-          aria-label={locale === "en" ? "Main navigation" : "Põhinavigeerimine"}
+          aria-label={locale === "en" ? "Main navigation" : "P\u00f5hinavigeerimine"}
         >
-          <Link href={withLocale("/", locale, "#artists")}>
-            {locale === "en" ? "Artists" : "Kunstnikud"}
-          </Link>
-          <Link href={withLocale("/", locale, "#contact")}>
-            {locale === "en" ? "Contact" : "Kontakt"}
-          </Link>
+          <div className="site-nav__links">
+            <Link href={withLocale("/", locale, "#artists")}>
+              {locale === "en" ? "Artists" : "Kunstnikud"}
+            </Link>
+            <Link href={withLocale("/gallery", locale)}>
+              {locale === "en" ? "Gallery" : "Galerii"}
+            </Link>
+            <Link href={withLocale("/", locale, "#contact")}>
+              {locale === "en" ? "Contact" : "Kontakt"}
+            </Link>
+          </div>
+
           <div className="site-nav__controls">
             <LanguageSwitch locale={locale} />
             <ThemeToggle locale={locale} />
