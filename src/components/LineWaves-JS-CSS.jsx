@@ -124,13 +124,21 @@ void main() {
   }
 
   float pattern = verticalMask * lines;
-  float cycleT = fullT * uColorCycleSpeed;
+  float patternEnergy = max(pattern + ridge * verticalMask * 0.45, 0.0);
+  float paletteT = uTime * uColorCycleSpeed;
+  float palettePhase = fract(paletteT / 6.2831853);
+  float paletteStep = palettePhase * 3.0;
+  vec3 cycledPalette;
 
-  float rChannel = (pattern + lines * ridge) * (cos(blended.y + cycleT * 0.234) * 0.5 + 1.0);
-  float gChannel = (pattern + verticalMask * ridge) * (sin(blended.x + cycleT * 1.745) * 0.5 + 1.0);
-  float bChannel = (pattern + lines * ridge) * (cos(blended.x + cycleT * 0.534) * 0.5 + 1.0);
+  if (paletteStep < 1.0) {
+    cycledPalette = mix(uColor1, uColor2, smoothstep(0.0, 1.0, paletteStep));
+  } else if (paletteStep < 2.0) {
+    cycledPalette = mix(uColor2, uColor3, smoothstep(0.0, 1.0, paletteStep - 1.0));
+  } else {
+    cycledPalette = mix(uColor3, uColor1, smoothstep(0.0, 1.0, paletteStep - 2.0));
+  }
 
-  vec3 color = (rChannel * uColor1 + gChannel * uColor2 + bChannel * uColor3) * uBrightness;
+  vec3 color = cycledPalette * patternEnergy * uBrightness;
   float alpha = clamp(length(color), 0.0, 1.0);
 
   gl_FragColor = vec4(color, alpha);

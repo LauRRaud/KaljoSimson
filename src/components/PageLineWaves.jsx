@@ -1,11 +1,11 @@
 import LineWavesJSCSS from "@/components/LineWaves-JS-CSS";
 
 const lineWavesPreset = {
-  brightness: 0.1,
-  color1: "#ef4444",
-  color2: "#eab308",
-  color3: "#10b981",
-  colorCycleSpeed: 5,
+  brightness: 0.28,
+  color1: "#eab308",
+  color2: "#ef4444",
+  color3: "#22c55e",
+  colorCycleSpeed: 0.65,
   edgeFadeWidth: 0.2,
   enableMouseInteraction: false,
   innerLineCount: 32,

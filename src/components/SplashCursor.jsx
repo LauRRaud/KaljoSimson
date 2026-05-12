@@ -10,7 +10,7 @@ export default function SplashCursor({
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 2,
-  SPLAT_RADIUS = 0.0055,
+  SPLAT_RADIUS = 0.007,
   SPLAT_FORCE = 6600,
   SHADING = true,
   COLOR_UPDATE_SPEED = 5,
@@ -917,7 +917,7 @@ export default function SplashCursor({
   return <div style={{
     position: "fixed",
     inset: 0,
-    zIndex: 9999,
+    zIndex: 20,
     pointerEvents: "none",
     width: "100%",
     height: "100%"

@@ -31,15 +31,17 @@ test("artwork captions show title, year, and size in one centered row", () => {
 test("artwork frame variants swap between light and dark themes", () => {
   const obsidianRule = getRule(".artwork-frame__window--obsidian");
   const ivoryRule = getRule(".artwork-frame__window--ivory");
+  const mountRule = getRule(".artwork-frame__mount");
   const darkObsidianRule = getRule("html[data-theme=\"dark\"] .artwork-frame__window--obsidian");
 
-  assert.match(obsidianRule, /#17181d/);
-  assert.match(ivoryRule, /#f6f1e7/);
+  assert.match(obsidianRule, /linear-gradient\(180deg,\s*#5f5a54 0%,\s*#45413d 32%,\s*#2f3035 68%,\s*#24252a 100%\)/);
+  assert.match(ivoryRule, /linear-gradient\(180deg,\s*#fffaf1 0%,\s*#f0e7d9 38%,\s*#ded2bf 74%,\s*#f3eadf 100%\)/);
+  assert.match(mountRule, /padding:\s*0;/);
   assert.doesNotMatch(ivoryRule, /#c9a979|#d7b98d/);
-  assert.match(darkObsidianRule, /#f6f1e7/);
+  assert.match(darkObsidianRule, /#fffaf1/);
   assert.doesNotMatch(darkObsidianRule, /#c9a979|#d7b98d/);
   assert.match(
     css,
-    /html\[data-theme="dark"\]\s+\.artwork-frame__window--ivory\s*\{[\s\S]*?#0d0d10/,
+    /html\[data-theme="dark"\]\s+\.artwork-frame__window--ivory\s*\{[\s\S]*?linear-gradient\(180deg,\s*#5f5a54 0%,\s*#45413d 32%,\s*#2f3035 68%,\s*#24252a 100%\)/,
   );
 });

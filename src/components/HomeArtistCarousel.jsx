@@ -20,12 +20,6 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
     deltaX: 0,
   });
 
-  function finishMove(direction) {
-    setCurrentIndex((current) => wrapIndex(current + direction, artists.length));
-    setAnimationDirection(0);
-    animationTimeoutRef.current = null;
-  }
-
   function move(direction) {
     if (artists.length <= 1 || animationDirection) {
       return;
@@ -36,15 +30,18 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
       return;
     }
 
-    setAnimationDirection(direction > 0 ? 1 : -1);
+    const nextDirection = direction > 0 ? 1 : -1;
+    setAnimationDirection(nextDirection);
+    setCurrentIndex((current) => wrapIndex(current + nextDirection, artists.length));
 
     if (animationTimeoutRef.current) {
       window.clearTimeout(animationTimeoutRef.current);
     }
 
     animationTimeoutRef.current = window.setTimeout(() => {
-      finishMove(direction > 0 ? 1 : -1);
-    }, 620);
+      setAnimationDirection(0);
+      animationTimeoutRef.current = null;
+    }, 360);
   }
 
   function handlePointerDown(event) {
@@ -121,39 +118,23 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
     return null;
   }
 
-  const previousIndex = wrapIndex(currentIndex - 1, artists.length);
-  const nextIndex = wrapIndex(currentIndex + 1, artists.length);
-  const beforePreviousIndex = wrapIndex(currentIndex - 2, artists.length);
-  const afterNextIndex = wrapIndex(currentIndex + 2, artists.length);
+  const activeIndex = wrapIndex(currentIndex, artists.length);
+  const previousIndex = wrapIndex(activeIndex - 1, artists.length);
+  const nextIndex = wrapIndex(activeIndex + 1, artists.length);
 
   let visibleCards = [];
 
   if (artists.length === 1) {
     visibleCards = [{ artist: artists[0], slot: "center" }];
-  } else if (artists.length === 2 || !animationDirection) {
-    visibleCards =
-      artists.length === 2
-        ? [
-            { artist: artists[currentIndex], slot: "center" },
-            { artist: artists[nextIndex], slot: "right" },
-          ]
-        : [
-            { artist: artists[previousIndex], slot: "left" },
-            { artist: artists[currentIndex], slot: "center" },
-            { artist: artists[nextIndex], slot: "right" },
-          ];
-  } else if (animationDirection > 0) {
+  } else if (artists.length === 2) {
     visibleCards = [
-      { artist: artists[previousIndex], slot: "left" },
-      { artist: artists[currentIndex], slot: "center" },
+      { artist: artists[activeIndex], slot: "center" },
       { artist: artists[nextIndex], slot: "right" },
-      { artist: artists[afterNextIndex], slot: "incoming-right" },
     ];
   } else {
     visibleCards = [
-      { artist: artists[beforePreviousIndex], slot: "incoming-left" },
       { artist: artists[previousIndex], slot: "left" },
-      { artist: artists[currentIndex], slot: "center" },
+      { artist: artists[activeIndex], slot: "center" },
       { artist: artists[nextIndex], slot: "right" },
     ];
   }
@@ -198,7 +179,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
           {visibleCards.map(({ artist, slot }) => (
             <div
               className={`artist-stage__slot artist-stage__slot--${slot}`}
-              key={`${slot}-${artist.slug}`}
+              key={slot}
             >
               <ArtistCard
                 artist={artist}
@@ -220,7 +201,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
                           dragStateRef.current.deltaX = 0;
                         }
                       }
-                    : slot === "left" || slot === "incoming-left"
+                    : slot === "left"
                       ? () => move(-1)
                       : () => move(1)
                 }

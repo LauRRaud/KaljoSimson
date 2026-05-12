@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
 
@@ -11,6 +12,7 @@ export default function GalleryClient({ artist, locale = "et" }) {
   const hasArtworks = artist.artworks.length > 0;
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
+  const portalRoot = typeof document === "undefined" ? null : document.body;
 
   useEffect(() => {
     if (!hasArtworks || activeIndex === null) {
@@ -90,7 +92,7 @@ export default function GalleryClient({ artist, locale = "et" }) {
         ))}
       </div>
 
-      {activeArtwork ? (
+      {portalRoot && activeArtwork ? createPortal(
         <div
           aria-modal="true"
           className="lightbox"
@@ -200,7 +202,8 @@ export default function GalleryClient({ artist, locale = "et" }) {
               </aside>
             </div>
           </div>
-        </div>
+        </div>,
+        portalRoot,
       ) : null}
     </>
   );

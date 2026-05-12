@@ -66,8 +66,20 @@ test("artist carousel and platform copy use expanded letter spacing", () => {
   assert.match(bodyRule, /letter-spacing:\s*var\(--tracking-body\);/);
   assert.match(paragraphRule, /letter-spacing:\s*var\(--tracking-copy\);/);
   assert.match(carouselHeadingRule, /letter-spacing:\s*var\(--tracking-display\);/);
+  assert.match(carouselHeadingRule, /text-wrap:\s*balance;/);
   assert.match(css, /h1,\s*h2,\s*h3,\s*h4\s*\{[\s\S]*?letter-spacing:\s*var\(--tracking-heading\);/);
   assert.doesNotMatch(css, /letter-spacing:\s*-/);
+});
+
+test("artist carousel portraits and titles use a calmer profile-style crop", () => {
+  const portraitRule = getRule(".artist-card--carousel .portrait-shell");
+  const portraitImageRule = getRule(".artist-card--carousel .portrait-shell__image");
+  const headingRule = getRule(".artist-card--carousel h3");
+
+  assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
+  assert.match(portraitImageRule, /object-position:\s*center\s+center;/);
+  assert.match(headingRule, /max-width:\s*9\.5ch;/);
+  assert.match(headingRule, /font-size:\s*clamp\(1\.9rem,\s*2\.7vw,\s*2\.6rem\);/);
 });
 
 test("artist carousel hides only location metadata on homepage artist cards", () => {

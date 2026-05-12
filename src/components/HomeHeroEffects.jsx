@@ -34,16 +34,17 @@ function subscribeThemeChange(onStoreChange) {
 const darkPreset = {
   rays: {
     animated: true,
-    fadeDistance: 1.08,
+    distortion: 0,
+    fadeDistance: 1.06,
     followMouse: true,
-    lightSpread: 0.28,
-    mouseInfluence: 0.16,
+    lightSpread: 0.32,
+    mouseInfluence: 0.12,
     noiseAmount: 0,
-    rayLength: 1.42,
-    raysColor: "#f4ecdd",
+    rayLength: 1.34,
+    raysColor: "#f2e5d3",
     raysOrigin: "top-center",
     raysSpeed: 0,
-    saturation: 0.72,
+    saturation: 0.64,
   },
 };
 
