@@ -1,7 +1,7 @@
 "use client";
 
 import { Mesh, Program, Renderer, Triangle } from "ogl";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const containerStyle = {
   width: "100%",
@@ -150,6 +150,11 @@ export default function LineWavesJSCSS({
   innerLineCount = 32,
   outerLineCount = 36,
   warpIntensity = 1,
+  mobileBreakpoint = 760,
+  mobileSpeed,
+  mobileInnerLineCount,
+  mobileOuterLineCount,
+  mobileWarpIntensity,
   rotation = -45,
   edgeFadeWidth = 0,
   colorCycleSpeed = 1,
@@ -162,6 +167,27 @@ export default function LineWavesJSCSS({
   className = "",
 }) {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+
+    updateIsMobile();
+    mediaQuery.addEventListener("change", updateIsMobile);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateIsMobile);
+    };
+  }, [mobileBreakpoint]);
+
+  const resolvedSpeed = isMobile && mobileSpeed !== undefined ? mobileSpeed : speed;
+  const resolvedInnerLineCount =
+    isMobile && mobileInnerLineCount !== undefined ? mobileInnerLineCount : innerLineCount;
+  const resolvedOuterLineCount =
+    isMobile && mobileOuterLineCount !== undefined ? mobileOuterLineCount : outerLineCount;
+  const resolvedWarpIntensity =
+    isMobile && mobileWarpIntensity !== undefined ? mobileWarpIntensity : warpIntensity;
 
   useEffect(() => {
     if (!containerRef.current) {
@@ -185,10 +211,10 @@ export default function LineWavesJSCSS({
       uniforms: {
         uTime: { value: 0 },
         uResolution: { value: [1, 1, 1] },
-        uSpeed: { value: speed },
-        uInnerLines: { value: innerLineCount },
-        uOuterLines: { value: outerLineCount },
-        uWarpIntensity: { value: warpIntensity },
+        uSpeed: { value: resolvedSpeed },
+        uInnerLines: { value: resolvedInnerLineCount },
+        uOuterLines: { value: resolvedOuterLineCount },
+        uWarpIntensity: { value: resolvedWarpIntensity },
         uRotation: { value: (rotation * Math.PI) / 180 },
         uEdgeFadeWidth: { value: edgeFadeWidth },
         uColorCycleSpeed: { value: colorCycleSpeed },
@@ -275,12 +301,12 @@ export default function LineWavesJSCSS({
     colorCycleSpeed,
     edgeFadeWidth,
     enableMouseInteraction,
-    innerLineCount,
     mouseInfluence,
-    outerLineCount,
+    resolvedInnerLineCount,
+    resolvedOuterLineCount,
+    resolvedSpeed,
+    resolvedWarpIntensity,
     rotation,
-    speed,
-    warpIntensity,
   ]);
 
   return (

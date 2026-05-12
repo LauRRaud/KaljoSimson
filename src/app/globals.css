@@ -412,7 +412,7 @@ img {
   inset: -10vh -18vw auto;
   z-index: -1;
   height: 140vh;
-  opacity: 0.5;
+  opacity: 0.42;
   pointer-events: none;
   filter: blur(0.35px);
   mix-blend-mode: normal;
@@ -2782,7 +2782,7 @@ html[data-theme="dark"] .home-title__beam {
 }
 
 html[data-theme="dark"] .page-line-waves {
-  opacity: 0.56;
+  opacity: 0.48;
   mix-blend-mode: normal;
 }
 
@@ -3295,9 +3295,10 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .page-line-waves {
-    inset: -8vh -42vw auto;
-    height: 126vh;
-    opacity: 0.46;
+    inset: -6vh -32vw auto;
+    height: 120vh;
+    opacity: 0.28;
+    filter: blur(0.5px);
   }
 
   .home-scroll-cue {

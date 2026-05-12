@@ -22,12 +22,18 @@ test("page line waves use yellow red and green palette", () => {
   assert.match(preset, /color1:\s*"#eab308"/);
   assert.match(preset, /color2:\s*"#ef4444"/);
   assert.match(preset, /color3:\s*"#22c55e"/);
-  assert.match(preset, /colorCycleSpeed:\s*0\.65/);
+  assert.match(preset, /colorCycleSpeed:\s*0\.32/);
+  assert.match(preset, /speed:\s*0\.035/);
+  assert.match(preset, /mobileInnerLineCount:\s*9/);
+  assert.match(preset, /mobileOuterLineCount:\s*7/);
+  assert.match(preset, /mobileSpeed:\s*0\.02/);
+  assert.match(preset, /mobileWarpIntensity:\s*0\.8/);
 });
 
 test("page line waves are strong enough to remain visible", () => {
-  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.5;/);
+  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.42;/);
   assert.match(css, /\.page-line-waves\s*\{[\s\S]*?filter:\s*blur\(0\.35px\);/);
-  assert.match(css, /html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.56;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.46;/);
+  assert.match(css, /html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.48;/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.28;/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?filter:\s*blur\(0\.5px\);/);
 });
