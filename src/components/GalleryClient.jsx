@@ -28,10 +28,14 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     const wallStyles = window.getComputedStyle(wall);
     const slotWidth = slot.getBoundingClientRect().width;
     const gap = Number.parseFloat(wallStyles.columnGap || wallStyles.gap || "0");
-    const pairStep = (slotWidth + gap) * 2;
+    const artworkStep = slotWidth + gap;
+    const pairStep = artworkStep * 2;
+    const isMobileLandscape = window.matchMedia(
+      "(max-width: 950px) and (max-height: 560px) and (orientation: landscape)",
+    ).matches;
 
     viewport.scrollBy({
-      left: direction * Math.max(pairStep, viewport.clientWidth * 0.72),
+      left: direction * (isMobileLandscape ? artworkStep : Math.max(pairStep, viewport.clientWidth * 0.72)),
       behavior: "smooth",
     });
   }

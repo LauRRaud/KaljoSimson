@@ -40,6 +40,20 @@ test("mobile artwork is centered in the lightbox viewport", async ({ page }) => 
   expect(Math.abs(artworkCenter - viewportCenter)).toBeLessThanOrEqual(4);
 });
 
+test("mobile artist gallery artworks stay inside the viewport", async ({ page }) => {
+  const viewport = { width: 486, height: 765 };
+  await page.setViewportSize(viewport);
+  await page.goto(`${baseURL}/artists/kaljo-simson?lang=et#works`);
+
+  const artwork = page.locator(".gallery-grid .artwork-frame--button").first();
+  await expect(artwork).toBeVisible();
+
+  const box = await artwork.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box?.x ?? 0).toBeGreaterThanOrEqual(0);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(viewport.width);
+});
+
 test("tablet layout keeps artist carousel and profile portrait at readable scale", async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 720 });
 

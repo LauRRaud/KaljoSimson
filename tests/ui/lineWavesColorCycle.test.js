@@ -17,28 +17,29 @@ test("line waves color cycling does not move the line pattern", () => {
   assert.match(source, /vec3 color = cycledPalette \* patternEnergy \* uBrightness;/);
 });
 
-test("page line waves use yellow red and green palette", () => {
-  assert.match(preset, /brightness:\s*0\.28/);
-  assert.match(preset, /color1:\s*"#eab308"/);
-  assert.match(preset, /color2:\s*"#ef4444"/);
-  assert.match(preset, /color3:\s*"#22c55e"/);
+test("page line waves use purple accent palette in both themes", () => {
+  assert.match(preset, /const sharedPreset = \{/);
+  assert.match(preset, /brightness:\s*0\.42/);
   assert.match(preset, /colorCycleSpeed:\s*0\.32/);
-  assert.match(preset, /innerLineCount:\s*18/);
-  assert.match(preset, /outerLineCount:\s*11/);
+  assert.match(preset, /innerLineCount:\s*14/);
+  assert.match(preset, /outerLineCount:\s*8/);
   assert.match(preset, /speed:\s*0\.035/);
-  assert.match(preset, /mobileInnerLineCount:\s*9/);
-  assert.match(preset, /mobileOuterLineCount:\s*7/);
+  assert.match(preset, /mobileInnerLineCount:\s*7/);
+  assert.match(preset, /mobileOuterLineCount:\s*5/);
   assert.match(preset, /mobileSpeed:\s*0\.026/);
   assert.match(preset, /mobileWarpIntensity:\s*0\.8/);
+  assert.match(preset, /const lightPalette = \{\s*color1:\s*"#d4a72c",\s*color2:\s*"#ef4444",\s*color3:\s*"#7c3aed"/);
+  assert.match(preset, /const darkPalette = \{\s*color1:\s*"#d4a72c",\s*color2:\s*"#ef4444",\s*color3:\s*"#8b5cf6"/);
+  assert.match(preset, /const palette = theme === "dark" \? darkPalette : lightPalette;/);
 });
 
-test("page line waves are strong enough to remain visible", () => {
-  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.34;/);
-  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?filter:\s*blur\(0\.35px\);/);
-  assert.match(css, /html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.38;/);
+test("page line waves are crisp and visible in light mode and clearer in dark mode", () => {
+  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.26;/);
+  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?filter:\s*none;/);
+  assert.match(css, /html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.28;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.22;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.26;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?filter:\s*blur\(0\.5px\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?opacity:\s*0\.22;/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?filter:\s*none;/);
 });
 
 test("mobile page line waves keep the pattern anchored toward the left edge", () => {

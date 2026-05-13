@@ -14,6 +14,8 @@ test("public gallery page uses the room variant without changing artist gallerie
   assert.match(siteAmbient, /if \(isGalleryRoom\) \{[\s\S]*?return null;/);
   assert.match(galleryPage, /className="gallery-room-page"/);
   assert.match(galleryPage, /className="gallery-room-page__back inline-link"/);
+  assert.match(galleryPage, /locale === "en" \? "Back" : "Tagasi"/);
+  assert.doesNotMatch(galleryPage, /Back to homepage|Tagasi avalehele/);
   assert.doesNotMatch(galleryPage, /className="gallery-room-page__heading"/);
   assert.match(galleryPage, /<GalleryClient artist=\{galleryArtist\} locale=\{locale\} variant="room" \/>/);
   assert.match(galleryClient, /variant = "grid"/);
@@ -30,7 +32,9 @@ test("gallery room is a horizontal wall with carousel-style controls", () => {
   assert.match(galleryClient, /onClick=\{\(\) => scrollRoom\(-1\)\}/);
   assert.match(galleryClient, /onClick=\{\(\) => scrollRoom\(1\)\}/);
   assert.match(galleryClient, /viewport\.scrollBy\(\{/);
-  assert.match(galleryClient, /const pairStep = \(slotWidth \+ gap\) \* 2;/);
+  assert.match(galleryClient, /const artworkStep = slotWidth \+ gap;/);
+  assert.match(galleryClient, /const pairStep = artworkStep \* 2;/);
+  assert.match(galleryClient, /max-width:\s*950px[\s\S]*orientation:\s*landscape/);
 });
 
 test("gallery room styling creates a clean wall and responsive artwork rhythm", () => {
@@ -48,7 +52,15 @@ test("gallery room styling creates a clean wall and responsive artwork rhythm", 
   assert.doesNotMatch(css, /\.gallery-room__floor\s*\{/);
   assert.match(css, /\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*clamp\(18px,\s*3vw,\s*44px\);/);
   assert.match(css, /\.gallery-room__nav span\s*\{[\s\S]*?border-top:\s*5px solid currentColor;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__slot\s*\{[\s\S]*?flex-basis:\s*min\(78vw,\s*310px\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-main--gallery\s*\{[\s\S]*?padding-top:\s*0;/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room\s*\{[\s\S]*?--gallery-room-mobile-slot:\s*min\(88vw,\s*350px\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?calc\(\(100vw - var\(--gallery-room-mobile-slot\)\) \/ 2\)/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__slot\s*\{[\s\S]*?flex-basis:\s*var\(--gallery-room-mobile-slot\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(68vw,\s*300px\);/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(50% \+ clamp\(132px,\s*20svh,\s*154px\)\);[\s\S]*?bottom:\s*auto;/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*calc\(50% - 138px\);/);
+  assert.match(css, /@media \(max-width:\s*950px\) and \(max-height:\s*560px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(84vw,\s*680px\);/);
+  assert.match(css, /@media \(max-width:\s*950px\) and \(max-height:\s*560px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding-inline:\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/);
 });
 
 test("dark mode keeps the gallery room consistent with the site atmosphere", () => {

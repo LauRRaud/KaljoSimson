@@ -67,6 +67,8 @@ test("artist carousel cards center short metadata while keeping bio left aligned
   assert.match(metaRule, /align-items:\s*center;/);
   assert.match(metaRule, /text-align:\s*center;/);
   assert.match(bioRule, /text-align:\s*left;/);
+  assert.match(bioRule, /font-size:\s*clamp\(1\.08rem,\s*1\.05vw,\s*1\.18rem\);/);
+  assert.match(bioRule, /letter-spacing:\s*var\(--tracking-copy\);/);
   assert.match(pillRowRule, /justify-content:\s*center;/);
 });
 

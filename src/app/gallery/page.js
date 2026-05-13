@@ -57,7 +57,7 @@ export default async function GalleryPage({ searchParams }) {
     >
       <section className="gallery-room-page">
         <Link className="gallery-room-page__back inline-link" href={withLocale("/", locale)}>
-          {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
+          {locale === "en" ? "Back" : "Tagasi"}
         </Link>
 
         <GalleryClient artist={galleryArtist} locale={locale} variant="room" />

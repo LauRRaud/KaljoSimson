@@ -44,13 +44,13 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
   assert.match(galleryClient, /className="lightbox__artwork-image"/);
   assert.match(galleryClient, /<div className="lightbox__artwork-frame lightbox__artwork-frame--fallback">[\s\S]*?<ArtworkFrame/);
   assert.match(galleryClient, /<ArtworkFrame[\s\S]*?showCaption=\{false\}/);
-  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*fit-content;/);
-  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?height:\s*var\(--lightbox-panel-height\);/);
+  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*min\(100%,\s*calc\(\(var\(--lightbox-panel-height\) - clamp\(16px,\s*2vh,\s*28px\)\) \* 1\.28\)\);/);
+  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(16px,\s*2vh,\s*28px\)\);/);
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?justify-items:\s*end;/);
   assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.lightbox__artwork-mount\s*\{[\s\S]*?padding:\s*0;/);
-  assert.match(css, /\.lightbox__artwork-image\s*\{[\s\S]*?height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(48px,\s*5\.8vh,\s*72px\)\);/);
-  assert.match(css, /\.lightbox__artwork-image\s*\{[\s\S]*?max-height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(48px,\s*5\.8vh,\s*72px\)\);/);
+  assert.match(css, /\.lightbox__artwork-mount\s*\{[\s\S]*?width:\s*100%;[\s\S]*?height:\s*100%;/);
+  assert.match(css, /\.lightbox__artwork-image\s*\{[\s\S]*?height:\s*100%;[\s\S]*?object-fit:\s*cover;/);
   assert.match(galleryClient, /<dl className="lightbox__details">/);
   assert.match(css, /\.lightbox__actions\s*\{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/);
   assert.match(css, /\.lightbox__nav-button\s*\{[\s\S]*?width:\s*clamp\(128px,\s*7\.5vw,\s*150px\);/);
@@ -69,6 +69,29 @@ test("dark mode lightbox keeps the gallery room dark", () => {
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame,\s*html\[data-theme="dark"\] \.lightbox__artwork-frame--obsidian\s*\{[\s\S]*?background:\s*var\(--frame-light-wood\);/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory\s*\{[\s\S]*?background:\s*var\(--frame-dark-wood\);/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory \.lightbox__artwork-mount\s*\{[\s\S]*?background:\s*transparent;/);
+});
+
+test("mobile lightbox gives portrait artwork more room and keeps landscape balanced", () => {
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(44vh,\s*360px\);[\s\S]*?--lightbox-panel-min-height:\s*278px;[\s\S]*?width:\s*calc\(100vw - 16px\);/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*min\(100%,\s*calc\(\(var\(--lightbox-panel-height\) - 12px\) \* 1\.28\)\);[\s\S]*?height:\s*calc\(var\(--lightbox-panel-height\) - 12px\);/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1\.12fr\) minmax\(260px,\s*0\.88fr\);/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(78svh,\s*340px\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*950px\) and \(max-height:\s*560px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1\.12fr\) minmax\(260px,\s*0\.88fr\);/,
+  );
 });
 
 test("gallery artwork frames use a consistent visual footprint", () => {

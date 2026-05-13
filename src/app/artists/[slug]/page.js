@@ -53,7 +53,7 @@ export default async function ArtistPage({ params, searchParams }) {
       <section className="section profile-hero">
         <div className="profile-nav">
           <Link className="inline-link profile-back-link" href={withLocale("/", locale)}>
-            {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
+            {locale === "en" ? "Back" : "Tagasi"}
           </Link>
         </div>
 

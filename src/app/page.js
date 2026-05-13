@@ -23,6 +23,19 @@ function renderContactCopy(copy) {
   );
 }
 
+function renderHomeTitle(title) {
+  if (title === "BeyondFrames") {
+    return (
+      <>
+        <span className="home-title__brand-word">Beyond</span>
+        <span className="home-title__brand-word">Frames</span>
+      </>
+    );
+  }
+
+  return title;
+}
+
 const desktopWordStep = 4.2;
 const mobileWordStep = 1.85;
 const desktopCycleEndPause = 2.2;
@@ -75,7 +88,9 @@ export default async function HomePage({ searchParams }) {
     >
       <section className="home-title">
         <div className="home-title__inner">
-          <h1 className="home-title__brand">{content.site.title}</h1>
+          <h1 className="home-title__brand" aria-label={content.site.title}>
+            {renderHomeTitle(content.site.title)}
+          </h1>
           {tagline ? (
             <p
               className="home-title__tagline"

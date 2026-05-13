@@ -3,6 +3,7 @@ const { readFileSync } = require("node:fs");
 const test = require("node:test");
 
 const css = readFileSync("src/app/globals.css", "utf8");
+const artistPage = readFileSync("src/app/artists/[slug]/page.js", "utf8");
 
 function getRule(selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -29,17 +30,26 @@ test("artist profile enquiry action sits on the right side of the tag row", () =
   assert.match(actionsRule, /margin-left:\s*auto;/);
 });
 
-test("artist profile makes biography heading match gallery heading typography at a smaller size", () => {
+test("artist profile keeps biography heading in eyebrow style but larger", () => {
   const introCopyRule = getRule(".profile-copy .section-copy");
   const biographyHeadingRule = getRule(".profile-biography .eyebrow");
   const biographyCopyRule = getRule(".profile-biography .section-copy");
 
   assert.match(introCopyRule, /font-size:\s*clamp\(1\.14rem,\s*1\.46vw,\s*1\.34rem\);/);
-  assert.match(biographyHeadingRule, /font-family:\s*var\(--font-heading\);/);
-  assert.match(biographyHeadingRule, /font-weight:\s*600;/);
-  assert.match(biographyHeadingRule, /letter-spacing:\s*var\(--tracking-heading\);/);
-  assert.match(biographyHeadingRule, /line-height:\s*0\.96;/);
-  assert.match(biographyHeadingRule, /text-transform:\s*none;/);
-  assert.match(biographyHeadingRule, /font-size:\s*clamp\(1\.9rem,\s*3vw,\s*2\.7rem\);/);
+  assert.match(biographyHeadingRule, /font-size:\s*clamp\(1\.14rem,\s*1\.46vw,\s*1\.34rem\);/);
+  assert.doesNotMatch(biographyHeadingRule, /font-family:\s*var\(--font-heading\);/);
+  assert.doesNotMatch(biographyHeadingRule, /text-transform:\s*none;/);
   assert.match(biographyCopyRule, /font-size:\s*clamp\(1\.06rem,\s*1\.28vw,\s*1\.2rem\);/);
+});
+
+test("artist profile back link uses short copy", () => {
+  assert.match(artistPage, /locale === "en" \? "Back" : "Tagasi"/);
+  assert.doesNotMatch(artistPage, /Back to homepage|Tagasi avalehele/);
+});
+
+test("artist profile panel expands wider on mobile", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.profile-hero\s*\{[\s\S]*?width:\s*calc\(100% \+ 32px\);[\s\S]*?margin-inline:\s*-16px;[\s\S]*?padding-inline:\s*22px;/,
+  );
 });

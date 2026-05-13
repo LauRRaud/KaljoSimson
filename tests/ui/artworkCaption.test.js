@@ -30,6 +30,21 @@ test("artwork captions show title, year, and size in one centered row", () => {
   assert.match(artworkFrame, /<span>\{getCaptionSize\(artwork\.size,\s*locale\)\}<\/span>/);
 });
 
+test("artist profile mobile gallery captions can wrap inside wider artwork cards", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.profile-hero \+ \.section\s*\{[\s\S]*?width:\s*calc\(100% \+ 32px\);[\s\S]*?margin-inline:\s*-16px;[\s\S]*?padding-inline:\s*18px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.profile-hero \+ \.section \.gallery-grid \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(300px,\s*72vw,\s*340px\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.profile-hero \+ \.section \.gallery-grid \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?overflow:\s*visible;[\s\S]*?white-space:\s*normal;/,
+  );
+});
+
 test("gallery captions show label placeholders when artwork metadata is not confirmed", () => {
   assert.match(artworkFrame, /function getCaptionYear/);
   assert.match(artworkFrame, /return locale === "en" \? "Year" : "Aasta";/);
