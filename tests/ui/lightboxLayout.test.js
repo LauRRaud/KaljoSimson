@@ -58,7 +58,7 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
 });
 
 test("dark mode lightbox keeps the gallery room dark", () => {
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox\s*\{[\s\S]*?linear-gradient\(180deg,\s*#26272b 0%,\s*#111215 42%,\s*#15161a 100%\);/);
+  assert.match(css, /html\[data-theme="dark"\] \.lightbox\s*\{[\s\S]*?rgba\(73,\s*72,\s*66,\s*0\.98\)/);
   assert.match(css, /\.lightbox::before,\s*\.lightbox::after\s*\{[\s\S]*?position:\s*fixed;/);
   assert.match(css, /\.lightbox__beam\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?top:\s*0;/);
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);

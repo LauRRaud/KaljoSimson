@@ -8,9 +8,16 @@ const css = readFileSync("src/app/globals.css", "utf8");
 
 test("homepage renders tagline between brand and hero copy only when it has content", () => {
   assert.match(homePage, /const tagline = getCopy\(content\.site\.tagline, locale\)\.trim\(\);/);
+  assert.match(homePage, /function renderTaglineWords\(words\)/);
+  assert.match(homePage, /words\.map\(\(word, index\) =>/);
+  assert.match(homePage, /className="home-title__tagline-word"/);
+  assert.match(homePage, /style=\{\{[\s\S]*?"--word-index": index,[\s\S]*?\}\}/);
+  assert.match(homePage, /"--word-delay": `\$\{index \* desktopWordStep\}s`/);
+  assert.match(homePage, /"--word-mobile-delay": `\$\{index \* mobileWordStep\}s`/);
+  assert.match(homePage, /const taglineWords = tagline \? tagline\.split\(\/\\s\+\/\) : \[\];/);
   assert.match(
     homePage,
-    /<h1 className="home-title__brand">\{content\.site\.title\}<\/h1>\s*\{tagline \? <p className="home-title__tagline">\{tagline\}<\/p> : null\}\s*<div className="home-title__story">/,
+    /<h1 className="home-title__brand">\{content\.site\.title\}<\/h1>\s*\{tagline \? \(\s*<p\s*className="home-title__tagline"\s*aria-label=\{tagline\}\s*style=\{\{\s*"--tagline-cycle-duration": `\$\{taglineWords\.length \* desktopWordStep\}s`,\s*"--tagline-mobile-cycle-duration": `\$\{taglineWords\.length \* mobileWordStep\}s`,\s*\}\}\s*>\s*\{renderTaglineWords\(taglineWords\)\}\s*<\/p>\s*\) : null\}\s*<div className="home-title__story">/,
   );
 });
 
@@ -22,4 +29,5 @@ test("admin studio exposes the tagline field again", () => {
 
 test("homepage stylesheet includes tagline styling", () => {
   assert.match(css, /\.home-title__tagline\s*\{[\s\S]*?text-align:\s*center;/);
+  assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*12\.6s\) linear infinite;/);
 });

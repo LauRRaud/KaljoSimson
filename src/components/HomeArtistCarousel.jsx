@@ -161,7 +161,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             className="artist-stage__arrow artist-stage__arrow--left"
             onClick={(event) => {
               event.stopPropagation();
-              move(1);
+              move(-1);
             }}
             onPointerDown={(event) => event.stopPropagation()}
             type="button"
@@ -213,7 +213,7 @@ export default function HomeArtistCarousel({ artists, locale = "et" }) {
             className="artist-stage__arrow artist-stage__arrow--right"
             onClick={(event) => {
               event.stopPropagation();
-              move(-1);
+              move(1);
             }}
             onPointerDown={(event) => event.stopPropagation()}
             type="button"

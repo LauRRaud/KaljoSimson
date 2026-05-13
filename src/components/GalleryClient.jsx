@@ -18,13 +18,20 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
 
   function scrollRoom(direction) {
     const viewport = roomViewportRef.current;
+    const wall = viewport?.querySelector(".gallery-room__wall");
+    const slot = viewport?.querySelector(".gallery-room__slot");
 
-    if (!viewport) {
+    if (!viewport || !wall || !slot) {
       return;
     }
 
+    const wallStyles = window.getComputedStyle(wall);
+    const slotWidth = slot.getBoundingClientRect().width;
+    const gap = Number.parseFloat(wallStyles.columnGap || wallStyles.gap || "0");
+    const pairStep = (slotWidth + gap) * 2;
+
     viewport.scrollBy({
-      left: direction * Math.max(viewport.clientWidth * 0.72, 320),
+      left: direction * Math.max(pairStep, viewport.clientWidth * 0.72),
       behavior: "smooth",
     });
   }
@@ -115,24 +122,26 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
             </div>
           </div>
 
-          <div className="gallery-room__controls">
-            <button
-              aria-label={locale === "en" ? "Move left in gallery" : "Liigu galeriis vasakule"}
-              className="gallery-room__nav gallery-room__nav--prev"
-              onClick={() => scrollRoom(-1)}
-              type="button"
-            >
-              <span aria-hidden="true">&lt;</span>
-            </button>
-            <button
-              aria-label={locale === "en" ? "Move right in gallery" : "Liigu galeriis paremale"}
-              className="gallery-room__nav gallery-room__nav--next"
-              onClick={() => scrollRoom(1)}
-              type="button"
-            >
-              <span aria-hidden="true">&gt;</span>
-            </button>
-          </div>
+          {artist.artworks.length > 1 ? (
+            <div className="gallery-room__controls">
+              <button
+                aria-label={locale === "en" ? "Move left in gallery" : "Liigu galeriis vasakule"}
+                className="gallery-room__nav gallery-room__nav--prev"
+                onClick={() => scrollRoom(-1)}
+                type="button"
+              >
+                <span aria-hidden="true">&lt;</span>
+              </button>
+              <button
+                aria-label={locale === "en" ? "Move right in gallery" : "Liigu galeriis paremale"}
+                className="gallery-room__nav gallery-room__nav--next"
+                onClick={() => scrollRoom(1)}
+                type="button"
+              >
+                <span aria-hidden="true">&gt;</span>
+              </button>
+            </div>
+          ) : null}
         </section>
       ) : (
         <div className="gallery-grid">

@@ -26,6 +26,14 @@ function getRules(selector) {
   return matches.map((match) => match[1]).join("\n");
 }
 
+function getArrowButtonBlock(direction) {
+  const match = carousel.match(
+    new RegExp(`className="artist-stage__arrow artist-stage__arrow--${direction}"[\\s\\S]*?<\\/button>`),
+  );
+  assert.ok(match, `Missing ${direction} carousel arrow button`);
+  return match[0];
+}
+
 test("artist carousel arrows stay near the screen edge with a soft hover treatment", () => {
   const baseRule = getRule(".artist-stage__arrow");
   const hoverRule = getRule(".artist-stage__arrow:hover");
@@ -91,6 +99,11 @@ test("artist carousel hides only location metadata on homepage artist cards", ()
 
 test("artist carousel arrow buttons do not render duplicate chevron glyphs", () => {
   assert.doesNotMatch(carousel, /&#8249;|&#8250;/);
+});
+
+test("artist carousel arrow buttons use the expected visual direction", () => {
+  assert.match(getArrowButtonBlock("left"), /move\(-1\);/);
+  assert.match(getArrowButtonBlock("right"), /move\(1\);/);
 });
 
 test("artist carousel mobile arrows sit higher and farther apart", () => {

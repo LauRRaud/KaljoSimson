@@ -23,6 +23,26 @@ function renderContactCopy(copy) {
   );
 }
 
+function renderTaglineWords(words) {
+  const desktopWordStep = 4.2;
+  const mobileWordStep = 1.85;
+
+  return words.map((word, index) => (
+    <span
+      aria-hidden="true"
+      className="home-title__tagline-word"
+      key={`${word}-${index}`}
+      style={{
+        "--word-index": index,
+        "--word-delay": `${index * desktopWordStep}s`,
+        "--word-mobile-delay": `${index * mobileWordStep}s`,
+      }}
+    >
+      {word}
+    </span>
+  ));
+}
+
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
@@ -40,6 +60,9 @@ export default async function HomePage({ searchParams }) {
   const content = await getSiteContent();
   const contactText = getCopy(content.site.contactText, locale);
   const tagline = getCopy(content.site.tagline, locale).trim();
+  const taglineWords = tagline ? tagline.split(/\s+/) : [];
+  const desktopWordStep = 4.2;
+  const mobileWordStep = 1.85;
 
   return (
     <PageShell
@@ -51,7 +74,18 @@ export default async function HomePage({ searchParams }) {
       <section className="home-title">
         <div className="home-title__inner">
           <h1 className="home-title__brand">{content.site.title}</h1>
-          {tagline ? <p className="home-title__tagline">{tagline}</p> : null}
+          {tagline ? (
+            <p
+              className="home-title__tagline"
+              aria-label={tagline}
+              style={{
+                "--tagline-cycle-duration": `${taglineWords.length * desktopWordStep}s`,
+                "--tagline-mobile-cycle-duration": `${taglineWords.length * mobileWordStep}s`,
+              }}
+            >
+              {renderTaglineWords(taglineWords)}
+            </p>
+          ) : null}
           <div className="home-title__story">
             <p className="home-title__copy">
               {getCopy(content.site.heroText, locale)}
