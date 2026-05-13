@@ -7,7 +7,7 @@ import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
 
-function compactMetaValue(value, fallback) {
+function compactMetaValue(value) {
   const normalized = String(value ?? "").trim().toLocaleLowerCase("et-EE");
   const placeholders = new Set([
     "",
@@ -20,7 +20,7 @@ function compactMetaValue(value, fallback) {
     "size to be confirmed",
   ]);
 
-  return placeholders.has(normalized) ? fallback : value;
+  return placeholders.has(normalized) ? null : value;
 }
 
 export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
@@ -34,6 +34,25 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   const yearLabel = locale === "en" ? "Year" : "Aasta";
   const mediumLabel = locale === "en" ? "Medium" : "Tehnika";
   const sizeLabel = locale === "en" ? "Size" : "Mõõdud";
+  const artworkMeta = activeArtwork
+    ? [
+        {
+          key: "year",
+          label: yearLabel,
+          value: compactMetaValue(activeArtwork.year),
+        },
+        {
+          key: "medium",
+          label: mediumLabel,
+          value: compactMetaValue(getCopy(activeArtwork.medium, locale)),
+        },
+        {
+          key: "size",
+          label: sizeLabel,
+          value: compactMetaValue(activeArtwork.size),
+        },
+      ].filter((item) => item.value)
+    : [];
 
   function scrollRoom(direction) {
     const viewport = roomViewportRef.current;
@@ -243,20 +262,16 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                   </p>
                 </div>
 
-                <dl className="lightbox__details">
-                  <div>
-                    <dt>{yearLabel}</dt>
-                    <dd>{compactMetaValue(activeArtwork.year, yearLabel)}</dd>
-                  </div>
-                  <div>
-                    <dt>{mediumLabel}</dt>
-                    <dd>{compactMetaValue(getCopy(activeArtwork.medium, locale), mediumLabel)}</dd>
-                  </div>
-                  <div>
-                    <dt>{sizeLabel}</dt>
-                    <dd>{compactMetaValue(activeArtwork.size, sizeLabel)}</dd>
-                  </div>
-                </dl>
+                {artworkMeta.length ? (
+                  <dl className="lightbox__details">
+                    {artworkMeta.map((item) => (
+                      <div key={item.key}>
+                        <dt>{item.label}</dt>
+                        <dd>{item.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
 
                 <div className="lightbox__actions">
                   <button

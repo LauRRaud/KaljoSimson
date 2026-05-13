@@ -13,6 +13,8 @@ test("homepage renders tagline between brand and hero copy only when it has cont
   assert.match(homePage, /className="home-title__tagline-word"/);
   assert.match(homePage, /style=\{\{[\s\S]*?"--word-index": index,[\s\S]*?\}\}/);
   assert.match(homePage, /"--word-delay": `\$\{index \* desktopWordStep\}s`/);
+  assert.match(homePage, /const mobileWordStep = desktopWordStep;/);
+  assert.match(homePage, /const mobileCycleEndPause = desktopCycleEndPause;/);
   assert.match(homePage, /"--word-mobile-delay": `\$\{index \* mobileWordStep\}s`/);
   assert.match(homePage, /const taglineWords = tagline \? tagline\.split\(\/\\s\+\/\) : \[\];/);
   assert.match(homePage, /function renderHomeTitle\(title\)/);

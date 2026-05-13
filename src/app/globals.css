@@ -453,6 +453,25 @@ img {
   background: var(--glass-control-bg-hover);
 }
 
+.site-nav .theme-toggle {
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-soft);
+  box-shadow: none;
+  backdrop-filter: none;
+  opacity: 1;
+}
+
+.site-nav .theme-toggle:hover,
+.site-nav .theme-toggle:focus-visible {
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+
 .page-main {
   position: relative;
   z-index: 2;
@@ -2447,14 +2466,14 @@ html[data-theme="dark"] .gallery-room-page__back {
 .lightbox__aside {
   position: relative;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   height: var(--lightbox-detail-panel-height);
   min-height: var(--lightbox-panel-min-height);
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
-  padding: clamp(22px, 2vw, 28px);
+  padding: clamp(18px, 1.8vw, 24px);
   border: none;
   border-radius: 20px;
   background: var(--glass-panel-bg);
@@ -2476,18 +2495,18 @@ html[data-theme="dark"] .gallery-room-page__back {
   flex: 0 1 auto;
   min-height: 0;
   width: 100%;
-  gap: 10px;
+  gap: 8px;
   padding-right: 0;
 }
 
 .lightbox__caption h2 {
-  max-width: calc(100% - 66px);
+  max-width: calc(100% - 54px);
   font-size: clamp(1.95rem, 2.3vw, 2.65rem);
   line-height: 1.02;
 }
 
 .lightbox__caption .eyebrow {
-  max-width: calc(100% - 66px);
+  max-width: calc(100% - 54px);
   font-size: 1rem;
 }
 
@@ -2501,26 +2520,31 @@ html[data-theme="dark"] .gallery-room-page__back {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   max-width: 100%;
   margin: 0;
   color: var(--text-soft);
   font-size: 1.02rem;
-  line-height: 1.44;
+  line-height: 1.38;
 }
 
 .lightbox__details div {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
 }
 
 .lightbox__details dt {
+  flex: 0 0 clamp(56px, 6vw, 74px);
   color: var(--text-faint);
 }
 
 .lightbox__details dd {
   margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .lightbox__close {
@@ -4014,52 +4038,62 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-header__inner {
-    padding: 14px 10px 0;
+    width: 100vw;
+    margin: 0 calc(50% - 50vw);
+    padding: 14px 0 0;
+    align-items: stretch;
   }
 
   .site-nav {
-    display: inline-flex;
-    gap: 8px;
-    width: auto;
-    max-width: calc(100vw - 28px);
-    padding: 10px 12px;
-    border-radius: 999px;
+    display: flex;
+    gap: 14px;
+    width: 100%;
+    max-width: 100vw;
+    padding: 13px 18px;
+    border-radius: 0 0 28px 28px;
   }
 
   .site-nav__links {
-    gap: 10px;
+    gap: 14px;
     flex: 1 1 auto;
   }
 
   .site-nav__controls {
-    gap: 5px;
-    padding-left: 8px;
+    gap: 8px;
+    padding-left: 12px;
   }
 
   .site-nav a {
-    font-size: 0.98rem;
+    font-size: 1.06rem;
   }
 
   .language-switch {
-    width: 40px;
-    height: 34px;
+    width: 44px;
+    height: 36px;
   }
 
   .language-switch__item {
-    width: 40px;
-    height: 34px;
+    width: 44px;
+    height: 36px;
   }
 
   .language-switch__flag {
-    width: 30px;
-    height: 21px;
+    width: 34px;
+    height: 24px;
   }
 
   .theme-toggle {
-    min-width: 58px;
-    height: 34px;
-    padding: 0 11px;
-    font-size: 0.9rem;
+    min-width: 68px;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 0.98rem;
+  }
+
+  .site-nav .theme-toggle {
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    font-size: 1.06rem;
   }
 
   .admin-topbar {
@@ -4192,7 +4226,7 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .home-title__tagline-word {
-    animation-duration: var(--tagline-mobile-cycle-duration, 7.55s);
+    animation-duration: var(--tagline-mobile-cycle-duration, 14.8s);
     animation-delay: var(--word-mobile-delay, 0s);
   }
 
@@ -4403,22 +4437,24 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__sheet {
-    --lightbox-panel-height: min(36vh, 300px);
+    --lightbox-panel-height: min(38vh, 314px);
     --lightbox-panel-min-height: 220px;
     width: calc(100vw - 28px);
     transform: none;
   }
 
   .lightbox__close {
-    position: static;
-    align-self: flex-end;
-    width: 34px;
-    height: 34px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    align-self: auto;
+    width: 38px;
+    height: 38px;
     margin-bottom: 0;
   }
 
   .lightbox__grid {
-    gap: 12px;
+    gap: 10px;
   }
 
   .lightbox__image-window {
@@ -4431,7 +4467,7 @@ html[data-theme="dark"] .admin-divider {
     max-width: calc(100% - 24px);
     max-height: calc(var(--lightbox-panel-height) - 36px);
     padding: 10px;
-    transform: translateY(-1vh);
+    transform: none;
   }
 
   .lightbox__artwork-image {
@@ -4453,30 +4489,38 @@ html[data-theme="dark"] .admin-divider {
 
   .lightbox__aside {
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
     height: auto;
     min-height: 0;
-    padding: 18px 18px 18px;
+    padding: 14px 16px 16px;
   }
 
   .lightbox__caption {
     align-items: flex-start;
-    padding-right: 0;
+    gap: 6px;
+    padding-right: 46px;
     text-align: left;
   }
 
   .lightbox__caption h2 {
-    font-size: clamp(2.05rem, 9vw, 2.7rem);
+    max-width: none;
+    font-size: clamp(1.98rem, 8.8vw, 2.52rem);
   }
 
   .lightbox__caption .inline-copy {
-    font-size: 1.18rem;
-    line-height: 1.62;
+    font-size: 1.08rem;
+    line-height: 1.56;
   }
 
   .lightbox__details {
     align-items: flex-start;
-    font-size: 1.02rem;
+    gap: 6px;
+    font-size: 0.98rem;
+    line-height: 1.3;
+  }
+
+  .lightbox__details dt {
+    flex-basis: 64px;
   }
 
   .lightbox__nav-button {
@@ -4508,10 +4552,10 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__artwork-frame {
-      width: min(100%, calc((var(--lightbox-panel-height) - 12px) * 1.28));
-      height: calc(var(--lightbox-panel-height) - 12px);
+      width: min(100%, calc((var(--lightbox-panel-height) - 8px) * 1.28));
+      height: calc(var(--lightbox-panel-height) - 8px);
       max-width: calc(100% - 8px);
-      max-height: calc(var(--lightbox-panel-height) - 12px);
+      max-height: calc(var(--lightbox-panel-height) - 8px);
       padding: 14px;
       transform: none;
     }
@@ -4524,27 +4568,27 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__aside {
-      padding: 16px;
+      padding: 14px 16px 16px;
     }
   }
 
   @media (orientation: landscape) {
     .lightbox {
       place-items: center;
-      padding: 10px;
+      padding: 8px;
     }
 
     .lightbox__sheet {
-      --lightbox-panel-height: min(86svh, 380px);
+      --lightbox-panel-height: min(88svh, 400px);
       --lightbox-detail-panel-height: var(--lightbox-panel-height);
       --lightbox-panel-min-height: 240px;
-      width: calc(100vw - 10px);
+      width: calc(100vw - 8px);
     }
 
     .lightbox__grid {
-      grid-template-columns: minmax(0, 1fr) clamp(300px, 34vw, 340px);
-      align-items: center;
-      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) clamp(248px, 29vw, 292px);
+      align-items: stretch;
+      gap: 6px;
       text-align: left;
     }
 
@@ -4553,11 +4597,11 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__artwork-frame {
-      width: min(100%, calc(var(--lightbox-panel-height) * 1.28));
+      width: min(100%, calc(var(--lightbox-panel-height) * 1.34));
       height: var(--lightbox-panel-height);
       max-width: 100%;
       max-height: var(--lightbox-panel-height);
-      padding: 14px;
+      padding: 12px;
       transform: none;
     }
 
@@ -4569,16 +4613,20 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__close {
-      width: 32px;
-      height: 32px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
     }
 
     .lightbox__aside {
+      justify-self: start;
       align-items: flex-start;
       height: var(--lightbox-detail-panel-height);
       min-height: 0;
       overflow-y: auto;
-      padding: 14px;
+      padding: 12px 12px 12px 10px;
     }
 
     .lightbox__caption {
@@ -4586,16 +4634,18 @@ html[data-theme="dark"] .admin-divider {
       flex: 0 0 auto;
       min-height: auto;
       text-align: left;
-      gap: 6px;
+      gap: 4px;
+      padding-right: 44px;
     }
 
     .lightbox__caption h2 {
-      font-size: clamp(1.42rem, 4.2vw, 1.78rem);
+      max-width: none;
+      font-size: clamp(1.52rem, 4vw, 1.84rem);
     }
 
     .lightbox__caption .inline-copy {
-      font-size: 0.78rem;
-      line-height: 1.22;
+      font-size: 0.84rem;
+      line-height: 1.28;
     }
 
     .lightbox__details {
@@ -4603,37 +4653,39 @@ html[data-theme="dark"] .admin-divider {
       flex: 0 0 auto;
       flex-direction: column;
       width: 100%;
-      gap: 4px;
-      font-size: 0.75rem;
-      line-height: 1.18;
+      gap: 6px;
+      font-size: 0.8rem;
+      line-height: 1.22;
+      margin-top: 2px;
     }
 
     .lightbox__details div {
       display: flex;
       flex-wrap: nowrap;
-      gap: 6px;
+      gap: 8px;
       min-width: 0;
     }
 
     .lightbox__details dt {
-      flex: 0 0 auto;
+      flex: 0 0 56px;
     }
 
     .lightbox__details dd {
-      display: none;
+      display: block;
     }
 
     .lightbox__actions {
       flex: 0 0 auto;
-      gap: 10px;
-      margin-top: 0;
-      padding-top: 4px;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 6px;
+      align-self: flex-start;
     }
 
     .lightbox__nav-button {
-      min-height: 30px;
-      padding-inline: 9px;
-      font-size: 0.8rem;
+      min-height: 32px;
+      padding-inline: 12px;
+      font-size: 0.84rem;
     }
   }
 
@@ -4709,21 +4761,21 @@ html[data-theme="dark"] .admin-divider {
 
   .lightbox {
     place-items: center;
-    padding: 10px;
+    padding: 8px;
   }
 
   .lightbox__sheet {
-    --lightbox-panel-height: min(86svh, 380px);
+    --lightbox-panel-height: min(88svh, 400px);
     --lightbox-detail-panel-height: var(--lightbox-panel-height);
     --lightbox-panel-min-height: 240px;
-    width: calc(100vw - 10px);
+    width: calc(100vw - 8px);
     transform: none;
   }
 
   .lightbox__grid {
-    grid-template-columns: minmax(0, 1fr) clamp(300px, 34vw, 340px);
-    align-items: center;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) clamp(248px, 29vw, 292px);
+    align-items: stretch;
+    gap: 6px;
     text-align: left;
   }
 
@@ -4732,11 +4784,11 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__artwork-frame {
-    width: min(100%, calc(var(--lightbox-panel-height) * 1.28));
+    width: min(100%, calc(var(--lightbox-panel-height) * 1.34));
     height: var(--lightbox-panel-height);
     max-width: 100%;
     max-height: var(--lightbox-panel-height);
-    padding: 14px;
+    padding: 12px;
     transform: none;
   }
 
@@ -4748,16 +4800,20 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__close {
-    width: 32px;
-    height: 32px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
   }
 
   .lightbox__aside {
+    justify-self: start;
     align-items: flex-start;
     height: var(--lightbox-detail-panel-height);
     min-height: 0;
     overflow-y: auto;
-    padding: 14px;
+    padding: 12px 12px 12px 10px;
   }
 
   .lightbox__caption {
@@ -4765,16 +4821,18 @@ html[data-theme="dark"] .admin-divider {
     flex: 0 0 auto;
     min-height: auto;
     text-align: left;
-    gap: 6px;
+    gap: 4px;
+    padding-right: 44px;
   }
 
   .lightbox__caption h2 {
-    font-size: clamp(1.42rem, 4.2vw, 1.78rem);
+    max-width: none;
+    font-size: clamp(1.52rem, 4vw, 1.84rem);
   }
 
   .lightbox__caption .inline-copy {
-    font-size: 0.78rem;
-    line-height: 1.22;
+    font-size: 0.84rem;
+    line-height: 1.28;
   }
 
   .lightbox__details {
@@ -4782,58 +4840,61 @@ html[data-theme="dark"] .admin-divider {
     flex: 0 0 auto;
     flex-direction: column;
     width: 100%;
-    gap: 4px;
-    font-size: 0.75rem;
-    line-height: 1.18;
+    gap: 6px;
+    font-size: 0.8rem;
+    line-height: 1.22;
+    margin-top: 2px;
   }
 
   .lightbox__details div {
     display: flex;
     flex-wrap: nowrap;
-    gap: 6px;
+    gap: 8px;
     min-width: 0;
   }
 
   .lightbox__details dt {
-    flex: 0 0 auto;
+    flex: 0 0 56px;
   }
 
   .lightbox__details dd {
-    display: none;
+    display: block;
   }
 
   .lightbox__actions {
     flex: 0 0 auto;
-    gap: 10px;
-    margin-top: 0;
-    padding-top: 4px;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 6px;
+    align-self: flex-start;
   }
 
   .lightbox__nav-button {
-    min-height: 30px;
-    padding-inline: 9px;
-    font-size: 0.8rem;
+    min-height: 32px;
+    padding-inline: 12px;
+    font-size: 0.84rem;
   }
 }
 
 @media (max-width: 430px) {
   .site-nav {
-    width: auto;
-    max-width: calc(100vw - 20px);
+    width: 100%;
+    max-width: 100vw;
     flex-wrap: nowrap;
-    gap: 6px;
-    padding: 9px 10px;
+    gap: 10px;
+    padding: 12px 14px;
     overflow: visible;
+    border-radius: 0 0 24px 24px;
   }
 
   .site-nav__links {
     flex: 1 1 auto;
-    gap: 8px;
+    gap: 10px;
   }
 
   .site-nav__controls {
-    gap: 4px;
-    padding-left: 6px;
+    gap: 6px;
+    padding-left: 10px;
     pointer-events: auto;
   }
 
@@ -4845,25 +4906,32 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-nav a {
-    font-size: 0.88rem;
+    font-size: 0.96rem;
   }
 
   .language-switch,
   .language-switch__item {
-    width: 34px;
-    height: 32px;
+    width: 40px;
+    height: 34px;
   }
 
   .language-switch__flag {
-    width: 26px;
-    height: 18px;
+    width: 30px;
+    height: 21px;
   }
 
   .theme-toggle {
-    min-width: 50px;
-    height: 32px;
-    padding: 0 9px;
-    font-size: 0.82rem;
+    min-width: 58px;
+    height: 34px;
+    padding: 0 11px;
+    font-size: 0.9rem;
+  }
+
+  .site-nav .theme-toggle {
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    font-size: 0.96rem;
   }
 
   .admin-topbar__locale-copy,

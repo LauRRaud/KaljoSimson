@@ -37,9 +37,9 @@ function renderHomeTitle(title) {
 }
 
 const desktopWordStep = 4.2;
-const mobileWordStep = 1.85;
+const mobileWordStep = desktopWordStep;
 const desktopCycleEndPause = 2.2;
-const mobileCycleEndPause = 2;
+const mobileCycleEndPause = desktopCycleEndPause;
 
 function renderTaglineWords(words) {
 
