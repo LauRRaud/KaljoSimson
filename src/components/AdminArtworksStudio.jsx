@@ -170,7 +170,7 @@ function ArtworkForm({
   );
 }
 
-export default function AdminArtworksStudio({ artworks }) {
+export default function AdminArtworksStudio({ artworks, embedded = false }) {
   const router = useRouter();
   const [status, setStatus] = useState("");
   const [busyTarget, setBusyTarget] = useState("");
@@ -236,32 +236,64 @@ export default function AdminArtworksStudio({ artworks }) {
     });
   }
 
-  return (
-    <div className="admin-grid">
-      <div className="admin-toolbar">
-        <div>
-          <p className="eyebrow">Teoste haldus</p>
-          <h2>Kunstiteosed</h2>
-        </div>
-        <p className="admin-status">
-          {status || `${artworks.length} teost andmebaasis.`}
-        </p>
-      </div>
+  const content = (
+    <>
+      {embedded ? (
+        <article className="admin-panel admin-panel--compact">
+          <div className="section-heading">
+            <p className="eyebrow">Galerii</p>
+            <h2>Galerii</h2>
+            <p className="admin-note">
+              Siin haldad avalehe ja ühise galerii vaates nähtavaid teoseid.
+            </p>
+          </div>
+          <p className="admin-status">
+            {status || `${artworks.length} teost andmebaasis.`}
+          </p>
+          <div className="admin-divider" />
+          <div className="section-heading section-heading--inline">
+            <div>
+              <p className="eyebrow">Uus teos</p>
+              <h3>Lisa kunstiteos</h3>
+            </div>
+          </div>
+          <ArtworkForm
+            busy={isPending || busyTarget === "create"}
+            fileInputRef={createFileRef}
+            mode="create"
+            onSubmit={(event) =>
+              submitArtwork(event, createArtworkAction, "create", createFileRef.current)
+            }
+          />
+        </article>
+      ) : (
+        <>
+          <div className="admin-toolbar">
+            <div>
+              <p className="eyebrow">Galerii</p>
+              <h2>Galerii</h2>
+            </div>
+            <p className="admin-status">
+              {status || `${artworks.length} teost andmebaasis.`}
+            </p>
+          </div>
 
-      <article className="admin-panel admin-panel--compact">
-        <div className="section-heading">
-          <p className="eyebrow">Uus teos</p>
-          <h3>Lisa kunstiteos</h3>
-        </div>
-        <ArtworkForm
-          busy={isPending || busyTarget === "create"}
-          fileInputRef={createFileRef}
-          mode="create"
-          onSubmit={(event) =>
-            submitArtwork(event, createArtworkAction, "create", createFileRef.current)
-          }
-        />
-      </article>
+          <article className="admin-panel admin-panel--compact">
+            <div className="section-heading">
+              <p className="eyebrow">Uus teos</p>
+              <h3>Lisa kunstiteos</h3>
+            </div>
+            <ArtworkForm
+              busy={isPending || busyTarget === "create"}
+              fileInputRef={createFileRef}
+              mode="create"
+              onSubmit={(event) =>
+                submitArtwork(event, createArtworkAction, "create", createFileRef.current)
+              }
+            />
+          </article>
+        </>
+      )}
 
       <div className="admin-artwork-stack">
         {artworks.map((artwork) => (
@@ -311,6 +343,8 @@ export default function AdminArtworksStudio({ artworks }) {
           </article>
         ))}
       </div>
-    </div>
+    </>
   );
+
+  return embedded ? content : <div className="admin-grid">{content}</div>;
 }

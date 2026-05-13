@@ -39,6 +39,7 @@ export default async function HomePage({ searchParams }) {
   const locale = getLocaleFromSearchParams(params);
   const content = await getSiteContent();
   const contactText = getCopy(content.site.contactText, locale);
+  const tagline = getCopy(content.site.tagline, locale).trim();
 
   return (
     <PageShell
@@ -50,6 +51,7 @@ export default async function HomePage({ searchParams }) {
       <section className="home-title">
         <div className="home-title__inner">
           <h1 className="home-title__brand">{content.site.title}</h1>
+          {tagline ? <p className="home-title__tagline">{tagline}</p> : null}
           <div className="home-title__story">
             <p className="home-title__copy">
               {getCopy(content.site.heroText, locale)}

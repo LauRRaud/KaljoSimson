@@ -34,7 +34,7 @@ export default async function GalleryPage({ searchParams }) {
 
   return (
     <PageShell content={content} locale={locale}>
-      <section className="section">
+      <section className="section gallery-room-section">
         <div className="section-heading section-heading--centered">
           <Link className="inline-link" href={withLocale("/", locale)}>
             {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
@@ -50,7 +50,7 @@ export default async function GalleryPage({ searchParams }) {
           </a>
         </div>
 
-        <GalleryClient artist={galleryArtist} locale={locale} />
+        <GalleryClient artist={galleryArtist} locale={locale} variant="room" />
       </section>
     </PageShell>
   );

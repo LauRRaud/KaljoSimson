@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AdminArtworksStudio from "@/components/AdminArtworksStudio";
+import PageLineWaves from "@/components/PageLineWaves";
+import ThemeToggle from "@/components/ThemeToggle";
 import { logoutAction } from "@/app/admin/actions";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getAdminArtworks } from "@/lib/artworks";
@@ -8,8 +10,8 @@ import { getAdminArtworks } from "@/lib/artworks";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Kunstiteosed | Admin",
-  description: "BeyondFrames kunstiteoste haldus",
+  title: "Galerii | Admin",
+  description: "BeyondFrames galerii haldus",
 };
 
 export default async function AdminArtworksPage() {
@@ -20,31 +22,46 @@ export default async function AdminArtworksPage() {
   const artworks = await getAdminArtworks();
 
   return (
-    <main className="admin-page">
-      <section className="admin-shell">
-        <div className="admin-shell__top">
-          <div className="section-heading">
-            <h1>BeyondFrames</h1>
-            <p className="admin-login__label">Kunstiteoste haldus</p>
-          </div>
+    <div className="page-shell admin-page-shell">
+      <PageLineWaves />
+      <main className="admin-page">
+        <section className="admin-shell">
+          <div className="admin-shell__top">
+            <div className="section-heading">
+              <p className="eyebrow">Galerii haldus</p>
+              <h1>BeyondFrames</h1>
+              <p className="admin-shell__copy">
+                Eraldi galerii haldus jääb samasse visuaalsesse keelde nagu peamine
+                sisuhaldus ja avalik vaade.
+              </p>
+            </div>
 
-          <div className="admin-actions-inline">
-            <Link className="button button--ghost button--admin-ghost" href="/admin">
-              Üldsisuhaldus
-            </Link>
-            <form action={logoutAction}>
-              <button
-                className="button button--ghost button--admin-ghost"
-                type="submit"
+            <div className="admin-actions-inline admin-actions-inline--stacked">
+              <nav
+                className="site-nav admin-topbar admin-topbar--subpage"
+                aria-label="Admini vaated"
               >
-                Logi välja
-              </button>
-            </form>
-          </div>
-        </div>
+                <div className="site-nav__links admin-topbar__links">
+                  <Link href="/admin">Üldsisuhaldus</Link>
+                </div>
 
-        <AdminArtworksStudio artworks={artworks} />
-      </section>
-    </main>
+                <div className="site-nav__controls admin-topbar__controls">
+                  <span className="admin-topbar__locale-copy">Vaade</span>
+                  <ThemeToggle locale="et" />
+                </div>
+              </nav>
+
+              <form action={logoutAction}>
+                <button className="button button--ghost button--admin-ghost" type="submit">
+                  Logi välja
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <AdminArtworksStudio artworks={artworks} />
+        </section>
+      </main>
+    </div>
   );
 }

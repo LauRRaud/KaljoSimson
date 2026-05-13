@@ -1,9 +1,11 @@
-"use client";
+﻿"use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import AdminArtworksStudio from "@/components/AdminArtworksStudio";
 import ArtistPortrait from "@/components/ArtistPortrait";
 import ArtworkFrame from "@/components/ArtworkFrame";
+import ThemeToggle from "@/components/ThemeToggle";
 import { saveContentAction } from "@/app/admin/actions";
 import {
   cloneContent,
@@ -11,7 +13,6 @@ import {
   createEmptyArtwork,
   getCopy,
 } from "@/lib/content-helpers";
-import { artworkPresets, portraitPresets } from "@/lib/visuals";
 
 function LocaleSwitch({ locale, onChange }) {
   return (
@@ -70,7 +71,25 @@ function LinkButton({ href, children }) {
   );
 }
 
-export default function AdminStudio({ initialContent, demoContent }) {
+function renderContactCopy(copy) {
+  const noBreakTerm = "e-posti";
+
+  if (!copy.includes(noBreakTerm)) {
+    return copy;
+  }
+
+  const [before, ...after] = copy.split(noBreakTerm);
+
+  return (
+    <>
+      {before}
+      <span className="text-nowrap">{noBreakTerm}</span>
+      {after.join(noBreakTerm)}
+    </>
+  );
+}
+
+export default function AdminStudio({ initialContent, artworks }) {
   const [draft, setDraft] = useState(() => cloneContent(initialContent));
   const [status, setStatus] = useState("");
   const [busyTarget, setBusyTarget] = useState("");
@@ -81,10 +100,31 @@ export default function AdminStudio({ initialContent, demoContent }) {
     ),
   );
   const [expandedArtworks, setExpandedArtworks] = useState({});
+  const [scrollToArtistKey, setScrollToArtistKey] = useState("");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const artistCardRefs = useRef({});
   const portraitInputs = useRef({});
   const artworkInputs = useRef({});
+
+  useEffect(() => {
+    if (!scrollToArtistKey) {
+      return;
+    }
+
+    artistCardRefs.current[scrollToArtistKey]?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    const resetScrollTarget = window.requestAnimationFrame(() => {
+      setScrollToArtistKey("");
+    });
+
+    return () => {
+      window.cancelAnimationFrame(resetScrollTarget);
+    };
+  }, [scrollToArtistKey]);
 
   function getArtistKey(artist, index) {
     return artist.slug || `artist-${index}`;
@@ -141,21 +181,6 @@ export default function AdminStudio({ initialContent, demoContent }) {
         [field]: value,
       },
     }));
-  }
-
-  function updateNote(index, locale, value) {
-    setDraft((current) => {
-      const notes = [...current.notes];
-      notes[index] = {
-        ...notes[index],
-        [locale]: value,
-      };
-
-      return {
-        ...current,
-        notes,
-      };
-    });
   }
 
   function updateArtist(index, field, value) {
@@ -246,6 +271,7 @@ export default function AdminStudio({ initialContent, demoContent }) {
       ...current,
       [getArtistKey(newArtist, nextIndex)]: true,
     }));
+    setScrollToArtistKey(getArtistKey(newArtist, nextIndex));
   }
 
   function removeArtist(index) {
@@ -365,19 +391,6 @@ export default function AdminStudio({ initialContent, demoContent }) {
     });
   }
 
-  function handleReset() {
-    const confirmed = window.confirm(
-      "Kas taastada demoandmed? Praegused muutused kirjutatakse üle.",
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    setDraft(cloneContent(demoContent));
-    setStatus("Demoandmed taastatud. Salvesta, kui soovid need faili kirjutada.");
-  }
-
   function handleExport() {
     const blob = new Blob([JSON.stringify(draft, null, 2)], {
       type: "application/json",
@@ -390,8 +403,31 @@ export default function AdminStudio({ initialContent, demoContent }) {
     URL.revokeObjectURL(url);
   }
 
+  const siteTagline = getCopy(draft.site.tagline, editorLocale).trim();
+  const siteHeroText = getCopy(draft.site.heroText, editorLocale);
+  const siteContactTitle = getCopy(draft.site.contactTitle, editorLocale);
+  const siteContactText = getCopy(draft.site.contactText, editorLocale);
+
   return (
     <div className="admin-grid">
+      <nav className="site-nav admin-topbar" aria-label="Sisuhalduse navigeerimine">
+        <div className="site-nav__links admin-topbar__links">
+          <a href="#admin-site">Leht</a>
+          <a href="#admin-gallery">Galerii</a>
+          <a href="#admin-artists">Kunstnikud</a>
+        </div>
+
+        <div className="site-nav__controls admin-topbar__controls">
+          <div className="admin-topbar__locale">
+            <span className="admin-topbar__locale-copy">
+              {editorLocale === "en" ? "Editing EN" : `Muudad ${editorLocale.toUpperCase()}`}
+            </span>
+            <LocaleSwitch locale={editorLocale} onChange={setEditorLocale} />
+          </div>
+          <ThemeToggle locale={editorLocale} />
+        </div>
+      </nav>
+
       <div className="admin-toolbar">
         <div className="admin-toolbar__group">
           <button className="button" disabled={isPending} onClick={handleSave} type="button">
@@ -404,136 +440,151 @@ export default function AdminStudio({ initialContent, demoContent }) {
           >
             Ekspordi
           </button>
-          <button
-            className="button button--ghost"
-            onClick={handleReset}
-            type="button"
-          >
-            Taasta demo
-          </button>
         </div>
 
         <div className="admin-toolbar__meta">
-          <LocaleSwitch locale={editorLocale} onChange={setEditorLocale} />
           <p className="admin-status">
             {status || `Muudad praegu ${editorLocale.toUpperCase()} sisu.`}
           </p>
         </div>
       </div>
 
-      <article className="admin-panel admin-panel--compact">
+      <article className="admin-panel admin-panel--compact admin-home-editor" id="admin-site">
         <div className="section-heading">
-          <p className="eyebrow">Üldseaded</p>
+          <p className="eyebrow">Avaleht</p>
           <h2>Leht ja kontakt</h2>
           <p className="admin-note">
-            Tõlkeid muudad ühe keele kaupa. Andmestruktuur jääb ET ja EN jaoks
-            alles, kuid korraga on nähtav ainult valitud keel.
+            Siin näed avalehe esimest osa samas järjestuses nagu see päriselt välja
+            renderdub. Muuda iga nähtava ploki all vastavat sisu.
           </p>
         </div>
 
-        <div className="admin-form-grid">
-          <div className="form-field">
-            <label htmlFor="site-title">Lehe nimi</label>
-            <input
-              className="input"
-              id="site-title"
-              onChange={(event) => updateSite("title", event.target.value)}
-              value={draft.site.title}
-            />
-          </div>
-          <div className="form-field">
-            <label htmlFor="site-domain">Domeen</label>
-            <input
-              className="input"
-              id="site-domain"
-              onChange={(event) => updateSite("domain", event.target.value)}
-              value={draft.site.domain}
-            />
-          </div>
-          <div className="form-field">
-            <label htmlFor="contact-email">E-post</label>
-            <input
-              className="input"
-              id="contact-email"
-              onChange={(event) => updateContact("email", event.target.value)}
-              value={draft.contact.email}
-            />
-          </div>
-          <div className="form-field">
-            <label htmlFor="contact-phone">Telefon</label>
-            <input
-              className="input"
-              id="contact-phone"
-              onChange={(event) => updateContact("phone", event.target.value)}
-              value={draft.contact.phone}
-            />
-          </div>
-        </div>
+        <div className="admin-home-editor__canvas">
+          <div className="admin-home-editor__hero">
+            <div className="admin-home-editor__block admin-home-editor__block--title">
+              <h1 className="home-title__brand admin-home-editor__brand">{draft.site.title}</h1>
+              <div className="admin-home-editor__control">
+                <div className="form-field">
+                  <label htmlFor="site-title">Lehe nimi</label>
+                  <input
+                    className="input"
+                    id="site-title"
+                    onChange={(event) => updateSite("title", event.target.value)}
+                    value={draft.site.title}
+                  />
+                </div>
+              </div>
+            </div>
 
-        <div className="admin-form-grid admin-form-grid--full">
-          <LocalizedField
-            label="Tagline"
-            locale={editorLocale}
-            onChange={(locale, value) => updateSiteText("tagline", locale, value)}
-            value={draft.site.tagline}
-          />
-          <LocalizedField
-            label="Hero pealkiri"
-            locale={editorLocale}
-            onChange={(locale, value) => updateSiteText("heroTitle", locale, value)}
-            value={draft.site.heroTitle}
-          />
-          <LocalizedField
-            label="Hero tekst"
-            locale={editorLocale}
-            multiline
-            onChange={(locale, value) => updateSiteText("heroText", locale, value)}
-            value={draft.site.heroText}
-          />
-          <LocalizedField
-            label="Kontseptsiooni pealkiri"
-            locale={editorLocale}
-            onChange={(locale, value) => updateSiteText("aboutTitle", locale, value)}
-            value={draft.site.aboutTitle}
-          />
-          <LocalizedField
-            label="Kontseptsiooni tekst"
-            locale={editorLocale}
-            multiline
-            onChange={(locale, value) => updateSiteText("aboutText", locale, value)}
-            value={draft.site.aboutText}
-          />
-          <LocalizedField
-            label="Kontakti pealkiri"
-            locale={editorLocale}
-            onChange={(locale, value) => updateSiteText("contactTitle", locale, value)}
-            value={draft.site.contactTitle}
-          />
-          <LocalizedField
-            label="Kontakti tekst"
-            locale={editorLocale}
-            multiline
-            onChange={(locale, value) => updateSiteText("contactText", locale, value)}
-            value={draft.site.contactText}
-          />
-        </div>
+            <div className="admin-home-editor__block admin-home-editor__block--tagline">
+              {siteTagline ? (
+                <p className="home-title__tagline admin-home-editor__tagline">{siteTagline}</p>
+              ) : (
+                <p className="admin-home-editor__ghost-label">
+                  Tagline kuvatakse siin, kui see pole tühi.
+                </p>
+              )}
+              <div className="admin-home-editor__control">
+                <LocalizedField
+                  label="Tagline"
+                  locale={editorLocale}
+                  onChange={(locale, value) => updateSiteText("tagline", locale, value)}
+                  value={draft.site.tagline}
+                />
+              </div>
+            </div>
 
-        <div className="admin-divider" />
+            <div className="admin-home-editor__block admin-home-editor__block--hero-copy">
+              <div className="home-title__story admin-home-editor__story">
+                <p className="home-title__copy admin-home-editor__copy">{siteHeroText}</p>
+              </div>
+              <div className="admin-home-editor__control">
+                <LocalizedField
+                  label="Hero tekst"
+                  locale={editorLocale}
+                  multiline
+                  onChange={(locale, value) => updateSiteText("heroText", locale, value)}
+                  value={draft.site.heroText}
+                />
+              </div>
+            </div>
+          </div>
 
-        <div className="admin-note-grid">
-          {draft.notes.map((note, index) => (
-            <LocalizedField
-              key={`note-${index}`}
-              label={`Märksõna ${index + 1}`}
-              locale={editorLocale}
-              onChange={(locale, value) => updateNote(index, locale, value)}
-              value={note}
-            />
-          ))}
+          <section className="admin-home-editor__contact" aria-label="Kontakti eelvaade">
+            <div className="admin-home-editor__block">
+              <h2>{siteContactTitle}</h2>
+              <div className="admin-home-editor__control">
+                <LocalizedField
+                  label="Kontakti pealkiri"
+                  locale={editorLocale}
+                  onChange={(locale, value) => updateSiteText("contactTitle", locale, value)}
+                  value={draft.site.contactTitle}
+                />
+              </div>
+            </div>
+
+            <div className="admin-home-editor__block">
+              <p className="section-copy admin-home-editor__contact-copy">
+                {renderContactCopy(siteContactText)}
+              </p>
+              <div className="admin-home-editor__control">
+                <LocalizedField
+                  label="Kontakti tekst"
+                  locale={editorLocale}
+                  multiline
+                  onChange={(locale, value) => updateSiteText("contactText", locale, value)}
+                  value={draft.site.contactText}
+                />
+              </div>
+            </div>
+
+            <div className="contact-inline admin-home-editor__contact-lines">
+              <div className="admin-home-editor__line-group">
+                <a className="contact-inline__line" href={`mailto:${draft.contact.email}`}>
+                  {draft.contact.email}
+                </a>
+                <div className="admin-home-editor__control">
+                  <div className="form-field">
+                    <label htmlFor="contact-email">E-post</label>
+                    <input
+                      className="input"
+                      id="contact-email"
+                      onChange={(event) => updateContact("email", event.target.value)}
+                      value={draft.contact.email}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-home-editor__line-group">
+                <a
+                  className="contact-inline__line"
+                  href={`tel:${draft.contact.phone.replace(/\s+/g, "")}`}
+                >
+                  {draft.contact.phone}
+                </a>
+                <div className="admin-home-editor__control">
+                  <div className="form-field">
+                    <label htmlFor="contact-phone">Telefon</label>
+                    <input
+                      className="input"
+                      id="contact-phone"
+                      onChange={(event) => updateContact("phone", event.target.value)}
+                      value={draft.contact.phone}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </article>
 
-      <article className="admin-panel admin-panel--compact">
+      <section id="admin-gallery">
+        <AdminArtworksStudio artworks={artworks} embedded />
+      </section>
+
+      <article className="admin-panel admin-panel--compact" id="admin-artists">
         <div className="section-heading">
           <p className="eyebrow">Kunstnikud</p>
           <h2>Profiilid ja galeriid</h2>
@@ -560,6 +611,9 @@ export default function AdminStudio({ initialContent, demoContent }) {
                   artistExpanded ? "admin-artist-card--open" : ""
                 }`}
                 key={`${artist.slug}-${artistIndex}`}
+                ref={(element) => {
+                  artistCardRefs.current[artistKey] = element;
+                }}
               >
                 <div className="admin-card-header">
                   <div className="admin-card-heading">
@@ -596,19 +650,9 @@ export default function AdminStudio({ initialContent, demoContent }) {
 
                 {artistExpanded ? (
                   <div className="admin-card-body">
-                    <div className="admin-artist-layout">
-                      <div className="admin-stack">
+                    <section className="admin-artist-editor profile-hero">
+                      <div className="profile-nav admin-artist-editor__meta">
                         <div className="admin-form-grid">
-                          <div className="form-field">
-                            <label>Nimi</label>
-                            <input
-                              className="input"
-                              onChange={(event) =>
-                                updateArtist(artistIndex, "name", event.target.value)
-                              }
-                              value={artist.name}
-                            />
-                          </div>
                           <div className="form-field">
                             <label>Slug</label>
                             <input
@@ -632,20 +676,111 @@ export default function AdminStudio({ initialContent, demoContent }) {
                               value={artist.location}
                             />
                           </div>
+                        </div>
+                      </div>
+
+                      <div className="admin-artist-editor__portrait">
+                        <ArtistPortrait artist={artist} />
+                        <div className="admin-artist-editor__control">
                           <div className="form-field">
-                            <label>Praktika algus</label>
+                            <label>Portreepildi URL</label>
                             <input
                               className="input"
                               onChange={(event) =>
-                                updateArtist(
-                                  artistIndex,
-                                  "practiceSince",
-                                  event.target.value,
-                                )
+                                updateArtist(artistIndex, "portraitImage", event.target.value)
                               }
-                              value={artist.practiceSince}
+                              value={artist.portraitImage}
                             />
                           </div>
+                          <button
+                            className="admin-preview-button"
+                            onClick={() => portraitInputs.current[artistIndex]?.click()}
+                            type="button"
+                          >
+                            {busyTarget === `portrait-${artistIndex}`
+                              ? "Laen üles..."
+                              : "Laadi portree"}
+                          </button>
+                          <input
+                            accept="image/*"
+                            className="hidden-input"
+                            onChange={(event) =>
+                              handlePortraitUpload(artistIndex, event.target.files?.[0])
+                            }
+                            ref={(element) => {
+                              portraitInputs.current[artistIndex] = element;
+                            }}
+                            type="file"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="profile-copy admin-artist-editor__copy">
+                        <div className="admin-artist-editor__block">
+                          <h1>{artist.name || "Uus kunstnik"}</h1>
+                          <div className="admin-artist-editor__control">
+                            <div className="form-field">
+                              <label>Nimi</label>
+                              <input
+                                className="input"
+                                onChange={(event) =>
+                                  updateArtist(artistIndex, "name", event.target.value)
+                                }
+                                value={artist.name}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="admin-artist-editor__block">
+                          <p className="profile-copy__lead">
+                            {getCopy(artist.role, editorLocale)}
+                          </p>
+                          <div className="admin-artist-editor__control">
+                            <LocalizedField
+                              label="Roll"
+                              locale={editorLocale}
+                              onChange={(locale, value) =>
+                                updateArtistText(artistIndex, "role", locale, value)
+                              }
+                              value={artist.role}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="admin-artist-editor__block">
+                          <p className="section-copy">
+                            {getCopy(artist.shortBio, editorLocale)}
+                          </p>
+                          <div className="admin-artist-editor__control">
+                            <LocalizedField
+                              label="Lühitutvustus"
+                              locale={editorLocale}
+                              multiline
+                              onChange={(locale, value) =>
+                                updateArtistText(artistIndex, "shortBio", locale, value)
+                              }
+                              value={artist.shortBio}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="profile-tags-actions admin-artist-editor__tags">
+                          <div className="pill-row">
+                            {artist.focus.map((focus) => (
+                              <span className="pill" key={focus}>
+                                {focus}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="profile-actions">
+                            <span className="button button--ghost">
+                              {editorLocale === "en" ? "Ask about works" : "Küsi teoste kohta"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="admin-artist-editor__control">
                           <div className="form-field">
                             <label>Fookusmärksõnad</label>
                             <input
@@ -664,119 +799,35 @@ export default function AdminStudio({ initialContent, demoContent }) {
                             />
                             <span className="field-hint">Eralda komadega.</span>
                           </div>
-                          <div className="form-field">
-                            <label>Portree preset</label>
-                            <select
-                              className="select"
-                              onChange={(event) =>
-                                updateArtist(
-                                  artistIndex,
-                                  "portraitPresetId",
-                                  event.target.value,
-                                )
-                              }
-                              value={artist.portraitPresetId}
-                            >
-                              {portraitPresets.map((preset) => (
-                                <option key={preset.id} value={preset.id}>
-                                  {preset.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="form-field form-field--full">
-                            <label>Portreepildi URL</label>
-                            <input
-                              className="input"
-                              onChange={(event) =>
-                                updateArtist(artistIndex, "portraitImage", event.target.value)
-                              }
-                              value={artist.portraitImage}
-                            />
-                          </div>
                         </div>
-
-                        <LocalizedField
-                          label="Roll"
-                          locale={editorLocale}
-                          onChange={(locale, value) =>
-                            updateArtistText(artistIndex, "role", locale, value)
-                          }
-                          value={artist.role}
-                        />
-                        <LocalizedField
-                          label="Lühitutvustus"
-                          locale={editorLocale}
-                          multiline
-                          onChange={(locale, value) =>
-                            updateArtistText(artistIndex, "shortBio", locale, value)
-                          }
-                          value={artist.shortBio}
-                        />
-                        <LocalizedField
-                          label="Biograafia"
-                          locale={editorLocale}
-                          multiline
-                          onChange={(locale, value) =>
-                            updateArtistText(artistIndex, "biography", locale, value)
-                          }
-                          value={artist.biography}
-                        />
-                        <LocalizedField
-                          label="Statement"
-                          locale={editorLocale}
-                          multiline
-                          onChange={(locale, value) =>
-                            updateArtistText(artistIndex, "statement", locale, value)
-                          }
-                          value={artist.statement}
-                        />
-                        <LocalizedField
-                          label="Galerii sissejuhatus"
-                          locale={editorLocale}
-                          multiline
-                          onChange={(locale, value) =>
-                            updateArtistText(artistIndex, "galleryIntro", locale, value)
-                          }
-                          value={artist.galleryIntro}
-                        />
                       </div>
 
-                      <aside className="admin-media-card">
-                        <div className="admin-media-card__preview admin-media-card__preview--portrait">
-                          <ArtistPortrait artist={artist} />
+                      <div className="profile-biography admin-artist-editor__biography">
+                        <p className="eyebrow">
+                          {editorLocale === "en" ? "Biography" : "Biograafia"}
+                        </p>
+                        {getCopy(artist.biography, editorLocale)
+                          .split(/\n\s*\n/)
+                          .map((paragraph) => paragraph.trim())
+                          .filter(Boolean)
+                          .map((paragraph) => (
+                            <p className="section-copy" key={paragraph}>
+                              {paragraph}
+                            </p>
+                          ))}
+                        <div className="admin-artist-editor__control">
+                          <LocalizedField
+                            label="Biograafia"
+                            locale={editorLocale}
+                            multiline
+                            onChange={(locale, value) =>
+                              updateArtistText(artistIndex, "biography", locale, value)
+                            }
+                            value={artist.biography}
+                          />
                         </div>
-                        <div className="admin-actions-inline">
-                          <button
-                            className="admin-preview-button"
-                            onClick={() => portraitInputs.current[artistIndex]?.click()}
-                            type="button"
-                          >
-                            {busyTarget === `portrait-${artistIndex}`
-                              ? "Laen üles..."
-                              : "Laadi portree"}
-                          </button>
-                          <button
-                            className="admin-preview-button"
-                            onClick={() => updateArtist(artistIndex, "portraitImage", "")}
-                            type="button"
-                          >
-                            Kasuta presetit
-                          </button>
-                        </div>
-                        <input
-                          accept="image/*"
-                          className="hidden-input"
-                          onChange={(event) =>
-                            handlePortraitUpload(artistIndex, event.target.files?.[0])
-                          }
-                          ref={(element) => {
-                            portraitInputs.current[artistIndex] = element;
-                          }}
-                          type="file"
-                        />
-                      </aside>
-                    </div>
+                      </div>
+                    </section>
 
                     <div className="admin-divider" />
 
@@ -921,27 +972,6 @@ export default function AdminStudio({ initialContent, demoContent }) {
                                         </select>
                                       </div>
                                       <div className="form-field">
-                                        <label>Pildi preset</label>
-                                        <select
-                                          className="select"
-                                          onChange={(event) =>
-                                            updateArtwork(
-                                              artistIndex,
-                                              artworkIndex,
-                                              "visualPresetId",
-                                              event.target.value,
-                                            )
-                                          }
-                                          value={artwork.visualPresetId}
-                                        >
-                                          {artworkPresets.map((preset) => (
-                                            <option key={preset.id} value={preset.id}>
-                                              {preset.name}
-                                            </option>
-                                          ))}
-                                        </select>
-                                      </div>
-                                      <div className="form-field">
                                         <label>Pildi URL</label>
                                         <input
                                           className="input"
@@ -1036,20 +1066,6 @@ export default function AdminStudio({ initialContent, demoContent }) {
                                           ? "Laen üles..."
                                           : "Laadi pilt"}
                                       </button>
-                                      <button
-                                        className="admin-preview-button"
-                                        onClick={() =>
-                                          updateArtwork(
-                                            artistIndex,
-                                            artworkIndex,
-                                            "image",
-                                            "",
-                                          )
-                                        }
-                                        type="button"
-                                      >
-                                        Kasuta presetit
-                                      </button>
                                     </div>
                                     <input
                                       accept="image/*"
@@ -1086,3 +1102,4 @@ export default function AdminStudio({ initialContent, demoContent }) {
     </div>
   );
 }
+

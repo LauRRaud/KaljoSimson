@@ -2,17 +2,32 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
 
-export default function GalleryClient({ artist, locale = "et" }) {
+export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
   const [activeIndex, setActiveIndex] = useState(null);
+  const roomViewportRef = useRef(null);
   const hasArtworks = artist.artworks.length > 0;
+  const isRoom = variant === "room";
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
   const portalRoot = typeof document === "undefined" ? null : document.body;
+
+  function scrollRoom(direction) {
+    const viewport = roomViewportRef.current;
+
+    if (!viewport) {
+      return;
+    }
+
+    viewport.scrollBy({
+      left: direction * Math.max(viewport.clientWidth * 0.72, 320),
+      behavior: "smooth",
+    });
+  }
 
   useEffect(() => {
     if (!hasArtworks || activeIndex === null) {
@@ -80,17 +95,60 @@ export default function GalleryClient({ artist, locale = "et" }) {
 
   return (
     <>
-      <div className="gallery-grid">
-        {artist.artworks.map((artwork, index) => (
-          <ArtworkFrame
-            artwork={artwork}
-            interactive
-            key={artwork.slug}
-            locale={locale}
-            onClick={() => setActiveIndex(index)}
-          />
-        ))}
-      </div>
+      {isRoom ? (
+        <section
+          aria-label={locale === "en" ? "Gallery room" : "Galeriiruum"}
+          className="gallery-room"
+        >
+          <div className="gallery-room__viewport" ref={roomViewportRef}>
+            <div className="gallery-room__wall">
+              {artist.artworks.map((artwork, index) => (
+                <div className="gallery-room__slot" key={artwork.slug}>
+                  <ArtworkFrame
+                    artwork={artwork}
+                    interactive
+                    locale={locale}
+                    onClick={() => setActiveIndex(index)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div aria-hidden="true" className="gallery-room__floor" />
+
+          <div className="gallery-room__controls">
+            <button
+              aria-label={locale === "en" ? "Move left in gallery" : "Liigu galeriis vasakule"}
+              className="gallery-room__nav gallery-room__nav--prev"
+              onClick={() => scrollRoom(-1)}
+              type="button"
+            >
+              <span aria-hidden="true">&lt;</span>
+            </button>
+            <button
+              aria-label={locale === "en" ? "Move right in gallery" : "Liigu galeriis paremale"}
+              className="gallery-room__nav gallery-room__nav--next"
+              onClick={() => scrollRoom(1)}
+              type="button"
+            >
+              <span aria-hidden="true">&gt;</span>
+            </button>
+          </div>
+        </section>
+      ) : (
+        <div className="gallery-grid">
+          {artist.artworks.map((artwork, index) => (
+            <ArtworkFrame
+              artwork={artwork}
+              interactive
+              key={artwork.slug}
+              locale={locale}
+              onClick={() => setActiveIndex(index)}
+            />
+          ))}
+        </div>
+      )}
 
       {portalRoot && activeArtwork ? createPortal(
         <div
