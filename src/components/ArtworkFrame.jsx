@@ -3,6 +3,35 @@
 import { getCopy } from "@/lib/content-helpers";
 import { getArtworkPreset } from "@/lib/visuals";
 
+function normalizeCaptionValue(value) {
+  return String(value ?? "").trim().toLocaleLowerCase("et-EE");
+}
+
+function getCaptionYear(year, locale) {
+  const normalizedYear = normalizeCaptionValue(year);
+
+  if (!normalizedYear || normalizedYear === "dateerimata" || normalizedYear === "undated") {
+    return locale === "en" ? "Year" : "Aasta";
+  }
+
+  return year;
+}
+
+function getCaptionSize(size, locale) {
+  const normalizedSize = normalizeCaptionValue(size);
+
+  if (
+    !normalizedSize ||
+    normalizedSize === "mõõdud täpsustamisel" ||
+    normalizedSize === "dimensions to be confirmed" ||
+    normalizedSize === "size to be confirmed"
+  ) {
+    return locale === "en" ? "Dimensions" : "Mõõtmed";
+  }
+
+  return size;
+}
+
 export default function ArtworkFrame({
   artwork,
   interactive = false,
@@ -61,8 +90,8 @@ export default function ArtworkFrame({
           <div className="artwork-frame__caption">
             <p>
               <span>{getCopy(artwork.title, locale)}</span>
-              <span>{artwork.year}</span>
-              <span>{artwork.size}</span>
+              <span>{getCaptionYear(artwork.year, locale)}</span>
+              <span>{getCaptionSize(artwork.size, locale)}</span>
             </p>
           </div>
         ) : null}

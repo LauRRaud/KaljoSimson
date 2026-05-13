@@ -53,7 +53,6 @@ export default async function GalleryPage({ searchParams }) {
       content={content}
       locale={locale}
       mainClassName="page-main--gallery"
-      showAmbient={false}
       showFooter={false}
     >
       <section className="gallery-room-page">

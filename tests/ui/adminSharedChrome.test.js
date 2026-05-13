@@ -5,12 +5,14 @@ const test = require("node:test");
 const adminPage = readFileSync("src/app/admin/page.js", "utf8");
 const adminArtworksPage = readFileSync("src/app/admin/artworks/page.js", "utf8");
 const adminStudio = readFileSync("src/components/AdminStudio.jsx", "utf8");
+const siteAmbient = readFileSync("src/components/SiteAmbient.jsx", "utf8");
 const css = readFileSync("src/app/globals.css", "utf8");
 
 test("admin login and content page use shared page-shell background chrome", () => {
-  assert.match(adminPage, /import PageLineWaves from "@\/components\/PageLineWaves";/);
   assert.match(adminPage, /className="page-shell admin-page-shell"/);
-  assert.match(adminPage, /<PageLineWaves \/>/);
+  assert.match(siteAmbient, /pathname\?\.startsWith\("\/admin"\)/);
+  assert.match(siteAmbient, /<PageLineWaves \/>/);
+  assert.match(siteAmbient, /isAdmin \? null : <SplashCursor \/>/);
   assert.match(adminPage, /className="site-nav admin-topbar admin-topbar--login"/);
   assert.match(adminPage, /href="\/"[\s\S]*?Avalehele/);
 });
@@ -26,8 +28,8 @@ test("admin studio renders a top glass control bar with theme and locale control
 });
 
 test("admin fallback gallery route uses the same shared chrome system", () => {
-  assert.match(adminArtworksPage, /import PageLineWaves from "@\/components\/PageLineWaves";/);
   assert.match(adminArtworksPage, /className="page-shell admin-page-shell"/);
+  assert.match(siteAmbient, /pathname\?\.startsWith\("\/admin"\)/);
   assert.match(adminArtworksPage, /className="site-nav admin-topbar admin-topbar--subpage"/);
 });
 

@@ -5,11 +5,13 @@ const test = require("node:test");
 const css = readFileSync("src/app/globals.css", "utf8");
 const galleryPage = readFileSync("src/app/gallery/page.js", "utf8");
 const galleryClient = readFileSync("src/components/GalleryClient.jsx", "utf8");
+const siteAmbient = readFileSync("src/components/SiteAmbient.jsx", "utf8");
 
 test("public gallery page uses the room variant without changing artist galleries", () => {
   assert.match(galleryPage, /mainClassName="page-main--gallery"/);
-  assert.match(galleryPage, /showAmbient=\{false\}/);
   assert.match(galleryPage, /showFooter=\{false\}/);
+  assert.match(siteAmbient, /pathname === "\/gallery"/);
+  assert.match(siteAmbient, /if \(isGalleryRoom\) \{[\s\S]*?return null;/);
   assert.match(galleryPage, /className="gallery-room-page"/);
   assert.match(galleryPage, /className="gallery-room-page__back inline-link"/);
   assert.doesNotMatch(galleryPage, /className="gallery-room-page__heading"/);

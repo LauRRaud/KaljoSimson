@@ -30,17 +30,25 @@ test("glass panels do not add their own radial light spot", () => {
   );
 });
 
-test("artist profile gallery panel blocks background line glow", () => {
+test("artist profile panels use the same glass surface as contact", () => {
+  const profileHeroRule = getRule(".profile-hero");
+  const profileGalleryRule = getRule(".profile-hero + .section");
+
   assert.match(
     css,
-    /\.profile-hero \+ \.section\s*\{[\s\S]*?--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);[\s\S]*?background:\s*var\(--glass-panel-bg\);/,
+    /\.section--contact\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg\);[\s\S]*?box-shadow:\s*var\(--glass-panel-shadow\);[\s\S]*?border-radius:\s*28px;[\s\S]*?backdrop-filter:\s*var\(--glass-blur\);/,
+  );
+  assert.doesNotMatch(profileHeroRule, /--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);/);
+  assert.match(profileHeroRule, /border-radius:\s*28px;/);
+  assert.doesNotMatch(profileGalleryRule, /--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);/);
+  assert.match(profileGalleryRule, /background:\s*var\(--glass-panel-bg\);/);
+  assert.match(profileGalleryRule, /border-radius:\s*28px;/);
+  assert.match(
+    css,
+    /\.profile-hero::before,\s*\.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*inset 0 0 0 1px rgba\(255,\s*255,\s*255,\s*0\.04\);[\s\S]*?backdrop-filter:\s*none;/,
   );
   assert.match(
     css,
-    /\.profile-hero::before,\s*\.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*rgba\(255,\s*252,\s*246,\s*0\.16\);[\s\S]*?backdrop-filter:\s*blur\(22px\);/,
-  );
-  assert.match(
-    css,
-    /html\[data-theme="dark"\] \.profile-hero::before,\s*html\[data-theme="dark"\] \.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*rgba\(18,\s*18,\s*20,\s*0\.16\);/,
+    /html\[data-theme="dark"\] \.profile-hero::before,\s*html\[data-theme="dark"\] \.profile-hero \+ \.section::before\s*\{[\s\S]*?background:\s*transparent;/,
   );
 });

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import AdminStudio from "@/components/AdminStudio";
-import PageLineWaves from "@/components/PageLineWaves";
 import ThemeToggle from "@/components/ThemeToggle";
 import { loginAction, logoutAction } from "@/app/admin/actions";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
@@ -20,7 +19,6 @@ export default async function AdminPage({ searchParams }) {
   if (!authenticated) {
     return (
       <div className="page-shell admin-page-shell">
-        <PageLineWaves />
         <main className="admin-page admin-page--login">
           <div className="admin-login-wrap">
             <nav
@@ -79,7 +77,6 @@ export default async function AdminPage({ searchParams }) {
 
   return (
     <div className="page-shell admin-page-shell">
-      <PageLineWaves />
       <main className="admin-page">
         <section className="admin-shell">
           <div className="admin-shell__top">

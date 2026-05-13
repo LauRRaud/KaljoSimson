@@ -17,7 +17,7 @@ test("homepage renders tagline between brand and hero copy only when it has cont
   assert.match(homePage, /const taglineWords = tagline \? tagline\.split\(\/\\s\+\/\) : \[\];/);
   assert.match(
     homePage,
-    /<h1 className="home-title__brand">\{content\.site\.title\}<\/h1>\s*\{tagline \? \(\s*<p\s*className="home-title__tagline"\s*aria-label=\{tagline\}\s*style=\{\{\s*"--tagline-cycle-duration": `\$\{taglineWords\.length \* desktopWordStep\}s`,\s*"--tagline-mobile-cycle-duration": `\$\{taglineWords\.length \* mobileWordStep\}s`,\s*\}\}\s*>\s*\{renderTaglineWords\(taglineWords\)\}\s*<\/p>\s*\) : null\}\s*<div className="home-title__story">/,
+    /<h1 className="home-title__brand">\{content\.site\.title\}<\/h1>\s*\{tagline \? \(\s*<p\s*className="home-title__tagline"\s*aria-label=\{tagline\}\s*style=\{\{\s*"--tagline-cycle-duration": `\$\{taglineWords\.length \* desktopWordStep \+ desktopCycleEndPause\}s`,\s*"--tagline-mobile-cycle-duration": `\$\{taglineWords\.length \* mobileWordStep \+ mobileCycleEndPause\}s`,\s*\}\}\s*>\s*\{renderTaglineWords\(taglineWords\)\}\s*<\/p>\s*\) : null\}\s*<div className="home-title__story">/,
   );
 });
 
@@ -29,5 +29,5 @@ test("admin studio exposes the tagline field again", () => {
 
 test("homepage stylesheet includes tagline styling", () => {
   assert.match(css, /\.home-title__tagline\s*\{[\s\S]*?color:\s*var\(--home-tagline-text\);[\s\S]*?font-family:\s*var\(--font-tagline\);[\s\S]*?font-size:\s*clamp\(1\.18rem,\s*1\.36vw,\s*1\.54rem\);[\s\S]*?font-weight:\s*500;[\s\S]*?letter-spacing:\s*0\.16em;[\s\S]*?text-align:\s*center;/);
-  assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*12\.6s\) linear infinite;/);
+  assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;/);
 });

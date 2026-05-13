@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AdminArtworksStudio from "@/components/AdminArtworksStudio";
-import PageLineWaves from "@/components/PageLineWaves";
 import ThemeToggle from "@/components/ThemeToggle";
 import { logoutAction } from "@/app/admin/actions";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
@@ -23,7 +22,6 @@ export default async function AdminArtworksPage() {
 
   return (
     <div className="page-shell admin-page-shell">
-      <PageLineWaves />
       <main className="admin-page">
         <section className="admin-shell">
           <div className="admin-shell__top">

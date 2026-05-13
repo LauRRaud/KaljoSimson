@@ -8,11 +8,11 @@ const galleryClient = readFileSync("src/components/GalleryClient.jsx", "utf8");
 test("lightbox keeps artwork navigation anchored in a fixed right panel", () => {
   assert.match(css, /--lightbox-panel-height:\s*min\(80vh,\s*800px\);/);
   assert.match(css, /--lightbox-detail-panel-height:\s*var\(--lightbox-panel-height\);/);
-  assert.match(css, /width:\s*min\(1560px,\s*calc\(100vw\s*-\s*84px\)\);/);
-  assert.match(css, /transform:\s*translateX\(clamp\(-150px,\s*-7vw,\s*-86px\)\);/);
+  assert.match(css, /width:\s*min\(1640px,\s*calc\(100vw\s*-\s*84px\)\);/);
+  assert.match(css, /transform:\s*translateX\(clamp\(-190px,\s*-8vw,\s*-108px\)\);/);
   assert.match(
     css,
-    /grid-template-columns:\s*minmax\(0,\s*1080px\)\s+clamp\(320px,\s*21vw,\s*380px\);/,
+    /grid-template-columns:\s*minmax\(0,\s*1040px\)\s+clamp\(390px,\s*27vw,\s*500px\);/,
   );
   assert.match(css, /gap:\s*clamp\(28px,\s*2\.2vw,\s*44px\);/);
   assert.match(css, /align-items:\s*stretch;/);
@@ -29,11 +29,13 @@ test("lightbox close button lives inside the right panel and title stays restrai
   assert.match(css, /\.lightbox__caption h2\s*\{[\s\S]*?max-width:\s*calc\(100% - 66px\);/);
   assert.match(css, /\.lightbox__caption \.inline-copy\s*\{[\s\S]*?max-width:\s*100%;/);
   assert.match(css, /\.lightbox__details\s*\{[\s\S]*?max-width:\s*100%;/);
+  assert.match(css, /\.lightbox__aside\s*\{[\s\S]*?overflow:\s*hidden;/);
   assert.match(css, /\.lightbox__close\s*\{[\s\S]*?width:\s*44px;[\s\S]*?background:\s*var\(--glass-control-bg\);[\s\S]*?box-shadow:\s*var\(--glass-control-shadow\);/);
   assert.match(css, /\.lightbox__close::before,\s*\.lightbox__close::after\s*\{[\s\S]*?width:\s*14px;[\s\S]*?height:\s*1\.5px;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.lightbox__close\s*\{[\s\S]*?position:\s*static;[\s\S]*?align-self:\s*flex-end;/);
-  assert.match(css, /font-size:\s*clamp\(2\.2rem,\s*2\.75vw,\s*3\.1rem\);/);
-  assert.match(css, /line-height:\s*1\.03;/);
+  assert.match(css, /font-size:\s*clamp\(1\.95rem,\s*2\.3vw,\s*2\.65rem\);/);
+  assert.match(css, /line-height:\s*1\.02;/);
+  assert.match(css, /\.lightbox__caption \.inline-copy\s*\{[\s\S]*?font-size:\s*clamp\(1rem,\s*1\.1vw,\s*1\.16rem\);/);
 });
 
 test("lightbox presents artwork as a gallery wall with structured details", () => {
@@ -51,7 +53,7 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
   assert.match(css, /\.lightbox__artwork-image\s*\{[\s\S]*?max-height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(48px,\s*5\.8vh,\s*72px\)\);/);
   assert.match(galleryClient, /<dl className="lightbox__details">/);
   assert.match(css, /\.lightbox__actions\s*\{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/);
-  assert.match(css, /\.lightbox__nav-button\s*\{[\s\S]*?width:\s*clamp\(118px,\s*9vw,\s*138px\);/);
+  assert.match(css, /\.lightbox__nav-button\s*\{[\s\S]*?width:\s*clamp\(128px,\s*7\.5vw,\s*150px\);/);
   assert.match(css, /--glass-control-shadow:\s*[\s\S]*?0 6px 12px rgba\(75,\s*52,\s*28,\s*0\.14\);/);
   assert.match(galleryClient, /<dt>\{locale === "en" \? "Year" : "Aasta"\}<\/dt>/);
   assert.match(galleryClient, /<dt>\{locale === "en" \? "Size" : "M.*dud"\}<\/dt>/);
@@ -64,8 +66,8 @@ test("dark mode lightbox keeps the gallery room dark", () => {
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__image-window\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox::after\s*\{[\s\S]*?display:\s*none;[\s\S]*?background:\s*none;/);
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame,\s*html\[data-theme="dark"\] \.lightbox__artwork-frame--obsidian\s*\{[\s\S]*?linear-gradient\(180deg,\s*#fffaf1 0%,\s*#f0e7d9 38%,\s*#ded2bf 74%,\s*#f3eadf 100%\);/);
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory\s*\{[\s\S]*?linear-gradient\(180deg,\s*#5f5a54 0%,\s*#45413d 32%,\s*#2f3035 68%,\s*#24252a 100%\);/);
+  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame,\s*html\[data-theme="dark"\] \.lightbox__artwork-frame--obsidian\s*\{[\s\S]*?background:\s*var\(--frame-light-wood\);/);
+  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory\s*\{[\s\S]*?background:\s*var\(--frame-dark-wood\);/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory \.lightbox__artwork-mount\s*\{[\s\S]*?background:\s*transparent;/);
 });
 

@@ -16,11 +16,11 @@ test("mobile home hero keeps title and copy in one centered column", () => {
   );
   assert.match(
     css,
-    /\.home-title__tagline-word\s*\{[\s\S]*?display:\s*inline-block;[\s\S]*?color:\s*inherit;[\s\S]*?opacity:\s*0;[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*12\.6s\) linear infinite;[\s\S]*?animation-delay:\s*var\(--word-delay,\s*0s\);/,
+    /\.home-title__tagline-word\s*\{[\s\S]*?display:\s*inline-block;[\s\S]*?color:\s*inherit;[\s\S]*?opacity:\s*0;[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;[\s\S]*?animation-delay:\s*var\(--word-delay,\s*0s\);/,
   );
   assert.match(
     css,
-    /@keyframes home-title-shine\s*\{[\s\S]*?0%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?3%\s*\{[\s\S]*?opacity:\s*1;[\s\S]*?20%\s*\{[\s\S]*?opacity:\s*1;[\s\S]*?24%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?100%\s*\{[\s\S]*?opacity:\s*0;/,
+    /@keyframes home-title-shine\s*\{[\s\S]*?0%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?5%\s*\{[\s\S]*?opacity:\s*1;[\s\S]*?20%\s*\{[\s\S]*?opacity:\s*1;[\s\S]*?24%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?100%\s*\{[\s\S]*?opacity:\s*0;/,
   );
   assert.match(
     css,
@@ -40,7 +40,7 @@ test("mobile home hero keeps title and copy in one centered column", () => {
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline\s*\{[\s\S]*?margin-top:\s*82px;[\s\S]*?font-size:\s*clamp\(1\.14rem,\s*4\.9vw,\s*1\.32rem\);[\s\S]*?justify-content:\s*center;[\s\S]*?letter-spacing:\s*0\.14em;[\s\S]*?max-width:\s*min\(calc\(100vw - 48px\),\s*340px\);[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*5\.55s\);[\s\S]*?animation-delay:\s*var\(--word-mobile-delay,\s*0s\);/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline\s*\{[\s\S]*?margin-top:\s*82px;[\s\S]*?font-size:\s*clamp\(1\.14rem,\s*4\.9vw,\s*1\.32rem\);[\s\S]*?justify-content:\s*center;[\s\S]*?letter-spacing:\s*0\.14em;[\s\S]*?max-width:\s*min\(calc\(100vw - 48px\),\s*340px\);[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*7\.55s\);[\s\S]*?animation-delay:\s*var\(--word-mobile-delay,\s*0s\);/,
   );
   assert.match(
     css,

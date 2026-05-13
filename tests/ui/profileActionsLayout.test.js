@@ -28,3 +28,18 @@ test("artist profile enquiry action sits on the right side of the tag row", () =
   assert.match(actionsRule, /justify-content:\s*flex-end;/);
   assert.match(actionsRule, /margin-left:\s*auto;/);
 });
+
+test("artist profile makes biography heading match gallery heading typography at a smaller size", () => {
+  const introCopyRule = getRule(".profile-copy .section-copy");
+  const biographyHeadingRule = getRule(".profile-biography .eyebrow");
+  const biographyCopyRule = getRule(".profile-biography .section-copy");
+
+  assert.match(introCopyRule, /font-size:\s*clamp\(1\.14rem,\s*1\.46vw,\s*1\.34rem\);/);
+  assert.match(biographyHeadingRule, /font-family:\s*var\(--font-heading\);/);
+  assert.match(biographyHeadingRule, /font-weight:\s*600;/);
+  assert.match(biographyHeadingRule, /letter-spacing:\s*var\(--tracking-heading\);/);
+  assert.match(biographyHeadingRule, /line-height:\s*0\.96;/);
+  assert.match(biographyHeadingRule, /text-transform:\s*none;/);
+  assert.match(biographyHeadingRule, /font-size:\s*clamp\(1\.9rem,\s*3vw,\s*2\.7rem\);/);
+  assert.match(biographyCopyRule, /font-size:\s*clamp\(1\.06rem,\s*1\.28vw,\s*1\.2rem\);/);
+});

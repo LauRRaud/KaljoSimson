@@ -1,4 +1,5 @@
 import { Cormorant_Garamond, Manrope } from "next/font/google";
+import SiteAmbient from "@/components/SiteAmbient";
 import "./globals.css";
 
 const headingFont = Cormorant_Garamond({
@@ -54,7 +55,10 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <SiteAmbient />
+        {children}
+      </body>
     </html>
   );
 }

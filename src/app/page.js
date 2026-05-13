@@ -23,9 +23,12 @@ function renderContactCopy(copy) {
   );
 }
 
+const desktopWordStep = 4.2;
+const mobileWordStep = 1.85;
+const desktopCycleEndPause = 2.2;
+const mobileCycleEndPause = 2;
+
 function renderTaglineWords(words) {
-  const desktopWordStep = 4.2;
-  const mobileWordStep = 1.85;
 
   return words.map((word, index) => (
     <span
@@ -61,8 +64,6 @@ export default async function HomePage({ searchParams }) {
   const contactText = getCopy(content.site.contactText, locale);
   const tagline = getCopy(content.site.tagline, locale).trim().replace(",", "");
   const taglineWords = tagline ? tagline.split(/\s+/) : [];
-  const desktopWordStep = 4.2;
-  const mobileWordStep = 1.85;
 
   return (
     <PageShell
@@ -80,8 +81,8 @@ export default async function HomePage({ searchParams }) {
               className="home-title__tagline"
               aria-label={tagline}
               style={{
-                "--tagline-cycle-duration": `${taglineWords.length * desktopWordStep}s`,
-                "--tagline-mobile-cycle-duration": `${taglineWords.length * mobileWordStep}s`,
+                "--tagline-cycle-duration": `${taglineWords.length * desktopWordStep + desktopCycleEndPause}s`,
+                "--tagline-mobile-cycle-duration": `${taglineWords.length * mobileWordStep + mobileCycleEndPause}s`,
               }}
             >
               {renderTaglineWords(taglineWords)}
@@ -97,7 +98,14 @@ export default async function HomePage({ searchParams }) {
       </section>
 
       <section className="section section--artists" id="artists">
-        <HomeArtistCarousel artists={content.artists} locale={locale} />
+        <h2 className="section--artists__title">
+          {locale === "en" ? "Artists" : "Kunstnikud"}
+        </h2>
+        <HomeArtistCarousel
+          artists={content.artists}
+          initialArtistSlug="kaljo-simson"
+          locale={locale}
+        />
       </section>
 
       <section className="section section--contact" id="contact">

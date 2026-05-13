@@ -4,6 +4,7 @@ const test = require("node:test");
 
 const css = readFileSync("src/app/globals.css", "utf8");
 const carousel = readFileSync("src/components/HomeArtistCarousel.jsx", "utf8");
+const homePage = readFileSync("src/app/page.js", "utf8");
 
 function getRule(selector) {
   const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -95,6 +96,12 @@ test("artist carousel portraits and titles use a calmer profile-style crop", () 
 
 test("artist carousel hides only location metadata on homepage artist cards", () => {
   assert.match(carousel, /showLocation=\{false\}/);
+});
+
+test("artist carousel opens with Kaljo Simson centered on the homepage", () => {
+  assert.match(carousel, /initialArtistSlug = null/);
+  assert.match(carousel, /findIndex\(\(artist\) => artist\.slug === initialArtistSlug\)/);
+  assert.match(homePage, /initialArtistSlug="kaljo-simson"/);
 });
 
 test("artist carousel arrow buttons do not render duplicate chevron glyphs", () => {

@@ -7,8 +7,23 @@ function wrapIndex(index, length) {
   return (index + length) % length;
 }
 
-export default function HomeArtistCarousel({ artists, locale = "et" }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+function getInitialArtistIndex(artists, initialArtistSlug) {
+  if (!initialArtistSlug) {
+    return 0;
+  }
+
+  const initialIndex = artists.findIndex((artist) => artist.slug === initialArtistSlug);
+  return initialIndex >= 0 ? initialIndex : 0;
+}
+
+export default function HomeArtistCarousel({
+  artists,
+  initialArtistSlug = null,
+  locale = "et",
+}) {
+  const [currentIndex, setCurrentIndex] = useState(() =>
+    getInitialArtistIndex(artists, initialArtistSlug),
+  );
   const [isDragging, setIsDragging] = useState(false);
   const [isKeyboardActive, setIsKeyboardActive] = useState(false);
   const [animationDirection, setAnimationDirection] = useState(0);
