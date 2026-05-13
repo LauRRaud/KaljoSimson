@@ -14,7 +14,7 @@ test("mobile home hero keeps intro copy centered and readable", () => {
 test("mobile home hero shows tagline words together and moves the cue upward", () => {
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-scroll-cue\s*\{[\s\S]*?bottom:\s*58px;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-scroll-cue\s*\{[\s\S]*?bottom:\s*30px;/,
   );
   assert.match(
     css,

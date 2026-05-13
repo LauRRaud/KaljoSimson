@@ -55,8 +55,10 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
   assert.match(css, /\.lightbox__actions\s*\{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*fit-content;/);
   assert.match(css, /\.lightbox__nav-button\s*\{[\s\S]*?width:\s*auto;[\s\S]*?padding:\s*0 17px;/);
   assert.match(css, /--glass-control-shadow:\s*[\s\S]*?0 6px 12px rgba\(75,\s*52,\s*28,\s*0\.14\);/);
-  assert.match(galleryClient, /<dt>\{locale === "en" \? "Year" : "Aasta"\}<\/dt>/);
-  assert.match(galleryClient, /<dt>\{locale === "en" \? "Size" : "M.*dud"\}<\/dt>/);
+  assert.match(galleryClient, /function compactMetaValue/);
+  assert.match(galleryClient, /<dt>\{yearLabel\}<\/dt>/);
+  assert.match(galleryClient, /<dt>\{mediumLabel\}<\/dt>/);
+  assert.match(galleryClient, /<dt>\{sizeLabel\}<\/dt>/);
 });
 
 test("dark mode lightbox keeps the gallery room dark", () => {
@@ -86,15 +88,15 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1\.34fr\) minmax\(236px,\s*0\.66fr\);/,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(300px,\s*34vw,\s*340px\);/,
   );
   assert.match(
     css,
-    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(78svh,\s*340px\);/,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(86svh,\s*380px\);/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1\.34fr\) minmax\(236px,\s*0\.66fr\);/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(300px,\s*34vw,\s*340px\);/,
   );
   assert.match(
     css,
@@ -106,7 +108,23 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details div\s*\{[\s\S]*?display:\s*flex;[\s\S]*?gap:\s*6px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details dd\s*\{[\s\S]*?display:\s*none;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__caption h2\s*\{[\s\S]*?font-size:\s*clamp\(1\.42rem,\s*4\.2vw,\s*1\.78rem\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__nav-button\s*\{[\s\S]*?min-height:\s*30px;[\s\S]*?font-size:\s*0\.8rem;/,
   );
 });
 

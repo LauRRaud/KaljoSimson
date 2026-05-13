@@ -4092,7 +4092,7 @@ html[data-theme="dark"] .admin-divider {
 
   .home-title {
     min-height: calc(100svh - 20px);
-    padding: 148px 0 42px;
+    padding: 126px 0 48px;
   }
 
   .home-title__beam {
@@ -4115,7 +4115,7 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .home-scroll-cue {
-    bottom: 58px;
+    bottom: 30px;
   }
 
   .home-title::before {
@@ -4134,7 +4134,7 @@ html[data-theme="dark"] .admin-divider {
   .home-title__inner {
     gap: 0;
     width: 100vw;
-    margin: 4px calc(50% - 50vw) 0;
+    margin: 0 calc(50% - 50vw) 0;
     padding: 0;
     align-items: center;
   }
@@ -4180,11 +4180,11 @@ html[data-theme="dark"] .admin-divider {
   .home-title__story {
     width: 100%;
     justify-content: center;
-    margin-top: 96px;
+    margin-top: 58px;
   }
 
   .home-title__tagline {
-    margin-top: 96px;
+    margin-top: 48px;
     font-size: clamp(1.2rem, 5.2vw, 1.42rem);
     justify-content: center;
     letter-spacing: 0.14em;
@@ -4535,16 +4535,16 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__sheet {
-      --lightbox-panel-height: min(78svh, 340px);
+      --lightbox-panel-height: min(86svh, 380px);
       --lightbox-detail-panel-height: var(--lightbox-panel-height);
       --lightbox-panel-min-height: 240px;
-      width: calc(100vw - 20px);
+      width: calc(100vw - 10px);
     }
 
     .lightbox__grid {
-      grid-template-columns: minmax(0, 1.34fr) minmax(236px, 0.66fr);
+      grid-template-columns: minmax(0, 1fr) clamp(300px, 34vw, 340px);
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       text-align: left;
     }
 
@@ -4590,32 +4590,37 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__caption h2 {
-      font-size: clamp(1.72rem, 5vw, 2.2rem);
+      font-size: clamp(1.42rem, 4.2vw, 1.78rem);
     }
 
     .lightbox__caption .inline-copy {
-      font-size: 0.94rem;
-      line-height: 1.36;
+      font-size: 0.78rem;
+      line-height: 1.22;
     }
 
     .lightbox__details {
-      display: grid;
+      display: flex;
       flex: 0 0 auto;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      flex-direction: column;
       width: 100%;
-      gap: 3px 10px;
-      font-size: 0.82rem;
-      line-height: 1.24;
+      gap: 4px;
+      font-size: 0.75rem;
+      line-height: 1.18;
     }
 
     .lightbox__details div {
-      display: block;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
       min-width: 0;
     }
 
-    .lightbox__details dt,
+    .lightbox__details dt {
+      flex: 0 0 auto;
+    }
+
     .lightbox__details dd {
-      display: inline;
+      display: none;
     }
 
     .lightbox__actions {
@@ -4626,9 +4631,9 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .lightbox__nav-button {
-      min-height: 34px;
-      padding-inline: 11px;
-      font-size: 0.88rem;
+      min-height: 30px;
+      padding-inline: 9px;
+      font-size: 0.8rem;
     }
   }
 
@@ -4708,17 +4713,17 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__sheet {
-    --lightbox-panel-height: min(78svh, 340px);
+    --lightbox-panel-height: min(86svh, 380px);
     --lightbox-detail-panel-height: var(--lightbox-panel-height);
     --lightbox-panel-min-height: 240px;
-    width: calc(100vw - 20px);
+    width: calc(100vw - 10px);
     transform: none;
   }
 
   .lightbox__grid {
-    grid-template-columns: minmax(0, 1.34fr) minmax(236px, 0.66fr);
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 34vw, 340px);
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     text-align: left;
   }
 
@@ -4764,32 +4769,37 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__caption h2 {
-    font-size: clamp(1.72rem, 5vw, 2.2rem);
+    font-size: clamp(1.42rem, 4.2vw, 1.78rem);
   }
 
   .lightbox__caption .inline-copy {
-    font-size: 0.94rem;
-    line-height: 1.36;
+    font-size: 0.78rem;
+    line-height: 1.22;
   }
 
   .lightbox__details {
-    display: grid;
+    display: flex;
     flex: 0 0 auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-direction: column;
     width: 100%;
-    gap: 3px 10px;
-    font-size: 0.82rem;
-    line-height: 1.24;
+    gap: 4px;
+    font-size: 0.75rem;
+    line-height: 1.18;
   }
 
   .lightbox__details div {
-    display: block;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
     min-width: 0;
   }
 
-  .lightbox__details dt,
+  .lightbox__details dt {
+    flex: 0 0 auto;
+  }
+
   .lightbox__details dd {
-    display: inline;
+    display: none;
   }
 
   .lightbox__actions {
@@ -4800,9 +4810,9 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__nav-button {
-    min-height: 34px;
-    padding-inline: 11px;
-    font-size: 0.88rem;
+    min-height: 30px;
+    padding-inline: 9px;
+    font-size: 0.8rem;
   }
 }
 

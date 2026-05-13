@@ -7,6 +7,22 @@ import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
 
+function compactMetaValue(value, fallback) {
+  const normalized = String(value ?? "").trim().toLocaleLowerCase("et-EE");
+  const placeholders = new Set([
+    "",
+    "dateerimata",
+    "undated",
+    "meedium täpsustamisel",
+    "medium to be confirmed",
+    "mõõdud täpsustamisel",
+    "dimensions to be confirmed",
+    "size to be confirmed",
+  ]);
+
+  return placeholders.has(normalized) ? fallback : value;
+}
+
 export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
   const [activeIndex, setActiveIndex] = useState(null);
   const roomViewportRef = useRef(null);
@@ -15,6 +31,9 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
   const portalRoot = typeof document === "undefined" ? null : document.body;
+  const yearLabel = locale === "en" ? "Year" : "Aasta";
+  const mediumLabel = locale === "en" ? "Medium" : "Tehnika";
+  const sizeLabel = locale === "en" ? "Size" : "Mõõdud";
 
   function scrollRoom(direction) {
     const viewport = roomViewportRef.current;
@@ -225,24 +244,18 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                 </div>
 
                 <dl className="lightbox__details">
-                  {activeArtwork.year ? (
-                    <div>
-                      <dt>{locale === "en" ? "Year" : "Aasta"}</dt>
-                      <dd>{activeArtwork.year}</dd>
-                    </div>
-                  ) : null}
-                  {getCopy(activeArtwork.medium, locale) ? (
-                    <div>
-                      <dt>{locale === "en" ? "Medium" : "Tehnika"}</dt>
-                      <dd>{getCopy(activeArtwork.medium, locale)}</dd>
-                    </div>
-                  ) : null}
-                  {activeArtwork.size ? (
-                    <div>
-                      <dt>{locale === "en" ? "Size" : "Mõõdud"}</dt>
-                      <dd>{activeArtwork.size}</dd>
-                    </div>
-                  ) : null}
+                  <div>
+                    <dt>{yearLabel}</dt>
+                    <dd>{compactMetaValue(activeArtwork.year, yearLabel)}</dd>
+                  </div>
+                  <div>
+                    <dt>{mediumLabel}</dt>
+                    <dd>{compactMetaValue(getCopy(activeArtwork.medium, locale), mediumLabel)}</dd>
+                  </div>
+                  <div>
+                    <dt>{sizeLabel}</dt>
+                    <dd>{compactMetaValue(activeArtwork.size, sizeLabel)}</dd>
+                  </div>
                 </dl>
 
                 <div className="lightbox__actions">
