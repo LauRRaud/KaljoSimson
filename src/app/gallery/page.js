@@ -53,23 +53,13 @@ export default async function GalleryPage({ searchParams }) {
       content={content}
       locale={locale}
       mainClassName="page-main--gallery"
+      showAmbient={false}
       showFooter={false}
     >
       <section className="gallery-room-page">
-        <div className="gallery-room-page__heading">
-          <Link className="inline-link" href={withLocale("/", locale)}>
-            {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
-          </Link>
-          <h1>{locale === "en" ? "Gallery" : "Galerii"}</h1>
-          <p className="section-copy">
-            {locale === "en"
-              ? "Selected works currently visible on BeyondFrames."
-              : "BeyondFramesis hetkel avaldatud valik teoseid."}
-          </p>
-          <a className="button button--ghost" href={`mailto:${content.contact.email}`}>
-            {locale === "en" ? "Ask about a work" : "Küsi töö kohta"}
-          </a>
-        </div>
+        <Link className="gallery-room-page__back inline-link" href={withLocale("/", locale)}>
+          {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
+        </Link>
 
         <GalleryClient artist={galleryArtist} locale={locale} variant="room" />
       </section>

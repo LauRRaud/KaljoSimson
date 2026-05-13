@@ -115,8 +115,6 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
             </div>
           </div>
 
-          <div aria-hidden="true" className="gallery-room__floor" />
-
           <div className="gallery-room__controls">
             <button
               aria-label={locale === "en" ? "Move left in gallery" : "Liigu galeriis vasakule"}

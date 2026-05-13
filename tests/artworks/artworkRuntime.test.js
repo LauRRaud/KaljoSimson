@@ -50,6 +50,12 @@ test("content normalization preserves shared gallery selection metadata", () => 
   );
 });
 
+test("admin content save refreshes the public shared gallery route", () => {
+  const actions = readFileSync("src/app/admin/actions.js", "utf8");
+
+  assert.match(actions, /revalidatePath\("\/gallery"\)/);
+});
+
 test("artwork admin route is protected and manages all artworks", () => {
   const page = readFileSync("src/app/admin/artworks/page.js", "utf8");
   const actions = readFileSync("src/app/admin/artworks/actions.js", "utf8");

@@ -107,3 +107,14 @@ test("artist carousel mobile arrows sit higher and farther apart", () => {
     /@media \(max-width:\s*1100px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*calc\(50% - 136px\);/,
   );
 });
+
+test("artist carousel mobile tags stay on one horizontal row", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-card--carousel \.pill-row\s*\{[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*100%;[\s\S]*?overflow:\s*visible;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-card--carousel \.pill\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?padding:\s*0 12px;[\s\S]*?font-size:\s*0\.94rem;[\s\S]*?white-space:\s*nowrap;/,
+  );
+});
