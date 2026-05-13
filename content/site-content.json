@@ -59,6 +59,7 @@
       "practiceSince": "Täpsustamisel",
       "portraitPresetId": "dawn",
       "portraitImage": "/Profiilid/Kalevi%20Poiss/Kalevi%20Poiss.jpg",
+      "portraitPosition": "center center",
       "role": {
         "et": "Maalikunstnik",
         "en": "Painter"
@@ -93,6 +94,7 @@
       "practiceSince": "1960ndad",
       "portraitPresetId": "ember",
       "portraitImage": "/Profiilid/Kaljo%20Simson/kaljo_simson_profiilipilt_1960ndad-2016.jpg",
+      "portraitPosition": "center center",
       "role": {
         "et": "Eesti maalikunstnik",
         "en": "Estonian painter"
