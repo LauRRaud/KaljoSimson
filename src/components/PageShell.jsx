@@ -7,6 +7,7 @@ export default function PageShell({
   content,
   children,
   locale = "et",
+  showFooter = true,
   showHeader = false,
   mainClassName = "",
 }) {
@@ -16,7 +17,7 @@ export default function PageShell({
       <SplashCursor />
       {showHeader ? <SiteHeader locale={locale} /> : null}
       <main className={`page-main ${mainClassName}`.trim()}>{children}</main>
-      <SiteFooter content={content} />
+      {showFooter ? <SiteFooter content={content} /> : null}
     </div>
   );
 }

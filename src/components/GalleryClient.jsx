@@ -206,7 +206,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                 </button>
 
                 <div className="lightbox__caption">
-                  <p className="eyebrow">{artist.name}</p>
+                  <p className="eyebrow">{activeArtwork.artistName || artist.name}</p>
                   <h2>{getCopy(activeArtwork.title, locale)}</h2>
                   <p className="inline-copy">
                     {getCopy(activeArtwork.description, locale)}

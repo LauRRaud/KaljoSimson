@@ -3,7 +3,7 @@
     "title": "BeyondFrames",
     "domain": "beyondframes.net",
     "tagline": {
-      "et": "Kunst väljaspool raame",
+      "et": "Kunst, raamidest väljas",
       "en": "Art beyond the frame"
     },
     "heroTitle": {
@@ -11,7 +11,7 @@
       "en": "A space where art and artist can breathe."
     },
     "heroText": {
-      "et": "BeyondFrames on kunstiruum, mis avardab piire ja kutsub nägema loomingut raamidest väljaspool. Sellel lehel on esil kunstnikud, kelle teostes kohtuvad isikupära, vabadus ja julgus vaadata tavapärasest kaugemale.",
+      "et": "Ruum, mis avardab piire ja kutsub nägema loomingut uue nurga alt. Siin on esil kunstnikud, kelle teostes kohtuvad isikupära, vabadus ja julgus vaadata tavapärasest kaugemale.",
       "en": "BeyondFrames is a space for art that reaches beyond its frames. Here, artists and their work come forward through individuality, freedom and a vision broader than the conventional."
     },
     "aboutTitle": {
@@ -140,6 +140,8 @@
           "frame": "obsidian",
           "visualPresetId": "ember-mist",
           "image": "/Profiilid/Kaljo%20Simson/hobby.jpg",
+          "showInGallery": true,
+          "galleryOrder": 0,
           "description": {
             "et": "Helikopteri, õhupalli ja figuuride kaudu avaneb mänguline, kuid pingestatud stseen, kus liikuvus ja värv kannavad kogu kompositsiooni.",
             "en": "Through a helicopter, balloon and human figures, the painting opens into a playful yet tense scene where movement and colour carry the entire composition."
@@ -164,6 +166,8 @@
           "frame": "obsidian",
           "visualPresetId": "rose-smoke",
           "image": "/Profiilid/Kaljo%20Simson/probleem.jpg",
+          "showInGallery": true,
+          "galleryOrder": 1,
           "description": {
             "et": "Kahe figuuri vaheline kohtumine on ehitatud kontrastsele violetsele ja kollasele pinnale, mis muudab stseeni peaaegu allegooriliseks.",
             "en": "The meeting between two figures is built on a strong violet and yellow surface, making the scene feel almost allegorical."
@@ -188,6 +192,8 @@
           "frame": "obsidian",
           "visualPresetId": "forest-veil",
           "image": "/Profiilid/Kaljo%20Simson/tehislindude-vabrikus.jpg",
+          "showInGallery": true,
+          "galleryOrder": 2,
           "description": {
             "et": "Teravad kujundid, särav oranž taust ja mehhaniseeritud olendid loovad sürreaalse, peaaegu lavastusliku atmosfääri.",
             "en": "Sharp forms, a glowing orange background and mechanised creatures create a surreal, almost staged atmosphere."
@@ -212,6 +218,8 @@
           "frame": "obsidian",
           "visualPresetId": "ashen-gold",
           "image": "/Profiilid/Kaljo%20Simson/tiivasirutus.jpg",
+          "showInGallery": true,
+          "galleryOrder": 3,
           "description": {
             "et": "Troopilise rannastseeni ja üle vee liikuva linnu kaudu ühendab teos eksootilise kujutlusruumi ning intensiivse värvigamma.",
             "en": "With its tropical shoreline and the bird moving above the water, the work combines an exotic imaginary space with an intense palette."

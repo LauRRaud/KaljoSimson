@@ -4,28 +4,10 @@ import ArtistPortrait from "@/components/ArtistPortrait";
 import GalleryClient from "@/components/GalleryClient";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
-import { artworkToGalleryItem, getPublishedArtworks } from "@/lib/artworks";
 import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-
-async function getProfileGalleryArtworks(artist) {
-  if (!process.env.DATABASE_URL) {
-    return artist.artworks;
-  }
-
-  try {
-    const artworks = await getPublishedArtworks();
-    return artworks.map(artworkToGalleryItem);
-  } catch (error) {
-    if (process.env.NODE_ENV === "production") {
-      throw error;
-    }
-
-    return artist.artworks;
-  }
-}
 
 export async function generateMetadata({ params, searchParams }) {
   const { slug } = await params;
@@ -57,7 +39,6 @@ export default async function ArtistPage({ params, searchParams }) {
     notFound();
   }
 
-  const artworks = await getProfileGalleryArtworks(artist);
   const biographyParagraphs = getCopy(artist.biography, locale)
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
@@ -114,7 +95,7 @@ export default async function ArtistPage({ params, searchParams }) {
         <GalleryClient
           artist={{
             ...artist,
-            artworks,
+            artworks: artist.artworks,
           }}
           locale={locale}
         />

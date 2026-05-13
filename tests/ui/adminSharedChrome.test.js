@@ -12,6 +12,7 @@ test("admin login and content page use shared page-shell background chrome", () 
   assert.match(adminPage, /className="page-shell admin-page-shell"/);
   assert.match(adminPage, /<PageLineWaves \/>/);
   assert.match(adminPage, /className="site-nav admin-topbar admin-topbar--login"/);
+  assert.match(adminPage, /href="\/"[\s\S]*?Avalehele/);
 });
 
 test("admin studio renders a top glass control bar with theme and locale controls", () => {
@@ -21,7 +22,7 @@ test("admin studio renders a top glass control bar with theme and locale control
   assert.match(adminStudio, /href="#admin-gallery"/);
   assert.match(adminStudio, /href="#admin-artists"/);
   assert.match(adminStudio, /<ThemeToggle locale=\{editorLocale\} \/>/);
-  assert.match(adminStudio, /<section id="admin-gallery">\s*<AdminArtworksStudio artworks=\{artworks\} embedded \/>/);
+  assert.match(adminStudio, /id="admin-gallery"[\s\S]*?<h2>Galerii valik<\/h2>/);
 });
 
 test("admin fallback gallery route uses the same shared chrome system", () => {
@@ -35,4 +36,5 @@ test("admin stylesheet defines the shared topbar and page-shell styles", () => {
   assert.match(css, /\.admin-login-wrap\s*\{/);
   assert.match(css, /\.admin-topbar\s*\{/);
   assert.match(css, /\.admin-topbar__locale-copy\s*\{/);
+  assert.match(css, /\.admin-section-actions\s*\{/);
 });

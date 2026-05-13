@@ -20,6 +20,15 @@ function stringOrFallback(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function booleanOrFallback(value, fallback = false) {
+  return typeof value === "boolean" ? value : fallback;
+}
+
+function numberOrFallback(value, fallback = 0) {
+  const number = Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(number) ? number : fallback;
+}
+
 function normalizeText(value, fallback) {
   return {
     et: stringOrFallback(value?.et, fallback.et),
@@ -43,6 +52,8 @@ function normalizeArtwork(artwork, artistIndex, artworkIndex) {
       ? artwork.visualPresetId
       : fallback.visualPresetId,
     image: stringOrFallback(artwork?.image),
+    showInGallery: booleanOrFallback(artwork?.showInGallery, fallback.showInGallery),
+    galleryOrder: numberOrFallback(artwork?.galleryOrder, fallback.galleryOrder),
     description: normalizeText(artwork?.description, fallback.description),
   };
 }

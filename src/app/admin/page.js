@@ -5,7 +5,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { loginAction, logoutAction } from "@/app/admin/actions";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { getSiteContent } from "@/lib/content-store";
-import { getAdminArtworks } from "@/lib/artworks";
 
 export const metadata = {
   title: "Admin",
@@ -76,10 +75,7 @@ export default async function AdminPage({ searchParams }) {
     );
   }
 
-  const [content, artworks] = await Promise.all([
-    getSiteContent(),
-    getAdminArtworks(),
-  ]);
+  const content = await getSiteContent();
 
   return (
     <div className="page-shell admin-page-shell">
@@ -97,6 +93,9 @@ export default async function AdminPage({ searchParams }) {
             </div>
 
             <div className="admin-actions-inline">
+              <Link className="button button--ghost button--admin-ghost" href="/">
+                Avalehele
+              </Link>
               <form action={logoutAction}>
                 <button className="button button--ghost button--admin-ghost" type="submit">
                   Logi välja
@@ -105,7 +104,7 @@ export default async function AdminPage({ searchParams }) {
             </div>
           </div>
 
-          <AdminStudio initialContent={content} artworks={artworks} />
+          <AdminStudio initialContent={content} />
         </section>
       </main>
     </div>

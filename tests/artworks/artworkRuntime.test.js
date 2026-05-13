@@ -20,11 +20,34 @@ test("admin authentication uses ADMIN_PASSWORD from environment", () => {
   assert.doesNotMatch(auth, /BEYONDFRAMES_ADMIN_PASSWORD/);
 });
 
-test("public artist gallery reads published artworks dynamically from database", () => {
+test("public artist gallery uses the artist content artworks", () => {
   const page = readFileSync("src/app/artists/[slug]/gallery/page.js", "utf8");
 
   assert.match(page, /export const dynamic = ["']force-dynamic["']/);
-  assert.match(page, /getPublishedArtworks/);
+  assert.match(page, /artworks:\s*artist\.artworks/);
+  assert.doesNotMatch(page, /getPublishedArtworks/);
+});
+
+test("public shared gallery uses selected artist artworks", () => {
+  const page = readFileSync("src/app/gallery/page.js", "utf8");
+
+  assert.match(page, /function getSelectedGalleryArtworks\(content\)/);
+  assert.match(page, /artwork\.showInGallery && artwork\.image/);
+  assert.match(page, /artistName:\s*artist\.name/);
+  assert.doesNotMatch(page, /getPublishedArtworks/);
+});
+
+test("content normalization preserves shared gallery selection metadata", () => {
+  const store = readFileSync("src/lib/content-store.js", "utf8");
+
+  assert.match(
+    store,
+    /showInGallery:\s*booleanOrFallback\(artwork\?\.showInGallery,\s*fallback\.showInGallery\)/,
+  );
+  assert.match(
+    store,
+    /galleryOrder:\s*numberOrFallback\(artwork\?\.galleryOrder,\s*fallback\.galleryOrder\)/,
+  );
 });
 
 test("artwork admin route is protected and manages all artworks", () => {

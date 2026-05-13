@@ -7,7 +7,10 @@ const galleryPage = readFileSync("src/app/gallery/page.js", "utf8");
 const galleryClient = readFileSync("src/components/GalleryClient.jsx", "utf8");
 
 test("public gallery page uses the room variant without changing artist galleries", () => {
-  assert.match(galleryPage, /className="section gallery-room-section"/);
+  assert.match(galleryPage, /mainClassName="page-main--gallery"/);
+  assert.match(galleryPage, /showFooter=\{false\}/);
+  assert.match(galleryPage, /className="gallery-room-page"/);
+  assert.match(galleryPage, /className="gallery-room-page__heading"/);
   assert.match(galleryPage, /<GalleryClient artist=\{galleryArtist\} locale=\{locale\} variant="room" \/>/);
   assert.match(galleryClient, /variant = "grid"/);
   assert.match(galleryClient, /const isRoom = variant === "room";/);
@@ -26,15 +29,18 @@ test("gallery room is a horizontal wall with floor and controls", () => {
 });
 
 test("gallery room styling creates a wall, floor and responsive artwork rhythm", () => {
-  assert.match(css, /\.gallery-room\s*\{[\s\S]*?min-height:\s*clamp\(520px,\s*64vh,\s*760px\);/);
+  assert.match(css, /\.page-main--gallery\s*\{[\s\S]*?min-height:\s*100svh;/);
+  assert.match(css, /\.gallery-room-page\s*\{[\s\S]*?min-height:\s*100svh;/);
+  assert.match(css, /\.gallery-room-page__heading\s*\{[\s\S]*?position:\s*absolute;/);
+  assert.match(css, /\.gallery-room\s*\{[\s\S]*?min-height:\s*100svh;/);
   assert.match(css, /\.gallery-room::before\s*\{[\s\S]*?repeating-linear-gradient\(90deg,/);
-  assert.match(css, /\.gallery-room__viewport\s*\{[\s\S]*?overflow-x:\s*auto;[\s\S]*?scroll-snap-type:\s*x mandatory;/);
+  assert.match(css, /\.gallery-room__viewport\s*\{[\s\S]*?min-height:\s*100svh;[\s\S]*?overflow-x:\s*auto;[\s\S]*?scroll-snap-type:\s*x mandatory;/);
   assert.match(css, /\.gallery-room__wall\s*\{[\s\S]*?display:\s*flex;[\s\S]*?min-width:\s*max-content;/);
   assert.match(css, /\.gallery-room__slot\s*\{[\s\S]*?scroll-snap-align:\s*center;/);
-  assert.match(css, /\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(300px,\s*32vw,\s*460px\);/);
-  assert.match(css, /\.gallery-room__floor\s*\{[\s\S]*?clip-path:\s*polygon\(0 24%, 100% 0, 100% 100%, 0 100%\);/);
-  assert.match(css, /\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*clamp\(16px,\s*2vw,\s*28px\);/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__slot\s*\{[\s\S]*?flex-basis:\s*min\(72vw,\s*280px\);/);
+  assert.match(css, /\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(270px,\s*23vw,\s*410px\);/);
+  assert.match(css, /\.gallery-room__floor\s*\{[\s\S]*?clip-path:\s*polygon\(0 18%, 100% 0, 100% 100%, 0 100%\);/);
+  assert.match(css, /\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*clamp\(18px,\s*3vw,\s*44px\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__slot\s*\{[\s\S]*?flex-basis:\s*min\(78vw,\s*310px\);/);
 });
 
 test("dark mode keeps the gallery room consistent with the site atmosphere", () => {

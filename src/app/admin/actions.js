@@ -38,6 +38,8 @@ export async function saveContentAction(serializedContent) {
     const parsed = JSON.parse(serializedContent);
     await saveSiteContent(parsed);
     revalidatePath("/", "layout");
+    revalidatePath("/gallery");
+    revalidatePath("/admin");
 
     return {
       ok: true,

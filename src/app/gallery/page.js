@@ -4,9 +4,28 @@ import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
 import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
-import { artworkToGalleryItem, getPublishedArtworks } from "@/lib/artworks";
 
 export const dynamic = "force-dynamic";
+
+function getSelectedGalleryArtworks(content) {
+  return content.artists
+    .flatMap((artist) =>
+      artist.artworks
+        .filter((artwork) => artwork.showInGallery && artwork.image)
+        .map((artwork, index) => ({
+          ...artwork,
+          artistName: artist.name,
+          slug: `${artist.slug}-${artwork.slug || index}`,
+          galleryOrder: artwork.galleryOrder ?? index,
+        })),
+    )
+    .sort((first, second) => {
+      const firstOrder = first.galleryOrder ?? 0;
+      const secondOrder = second.galleryOrder ?? 0;
+
+      return firstOrder - secondOrder;
+    });
+}
 
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
@@ -22,20 +41,22 @@ export async function generateMetadata({ searchParams }) {
 export default async function GalleryPage({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
-  const [content, artworks] = await Promise.all([
-    getSiteContent(),
-    getPublishedArtworks(),
-  ]);
+  const content = await getSiteContent();
   const galleryArtist = {
     name: content.site.title,
     slug: "gallery",
-    artworks: artworks.map(artworkToGalleryItem),
+    artworks: getSelectedGalleryArtworks(content),
   };
 
   return (
-    <PageShell content={content} locale={locale}>
-      <section className="section gallery-room-section">
-        <div className="section-heading section-heading--centered">
+    <PageShell
+      content={content}
+      locale={locale}
+      mainClassName="page-main--gallery"
+      showFooter={false}
+    >
+      <section className="gallery-room-page">
+        <div className="gallery-room-page__heading">
           <Link className="inline-link" href={withLocale("/", locale)}>
             {locale === "en" ? "Back to homepage" : "Tagasi avalehele"}
           </Link>

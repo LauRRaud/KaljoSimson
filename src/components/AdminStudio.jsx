@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import AdminArtworksStudio from "@/components/AdminArtworksStudio";
 import ArtistPortrait from "@/components/ArtistPortrait";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -89,7 +88,26 @@ function renderContactCopy(copy) {
   );
 }
 
-export default function AdminStudio({ initialContent, artworks }) {
+function AdminSectionActions({ isPending, onExport, onSave, status, editorLocale }) {
+  return (
+    <div className="admin-section-actions">
+      <div className="admin-toolbar__group">
+        <button className="button" disabled={isPending} onClick={onSave} type="button">
+          {isPending ? "Salvestan..." : "Salvesta"}
+        </button>
+        <button className="button button--ghost" onClick={onExport} type="button">
+          Ekspordi
+        </button>
+      </div>
+
+      <p className="admin-status">
+        {status || `Muudad praegu ${editorLocale.toUpperCase()} sisu.`}
+      </p>
+    </div>
+  );
+}
+
+export default function AdminStudio({ initialContent }) {
   const [draft, setDraft] = useState(() => cloneContent(initialContent));
   const [status, setStatus] = useState("");
   const [busyTarget, setBusyTarget] = useState("");
@@ -217,12 +235,18 @@ export default function AdminStudio({ initialContent, artworks }) {
   }
 
   function updateArtwork(artistIndex, artworkIndex, field, value) {
+    updateArtworkFields(artistIndex, artworkIndex, {
+      [field]: value,
+    });
+  }
+
+  function updateArtworkFields(artistIndex, artworkIndex, fields) {
     setDraft((current) => {
       const artists = [...current.artists];
       const artworks = [...artists[artistIndex].artworks];
       artworks[artworkIndex] = {
         ...artworks[artworkIndex],
-        [field]: value,
+        ...fields,
       };
       artists[artistIndex] = {
         ...artists[artistIndex],
@@ -233,6 +257,18 @@ export default function AdminStudio({ initialContent, artworks }) {
         ...current,
         artists,
       };
+    });
+  }
+
+  function toggleArtworkGallery(artistIndex, artworkIndex, checked) {
+    const artwork = draft.artists[artistIndex].artworks[artworkIndex];
+    const selectedCount = draft.artists.flatMap((artist) => artist.artworks).filter(
+      (entry) => entry.showInGallery,
+    ).length;
+
+    updateArtworkFields(artistIndex, artworkIndex, {
+      showInGallery: checked,
+      galleryOrder: checked ? artwork.galleryOrder ?? selectedCount : artwork.galleryOrder,
     });
   }
 
@@ -407,6 +443,17 @@ export default function AdminStudio({ initialContent, artworks }) {
   const siteHeroText = getCopy(draft.site.heroText, editorLocale);
   const siteContactTitle = getCopy(draft.site.contactTitle, editorLocale);
   const siteContactText = getCopy(draft.site.contactText, editorLocale);
+  const galleryCandidates = draft.artists.flatMap((artist, artistIndex) =>
+    artist.artworks.map((artwork, artworkIndex) => ({
+      artist,
+      artistIndex,
+      artwork,
+      artworkIndex,
+    })),
+  );
+  const selectedGalleryCount = galleryCandidates.filter(
+    ({ artwork }) => artwork.showInGallery,
+  ).length;
 
   return (
     <div className="admin-grid">
@@ -578,11 +625,107 @@ export default function AdminStudio({ initialContent, artworks }) {
             </div>
           </section>
         </div>
+        <AdminSectionActions
+          editorLocale={editorLocale}
+          isPending={isPending}
+          onExport={handleExport}
+          onSave={handleSave}
+          status={status}
+        />
       </article>
 
-      <section id="admin-gallery">
-        <AdminArtworksStudio artworks={artworks} embedded />
-      </section>
+      <article className="admin-panel admin-panel--compact" id="admin-gallery">
+        <div className="section-heading">
+          <p className="eyebrow">Galerii</p>
+          <h2>Galerii valik</h2>
+          <p className="admin-note">
+            Ühine galerii kasutab kunstnike all juba lisatud teoseid. Märgi siit,
+            millised tööd ilmuvad avalikul galerii lehel.
+          </p>
+        </div>
+
+        <p className="admin-status">
+          {selectedGalleryCount} / {galleryCandidates.length} teost valitud.
+        </p>
+
+        {galleryCandidates.length ? (
+          <div className="admin-gallery-select-grid">
+            {galleryCandidates.map(({ artist, artistIndex, artwork, artworkIndex }) => {
+              const title = getCopy(artwork.title, editorLocale) || "Pealkiri puudub";
+              const selected = Boolean(artwork.showInGallery);
+
+              return (
+                <article
+                  className={`admin-gallery-select-card ${
+                    selected ? "admin-gallery-select-card--active" : ""
+                  }`}
+                  key={`${artist.slug}-${artwork.slug}-${artworkIndex}`}
+                >
+                  <div className="admin-gallery-select-card__thumb">
+                    <ArtworkFrame artwork={artwork} showCaption={false} />
+                  </div>
+
+                  <div className="admin-gallery-select-card__body">
+                    <p className="eyebrow">{artist.name}</p>
+                    <h3>{title}</h3>
+                    <p className="admin-note">
+                      {artwork.image ? "Pilt lisatud" : "Pilt puudub"}
+                    </p>
+                  </div>
+
+                  <div className="admin-gallery-select-card__controls">
+                    <label className="admin-checkline">
+                      <input
+                        checked={selected}
+                        disabled={!artwork.image}
+                        onChange={(event) =>
+                          toggleArtworkGallery(
+                            artistIndex,
+                            artworkIndex,
+                            event.target.checked,
+                          )
+                        }
+                        type="checkbox"
+                      />
+                      Näita galeriis
+                    </label>
+
+                    <div className="form-field form-field--tight">
+                      <label>Järjekord</label>
+                      <input
+                        className="input"
+                        disabled={!selected}
+                        min="0"
+                        onChange={(event) =>
+                          updateArtwork(
+                            artistIndex,
+                            artworkIndex,
+                            "galleryOrder",
+                            Number.parseInt(event.target.value || "0", 10),
+                          )
+                        }
+                        type="number"
+                        value={artwork.galleryOrder ?? 0}
+                      />
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="admin-note">
+            Galeriisse valimiseks lisa esmalt kunstniku alla vähemalt üks teos.
+          </p>
+        )}
+        <AdminSectionActions
+          editorLocale={editorLocale}
+          isPending={isPending}
+          onExport={handleExport}
+          onSave={handleSave}
+          status={status}
+        />
+      </article>
 
       <article className="admin-panel admin-panel--compact" id="admin-artists">
         <div className="section-heading">
@@ -1098,6 +1241,13 @@ export default function AdminStudio({ initialContent, artworks }) {
             );
           })}
         </div>
+        <AdminSectionActions
+          editorLocale={editorLocale}
+          isPending={isPending}
+          onExport={handleExport}
+          onSave={handleSave}
+          status={status}
+        />
       </article>
     </div>
   );

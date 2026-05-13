@@ -51,6 +51,8 @@ export function createEmptyArtwork(artistIndex = 0, artworkIndex = 0) {
     frame: artworkIndex % 2 === 0 ? "obsidian" : "ivory",
     visualPresetId: preset.id,
     image: "",
+    showInGallery: false,
+    galleryOrder: 0,
     description: createEmptyLocalizedText(
       "Lühike teose kirjeldus eesti keeles.",
       "Short artwork description in English.",
