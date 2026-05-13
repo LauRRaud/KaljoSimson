@@ -59,6 +59,7 @@ test("artist carousel cards center short metadata while keeping bio left aligned
   const cardRule = getRules(".artist-card--carousel");
   const buttonCardRule = getRules(".artist-card:is(button).artist-card--carousel");
   const metaRule = getRules(".artist-card--carousel .artist-card__meta");
+  const roleRule = getRules(".artist-card--carousel .artist-card__role");
   const bioRule = getRules(".artist-card--carousel .artist-card__bio");
   const pillRowRule = getRules(".artist-card--carousel .pill-row");
 
@@ -66,9 +67,12 @@ test("artist carousel cards center short metadata while keeping bio left aligned
   assert.match(buttonCardRule, /text-align:\s*center;/);
   assert.match(metaRule, /align-items:\s*center;/);
   assert.match(metaRule, /text-align:\s*center;/);
+  assert.match(roleRule, /margin-top:\s*4px;/);
+  assert.match(roleRule, /font-size:\s*1\.18rem;/);
   assert.match(bioRule, /text-align:\s*left;/);
-  assert.match(bioRule, /font-size:\s*clamp\(1\.08rem,\s*1\.05vw,\s*1\.18rem\);/);
+  assert.match(bioRule, /font-size:\s*clamp\(1\.14rem,\s*1\.12vw,\s*1\.24rem\);/);
   assert.match(bioRule, /letter-spacing:\s*var\(--tracking-copy\);/);
+  assert.match(bioRule, /margin-top:\s*14px;/);
   assert.match(pillRowRule, /justify-content:\s*center;/);
 });
 
@@ -87,13 +91,17 @@ test("artist carousel and platform copy use expanded letter spacing", () => {
 
 test("artist carousel portraits and titles use a calmer profile-style crop", () => {
   const portraitRule = getRule(".artist-card--carousel .portrait-shell");
+  const cardRule = getRules(".artist-card--carousel");
   const portraitImageRule = getRule(".artist-card--carousel .portrait-shell__image");
   const headingRule = getRule(".artist-card--carousel h3");
 
+  assert.match(cardRule, /box-shadow:\s*none;/);
   assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
+  assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
   assert.match(portraitImageRule, /object-position:\s*var\(--portrait-position,\s*center\s+center\);/);
-  assert.match(headingRule, /max-width:\s*9\.5ch;/);
-  assert.match(headingRule, /font-size:\s*clamp\(1\.9rem,\s*2\.7vw,\s*2\.6rem\);/);
+  assert.match(headingRule, /max-width:\s*100%;/);
+  assert.match(headingRule, /font-size:\s*clamp\(1\.78rem,\s*2\.45vw,\s*2\.45rem\);/);
+  assert.match(headingRule, /white-space:\s*nowrap;/);
 });
 
 test("artist carousel hides only location metadata on homepage artist cards", () => {

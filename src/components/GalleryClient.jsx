@@ -31,7 +31,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     const artworkStep = slotWidth + gap;
     const pairStep = artworkStep * 2;
     const isMobileLandscape = window.matchMedia(
-      "(max-width: 950px) and (max-height: 560px) and (orientation: landscape)",
+      "(max-width: 1100px) and (max-height: 620px) and (orientation: landscape)",
     ).matches;
 
     viewport.scrollBy({

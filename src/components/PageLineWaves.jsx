@@ -56,7 +56,7 @@ const sharedPreset = {
 };
 
 const lightPalette = {
-  color1: "#d4a72c",
+  color1: "#c9a64a",
   color2: "#ef4444",
   color3: "#7c3aed",
 };

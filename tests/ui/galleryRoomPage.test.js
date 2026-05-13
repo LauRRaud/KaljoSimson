@@ -34,7 +34,7 @@ test("gallery room is a horizontal wall with carousel-style controls", () => {
   assert.match(galleryClient, /viewport\.scrollBy\(\{/);
   assert.match(galleryClient, /const artworkStep = slotWidth \+ gap;/);
   assert.match(galleryClient, /const pairStep = artworkStep \* 2;/);
-  assert.match(galleryClient, /max-width:\s*950px[\s\S]*orientation:\s*landscape/);
+  assert.match(galleryClient, /max-width:\s*1100px[\s\S]*orientation:\s*landscape/);
 });
 
 test("gallery room styling creates a clean wall and responsive artwork rhythm", () => {
@@ -59,8 +59,9 @@ test("gallery room styling creates a clean wall and responsive artwork rhythm", 
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(68vw,\s*300px\);/);
   assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(50% \+ clamp\(132px,\s*20svh,\s*154px\)\);[\s\S]*?bottom:\s*auto;/);
   assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*calc\(50% - 138px\);/);
-  assert.match(css, /@media \(max-width:\s*950px\) and \(max-height:\s*560px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(84vw,\s*680px\);/);
-  assert.match(css, /@media \(max-width:\s*950px\) and \(max-height:\s*560px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding-inline:\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(56vw,\s*540px\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding-inline:\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(72svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.72\)\);/);
 });
 
 test("dark mode keeps the gallery room consistent with the site atmosphere", () => {

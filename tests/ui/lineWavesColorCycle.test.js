@@ -28,7 +28,7 @@ test("page line waves use purple accent palette in both themes", () => {
   assert.match(preset, /mobileOuterLineCount:\s*5/);
   assert.match(preset, /mobileSpeed:\s*0\.026/);
   assert.match(preset, /mobileWarpIntensity:\s*0\.8/);
-  assert.match(preset, /const lightPalette = \{\s*color1:\s*"#d4a72c",\s*color2:\s*"#ef4444",\s*color3:\s*"#7c3aed"/);
+  assert.match(preset, /const lightPalette = \{\s*color1:\s*"#c9a64a",\s*color2:\s*"#ef4444",\s*color3:\s*"#7c3aed"/);
   assert.match(preset, /const darkPalette = \{\s*color1:\s*"#d4a72c",\s*color2:\s*"#ef4444",\s*color3:\s*"#8b5cf6"/);
   assert.match(preset, /const palette = theme === "dark" \? darkPalette : lightPalette;/);
 });
