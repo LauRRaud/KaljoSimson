@@ -59,7 +59,7 @@ export default async function HomePage({ searchParams }) {
   const locale = getLocaleFromSearchParams(params);
   const content = await getSiteContent();
   const contactText = getCopy(content.site.contactText, locale);
-  const tagline = getCopy(content.site.tagline, locale).trim();
+  const tagline = getCopy(content.site.tagline, locale).trim().replace(",", "");
   const taglineWords = tagline ? tagline.split(/\s+/) : [];
   const desktopWordStep = 4.2;
   const mobileWordStep = 1.85;
@@ -68,6 +68,7 @@ export default async function HomePage({ searchParams }) {
     <PageShell
       content={content}
       locale={locale}
+      shellClassName="page-shell--gallery-surface"
       mainClassName="page-main--home"
       showHeader
     >

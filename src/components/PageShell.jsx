@@ -7,13 +7,14 @@ export default function PageShell({
   content,
   children,
   locale = "et",
+  shellClassName = "",
   showAmbient = true,
   showFooter = true,
   showHeader = false,
   mainClassName = "",
 }) {
   return (
-    <div className="page-shell">
+    <div className={`page-shell ${shellClassName}`.trim()}>
       {showAmbient ? <PageLineWaves /> : null}
       {showAmbient ? <SplashCursor /> : null}
       {showHeader ? <SiteHeader locale={locale} /> : null}

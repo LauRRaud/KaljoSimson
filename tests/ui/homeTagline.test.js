@@ -7,7 +7,7 @@ const adminStudio = readFileSync("src/components/AdminStudio.jsx", "utf8");
 const css = readFileSync("src/app/globals.css", "utf8");
 
 test("homepage renders tagline between brand and hero copy only when it has content", () => {
-  assert.match(homePage, /const tagline = getCopy\(content\.site\.tagline, locale\)\.trim\(\);/);
+  assert.match(homePage, /const tagline = getCopy\(content\.site\.tagline, locale\)\.trim\(\)\.replace\(",", ""\);/);
   assert.match(homePage, /function renderTaglineWords\(words\)/);
   assert.match(homePage, /words\.map\(\(word, index\) =>/);
   assert.match(homePage, /className="home-title__tagline-word"/);
@@ -28,6 +28,6 @@ test("admin studio exposes the tagline field again", () => {
 });
 
 test("homepage stylesheet includes tagline styling", () => {
-  assert.match(css, /\.home-title__tagline\s*\{[\s\S]*?text-align:\s*center;/);
+  assert.match(css, /\.home-title__tagline\s*\{[\s\S]*?color:\s*var\(--home-tagline-text\);[\s\S]*?font-family:\s*var\(--font-tagline\);[\s\S]*?font-size:\s*clamp\(1\.18rem,\s*1\.36vw,\s*1\.54rem\);[\s\S]*?font-weight:\s*500;[\s\S]*?letter-spacing:\s*0\.16em;[\s\S]*?text-align:\s*center;/);
   assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*12\.6s\) linear infinite;/);
 });

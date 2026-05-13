@@ -45,7 +45,11 @@ export default async function ArtistPage({ params, searchParams }) {
     .filter(Boolean);
 
   return (
-    <PageShell content={content} locale={locale}>
+    <PageShell
+      content={content}
+      locale={locale}
+      shellClassName="page-shell--gallery-surface"
+    >
       <section className="section profile-hero">
         <div className="profile-nav">
           <Link className="inline-link profile-back-link" href={withLocale("/", locale)}>
