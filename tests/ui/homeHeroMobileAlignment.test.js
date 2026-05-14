@@ -16,7 +16,7 @@ test("mobile home hero keeps title and copy in one centered column", () => {
   );
   assert.match(
     css,
-    /\.home-title__tagline-word\s*\{[\s\S]*?display:\s*inline-block;[\s\S]*?color:\s*inherit;[\s\S]*?opacity:\s*0;[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;[\s\S]*?animation-delay:\s*var\(--word-delay,\s*0s\);/,
+    /\.home-title__tagline-word\s*\{[\s\S]*?display:\s*inline-block;[\s\S]*?color:\s*inherit;[\s\S]*?opacity:\s*0;[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;[\s\S]*?animation-delay:\s*calc\(var\(--tagline-entrance-delay,\s*3s\) \+ var\(--word-delay,\s*0s\)\);/,
   );
   assert.match(
     css,
@@ -44,7 +44,7 @@ test("mobile home hero keeps title and copy in one centered column", () => {
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline\s*\{[\s\S]*?margin-top:\s*48px;[\s\S]*?font-size:\s*clamp\(1\.2rem,\s*5\.2vw,\s*1\.42rem\);[\s\S]*?justify-content:\s*center;[\s\S]*?letter-spacing:\s*0\.14em;[\s\S]*?max-width:\s*min\(calc\(100vw - 48px\),\s*340px\);[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*14\.8s\);[\s\S]*?animation-delay:\s*var\(--word-mobile-delay,\s*0s\);/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline\s*\{[\s\S]*?margin-top:\s*48px;[\s\S]*?font-size:\s*clamp\(1\.2rem,\s*5\.2vw,\s*1\.42rem\);[\s\S]*?justify-content:\s*center;[\s\S]*?letter-spacing:\s*0\.14em;[\s\S]*?max-width:\s*min\(calc\(100vw - 48px\),\s*340px\);[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*14\.8s\);[\s\S]*?animation-delay:\s*calc\(var\(--tagline-entrance-delay,\s*3s\) \+ var\(--word-mobile-delay,\s*0s\)\);/,
   );
   assert.match(
     css,

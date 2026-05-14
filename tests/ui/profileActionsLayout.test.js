@@ -18,16 +18,14 @@ test("artist profile biography spans the page width below the portrait row", () 
   assert.match(biographyRule, /grid-column:\s*1\s*\/\s*-1;/);
 });
 
-test("artist profile enquiry action sits on the right side of the tag row", () => {
+test("artist profile keeps the tag row as a full-width strip without an enquiry action", () => {
   const tagsActionsRule = getRule(".profile-tags-actions");
   const tagsRule = getRule(".profile-tags-actions .pill-row");
-  const actionsRule = getRule(".profile-actions");
 
   assert.match(tagsActionsRule, /display:\s*flex;/);
   assert.match(tagsActionsRule, /justify-content:\s*space-between;/);
   assert.match(tagsRule, /flex:\s*1\s+1\s+auto;/);
-  assert.match(actionsRule, /justify-content:\s*flex-end;/);
-  assert.match(actionsRule, /margin-left:\s*auto;/);
+  assert.doesNotMatch(artistPage, /Ask about works|Küsi teoste kohta/);
 });
 
 test("artist profile keeps biography heading in eyebrow style but larger", () => {
@@ -40,6 +38,13 @@ test("artist profile keeps biography heading in eyebrow style but larger", () =>
   assert.doesNotMatch(biographyHeadingRule, /font-family:\s*var\(--font-heading\);/);
   assert.doesNotMatch(biographyHeadingRule, /text-transform:\s*none;/);
   assert.match(biographyCopyRule, /font-size:\s*clamp\(1\.06rem,\s*1\.28vw,\s*1\.2rem\);/);
+});
+
+test("artist profile portrait uses the same soft light shadow as the carousel", () => {
+  const portraitRule = getRule(".profile-hero > .portrait-shell");
+
+  assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
+  assert.match(portraitRule, /0\s+26px\s+30px\s+-24px\s+rgba\(75,\s*52,\s*28,\s*0\.24\)/);
 });
 
 test("artist profile back link uses short copy", () => {

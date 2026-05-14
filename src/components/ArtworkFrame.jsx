@@ -34,6 +34,8 @@ function getCaptionSize(size, locale) {
 
 export default function ArtworkFrame({
   artwork,
+  imageFetchPriority,
+  imageLoading = "eager",
   interactive = false,
   locale = "et",
   onClick,
@@ -75,6 +77,9 @@ export default function ArtworkFrame({
                 <img
                   alt={artwork.altText || getCopy(artwork.title, locale)}
                   className="artwork-frame__image"
+                  decoding="async"
+                  fetchPriority={imageFetchPriority}
+                  loading={imageLoading}
                   src={artwork.image}
                 />
               ) : null}

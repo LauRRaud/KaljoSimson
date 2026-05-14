@@ -9,14 +9,12 @@ export default function SiteAmbient() {
   const isGalleryRoom = pathname === "/gallery";
   const isAdmin = pathname?.startsWith("/admin");
 
-  if (isGalleryRoom) {
-    return null;
-  }
+  const className = `site-ambient ${isGalleryRoom ? "site-ambient--gallery-room" : ""}`.trim();
 
   return (
-    <div className="site-ambient" aria-hidden="true">
+    <div className={className} aria-hidden="true">
       <PageLineWaves />
-      {isAdmin ? null : <SplashCursor />}
+      {isAdmin || isGalleryRoom ? null : <SplashCursor />}
     </div>
   );
 }

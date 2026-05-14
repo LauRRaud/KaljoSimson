@@ -23,11 +23,45 @@ function compactMetaValue(value) {
   return placeholders.has(normalized) ? null : value;
 }
 
+function renderMetaValue(value) {
+  return compactMetaValue(value) ?? "—";
+}
+
+function waitForImageDecode(src) {
+  if (!src || typeof window === "undefined") {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    const image = new window.Image();
+
+    image.onload = async () => {
+      if (typeof image.decode !== "function") {
+        resolve();
+        return;
+      }
+
+      try {
+        await image.decode();
+      } catch {
+        // Decode can reject for cached or unsupported images; loaded image is still usable.
+      }
+
+      resolve();
+    };
+    image.onerror = () => resolve();
+    image.src = src;
+  });
+}
+
 export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
   const [activeIndex, setActiveIndex] = useState(null);
+  const decodedRoomImagesRef = useRef(new Set());
   const roomViewportRef = useRef(null);
+  const roomTravelFrameRef = useRef(null);
   const hasArtworks = artist.artworks.length > 0;
   const isRoom = variant === "room";
+  const roomTravelDuration = 3200;
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
   const portalRoot = typeof document === "undefined" ? null : document.body;
@@ -37,45 +71,150 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   const artworkMeta = activeArtwork
     ? [
         {
-          key: "year",
-          label: yearLabel,
-          value: compactMetaValue(activeArtwork.year),
-        },
-        {
           key: "medium",
           label: mediumLabel,
-          value: compactMetaValue(getCopy(activeArtwork.medium, locale)),
+          value: renderMetaValue(getCopy(activeArtwork.medium, locale)),
+        },
+        {
+          key: "year",
+          label: yearLabel,
+          value: renderMetaValue(activeArtwork.year),
         },
         {
           key: "size",
           label: sizeLabel,
-          value: compactMetaValue(activeArtwork.size),
+          value: renderMetaValue(activeArtwork.size),
         },
-      ].filter((item) => item.value)
+      ]
     : [];
 
-  function scrollRoom(direction) {
-    const viewport = roomViewportRef.current;
-    const wall = viewport?.querySelector(".gallery-room__wall");
-    const slot = viewport?.querySelector(".gallery-room__slot");
+  function easeRoomScroll(progress) {
+    return 0.5 - Math.cos(progress * Math.PI) / 2;
+  }
 
-    if (!viewport || !wall || !slot) {
+  function getRoomImageSources(pairStartIndex, radius = 1) {
+    const startIndex = Math.max(0, pairStartIndex - radius * 2);
+    const endIndex = Math.min(artist.artworks.length, pairStartIndex + 2 + radius * 2);
+
+    return artist.artworks
+      .slice(startIndex, endIndex)
+      .map((artwork) => artwork.image)
+      .filter(Boolean);
+  }
+
+  async function predecodeRoomImages(sources) {
+    const pendingSources = sources.filter(
+      (source) => !decodedRoomImagesRef.current.has(source),
+    );
+
+    if (!pendingSources.length) {
       return;
     }
 
-    const wallStyles = window.getComputedStyle(wall);
-    const slotWidth = slot.getBoundingClientRect().width;
-    const gap = Number.parseFloat(wallStyles.columnGap || wallStyles.gap || "0");
-    const artworkStep = slotWidth + gap;
-    const pairStep = artworkStep * 2;
-    const isMobileLandscape = window.matchMedia(
-      "(max-width: 1100px) and (max-height: 620px) and (orientation: landscape)",
-    ).matches;
+    pendingSources.forEach((source) => decodedRoomImagesRef.current.add(source));
+    await Promise.all(pendingSources.map((source) => waitForImageDecode(source)));
+  }
 
-    viewport.scrollBy({
-      left: direction * (isMobileLandscape ? artworkStep : Math.max(pairStep, viewport.clientWidth * 0.72)),
-      behavior: "smooth",
-    });
+  function animateRoomScrollTo(target) {
+    const viewport = roomViewportRef.current;
+
+    if (!viewport) {
+      return;
+    }
+
+    if (roomTravelFrameRef.current !== null) {
+      window.cancelAnimationFrame(roomTravelFrameRef.current);
+    }
+
+    const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const clampedTarget = Math.min(maxScrollLeft, Math.max(0, target));
+    const startScrollLeft = viewport.scrollLeft;
+    const travelDistance = clampedTarget - startScrollLeft;
+
+    if (Math.abs(travelDistance) < 1) {
+      viewport.scrollLeft = clampedTarget;
+      roomTravelFrameRef.current = null;
+      return;
+    }
+
+    const startedAt = window.performance.now();
+
+    const step = (timestamp) => {
+      const progress = Math.min(1, (timestamp - startedAt) / roomTravelDuration);
+      const easedProgress = easeRoomScroll(progress);
+      viewport.scrollLeft = startScrollLeft + travelDistance * easedProgress;
+
+      if (progress < 1) {
+        roomTravelFrameRef.current = window.requestAnimationFrame(step);
+        return;
+      }
+
+      roomTravelFrameRef.current = null;
+    };
+
+    roomTravelFrameRef.current = window.requestAnimationFrame(step);
+  }
+
+  function getRoomSlots(viewport) {
+    return Array.from(viewport?.querySelectorAll(".gallery-room__slot") ?? []);
+  }
+
+  function getCurrentRoomPairStartIndex(viewport, slots) {
+    if (!viewport || slots.length === 0) {
+      return 0;
+    }
+
+    const viewportRect = viewport.getBoundingClientRect();
+    const viewportStyles = window.getComputedStyle(viewport);
+    const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
+    let closestPairStartIndex = 0;
+    let smallestDistance = Number.POSITIVE_INFINITY;
+
+    for (let index = 0; index < slots.length; index += 2) {
+      const distance = Math.abs(slots[index].getBoundingClientRect().left - focusLeft);
+
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        closestPairStartIndex = index;
+      }
+    }
+
+    return closestPairStartIndex;
+  }
+
+  function getRoomPairScrollTarget(viewport, slots, pairStartIndex) {
+    const firstSlot = slots[pairStartIndex];
+    const viewportRect = viewport.getBoundingClientRect();
+    const viewportStyles = window.getComputedStyle(viewport);
+    const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
+
+    return viewport.scrollLeft + firstSlot.getBoundingClientRect().left - focusLeft;
+  }
+
+  async function scrollRoom(direction) {
+    const viewport = roomViewportRef.current;
+    const wall = viewport?.querySelector(".gallery-room__wall");
+
+    if (!viewport || !wall) {
+      return;
+    }
+
+    const slots = getRoomSlots(viewport);
+
+    if (slots.length === 0) {
+      return;
+    }
+
+    const currentPairStartIndex = getCurrentRoomPairStartIndex(viewport, slots);
+    const maxPairStartIndex = Math.max(0, slots.length - (slots.length % 2 === 0 ? 2 : 1));
+    const targetIndex = Math.min(
+      maxPairStartIndex,
+      Math.max(0, currentPairStartIndex + direction * 2),
+    );
+    const targetScrollLeft = getRoomPairScrollTarget(viewport, slots, targetIndex);
+
+    await predecodeRoomImages(getRoomImageSources(targetIndex));
+    animateRoomScrollTo(targetScrollLeft);
   }
 
   useEffect(() => {
@@ -132,6 +271,58 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     };
   }, [activeIndex]);
 
+  useEffect(() => () => {
+    if (roomTravelFrameRef.current !== null) {
+      window.cancelAnimationFrame(roomTravelFrameRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isRoom || !hasArtworks) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    const immediateSources = getRoomImageSources(0);
+    const remainingSources = artist.artworks
+      .map((artwork) => artwork.image)
+      .filter(Boolean)
+      .filter((source) => !immediateSources.includes(source));
+
+    predecodeRoomImages(immediateSources);
+
+    function decodeNextIdleImage() {
+      if (cancelled || !remainingSources.length) {
+        return;
+      }
+
+      const nextSource = remainingSources.shift();
+
+      predecodeRoomImages([nextSource]).finally(() => {
+        if (cancelled) {
+          return;
+        }
+
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(decodeNextIdleImage, { timeout: 1600 });
+          return;
+        }
+
+        window.setTimeout(decodeNextIdleImage, 240);
+      });
+    }
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(decodeNextIdleImage, { timeout: 1600 });
+    } else {
+      window.setTimeout(decodeNextIdleImage, 240);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [artist.artworks, hasArtworks, isRoom]);
+
   if (!hasArtworks) {
     return (
       <div className="empty-state">
@@ -155,6 +346,8 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                 <div className="gallery-room__slot" key={artwork.slug}>
                   <ArtworkFrame
                     artwork={artwork}
+                    imageFetchPriority={index < 2 ? "high" : undefined}
+                    imageLoading={index < 4 ? "eager" : "lazy"}
                     interactive
                     locale={locale}
                     onClick={() => setActiveIndex(index)}
@@ -190,6 +383,8 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
           {artist.artworks.map((artwork, index) => (
             <ArtworkFrame
               artwork={artwork}
+              imageFetchPriority={index < 2 ? "high" : undefined}
+              imageLoading={index < 4 ? "eager" : "lazy"}
               interactive
               key={artwork.slug}
               locale={locale}

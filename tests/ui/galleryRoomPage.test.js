@@ -11,7 +11,7 @@ test("public gallery page uses the room variant without changing artist gallerie
   assert.match(galleryPage, /mainClassName="page-main--gallery"/);
   assert.match(galleryPage, /showFooter=\{false\}/);
   assert.match(siteAmbient, /pathname === "\/gallery"/);
-  assert.match(siteAmbient, /if \(isGalleryRoom\) \{[\s\S]*?return null;/);
+  assert.match(siteAmbient, /site-ambient--gallery-room/);
   assert.match(galleryPage, /className="gallery-room-page"/);
   assert.match(galleryPage, /className="gallery-room-page__back inline-link"/);
   assert.match(galleryPage, /locale === "en" \? "Back" : "Tagasi"/);
@@ -31,10 +31,25 @@ test("gallery room is a horizontal wall with carousel-style controls", () => {
   assert.doesNotMatch(galleryClient, /className="gallery-room__floor"/);
   assert.match(galleryClient, /onClick=\{\(\) => scrollRoom\(-1\)\}/);
   assert.match(galleryClient, /onClick=\{\(\) => scrollRoom\(1\)\}/);
-  assert.match(galleryClient, /viewport\.scrollBy\(\{/);
-  assert.match(galleryClient, /const artworkStep = slotWidth \+ gap;/);
-  assert.match(galleryClient, /const pairStep = artworkStep \* 2;/);
-  assert.match(galleryClient, /max-width:\s*1100px[\s\S]*orientation:\s*landscape/);
+  assert.match(galleryClient, /const roomTravelDuration = 3200;/);
+  assert.match(galleryClient, /function easeRoomScroll\(progress\)/);
+  assert.match(galleryClient, /function animateRoomScrollTo\(target\)/);
+  assert.match(galleryClient, /function getRoomSlots\(viewport\)/);
+  assert.match(galleryClient, /function getCurrentRoomPairStartIndex\(viewport, slots\)/);
+  assert.match(galleryClient, /function getRoomPairScrollTarget\(viewport, slots, pairStartIndex\)/);
+  assert.match(galleryClient, /focusLeft = viewportRect\.left \+ Number\.parseFloat\(viewportStyles\.paddingLeft \|\| "0"\)/);
+  assert.match(galleryClient, /slots\[index\]\.getBoundingClientRect\(\)\.left - focusLeft/);
+  assert.match(galleryClient, /window\.performance\.now\(\)/);
+  assert.match(galleryClient, /roomTravelFrameRef\.current = window\.requestAnimationFrame\(step\);/);
+  assert.match(galleryClient, /window\.cancelAnimationFrame\(roomTravelFrameRef\.current\)/);
+  assert.match(galleryClient, /const slots = getRoomSlots\(viewport\);/);
+  assert.match(galleryClient, /const maxPairStartIndex = Math\.max\(0, slots\.length - \(slots\.length % 2 === 0 \? 2 : 1\)\);/);
+  assert.match(galleryClient, /const currentPairStartIndex = getCurrentRoomPairStartIndex\(viewport, slots\);/);
+  assert.match(galleryClient, /currentPairStartIndex \+ direction \* 2/);
+  assert.match(galleryClient, /getRoomPairScrollTarget\(viewport, slots, targetIndex\)/);
+  assert.match(galleryClient, /animateRoomScrollTo\(targetScrollLeft\)/);
+  assert.doesNotMatch(galleryClient, /artworkStep \* 0\.8/);
+  assert.doesNotMatch(galleryClient, /behavior:\s*"smooth"/);
 });
 
 test("gallery room styling creates a clean wall and responsive artwork rhythm", () => {
@@ -45,12 +60,14 @@ test("gallery room styling creates a clean wall and responsive artwork rhythm", 
   assert.match(css, /--gallery-room-slot:\s*clamp\(340px,\s*30vw,\s*540px\);/);
   assert.match(css, /--gallery-room-edge:\s*max\(/);
   assert.doesNotMatch(css, /\.gallery-room::before\s*\{[\s\S]*?repeating-linear-gradient\(90deg,/);
-  assert.match(css, /\.gallery-room__viewport\s*\{[\s\S]*?min-height:\s*100svh;[\s\S]*?overflow-x:\s*auto;[\s\S]*?scroll-snap-type:\s*x mandatory;/);
+  assert.match(css, /\.gallery-room__viewport\s*\{[\s\S]*?min-height:\s*100svh;[\s\S]*?overflow-x:\s*auto;[\s\S]*?scroll-padding-inline:\s*var\(--gallery-room-edge\);/);
   assert.match(css, /\.gallery-room__wall\s*\{[\s\S]*?display:\s*flex;[\s\S]*?align-items:\s*flex-start;[\s\S]*?min-width:\s*max-content;/);
-  assert.match(css, /\.gallery-room__slot\s*\{[\s\S]*?scroll-snap-align:\s*center;/);
+  assert.match(css, /\.gallery-room__slot\s*\{[\s\S]*?flex:\s*0 0 var\(--gallery-room-slot\);[\s\S]*?min-width:\s*0;/);
   assert.match(css, /\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(286px,\s*23vw,\s*410px\);/);
   assert.doesNotMatch(css, /\.gallery-room__floor\s*\{/);
   assert.match(css, /\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*clamp\(18px,\s*3vw,\s*44px\);/);
+  assert.match(css, /\.gallery-room__nav\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg\);[\s\S]*?box-shadow:\s*var\(--glass-panel-shadow\);/);
+  assert.match(css, /\.gallery-room__nav:hover\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg-strong\);[\s\S]*?color:\s*var\(--text\);/);
   assert.match(css, /\.gallery-room__nav span\s*\{[\s\S]*?border-top:\s*5px solid currentColor;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-main--gallery\s*\{[\s\S]*?padding-top:\s*0;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room\s*\{[\s\S]*?--gallery-room-mobile-slot:\s*min\(88vw,\s*350px\);/);
@@ -60,8 +77,8 @@ test("gallery room styling creates a clean wall and responsive artwork rhythm", 
   assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(50% \+ clamp\(132px,\s*20svh,\s*154px\)\);[\s\S]*?bottom:\s*auto;/);
   assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*calc\(50% - 138px\);/);
   assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(56vw,\s*540px\);/);
-  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding-inline:\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/);
-  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(72svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.72\)\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*58px\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\)\s*34px;/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(58svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/);
 });
 
 test("dark mode keeps the gallery room consistent with the site atmosphere", () => {

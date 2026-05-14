@@ -72,12 +72,6 @@ export default async function ArtistPage({ params, searchParams }) {
                 </span>
               ))}
             </div>
-
-            <div className="profile-actions">
-              <a className="button button--ghost" href={`mailto:${content.contact.email}`}>
-                {locale === "en" ? "Ask about works" : "Küsi teoste kohta"}
-              </a>
-            </div>
           </div>
         </div>
 

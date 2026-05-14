@@ -47,8 +47,10 @@ test("artist carousel arrows stay near the screen edge with a soft hover treatme
   assert.match(baseRule, /width:\s*76px;/);
   assert.match(baseRule, /height:\s*76px;/);
   assert.doesNotMatch(baseRule, /inset\s+0\s+1px/);
-  assert.match(hoverRule, /background:\s*rgba\(255,\s*252,\s*246,\s*0\.78\);/);
-  assert.match(hoverRule, /color:\s*rgba\(24,\s*21,\s*18,\s*0\.76\);/);
+  assert.match(baseRule, /background:\s*var\(--glass-panel-bg\);/);
+  assert.match(baseRule, /box-shadow:\s*var\(--glass-panel-shadow\);/);
+  assert.match(hoverRule, /background:\s*var\(--glass-panel-bg-strong\);/);
+  assert.match(hoverRule, /color:\s*var\(--text\);/);
   assert.match(hoverRule, /transform:\s*translateY\(-50%\);/);
   assert.match(arrowGlyphRule, /border-radius:\s*3px;/);
   assert.match(leftRule, /left:\s*clamp\(4px,\s*2\.4vw,\s*28px\);/);
@@ -95,12 +97,12 @@ test("artist carousel portraits and titles use a calmer profile-style crop", () 
   const portraitImageRule = getRule(".artist-card--carousel .portrait-shell__image");
   const headingRule = getRule(".artist-card--carousel h3");
 
-  assert.match(cardRule, /box-shadow:\s*none;/);
+  assert.match(cardRule, /0\s+14px\s+14px\s+-16px\s+rgba\(75,\s*52,\s*28,\s*0\.28\)/);
   assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
   assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
   assert.match(portraitImageRule, /object-position:\s*var\(--portrait-position,\s*center\s+center\);/);
   assert.match(headingRule, /max-width:\s*100%;/);
-  assert.match(headingRule, /font-size:\s*clamp\(1\.78rem,\s*2\.45vw,\s*2\.45rem\);/);
+  assert.match(headingRule, /font-size:\s*clamp\(1\.96rem,\s*2\.7vw,\s*2\.7rem\);/);
   assert.match(headingRule, /white-space:\s*nowrap;/);
 });
 
@@ -139,6 +141,10 @@ test("artist carousel mobile arrows sit higher and farther apart", () => {
 });
 
 test("artist carousel mobile tags stay on one horizontal row", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__slot\s*\{[\s\S]*?width:\s*min\(calc\(100vw - 56px\),\s*360px\);[\s\S]*?max-width:\s*min\(calc\(100vw - 56px\),\s*360px\);/,
+  );
   assert.match(
     css,
     /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-card--carousel \.pill-row\s*\{[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*100%;[\s\S]*?overflow:\s*visible;/,

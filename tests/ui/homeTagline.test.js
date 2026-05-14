@@ -33,5 +33,5 @@ test("admin studio exposes the tagline field again", () => {
 test("homepage stylesheet includes tagline styling", () => {
   assert.match(css, /:root\s*\{[\s\S]*?--home-tagline-text:\s*rgba\(24,\s*21,\s*18,\s*0\.68\);/);
   assert.match(css, /\.home-title__tagline\s*\{[\s\S]*?color:\s*var\(--home-tagline-text\);[\s\S]*?font-family:\s*var\(--font-tagline\);[\s\S]*?font-size:\s*clamp\(1\.26rem,\s*1\.48vw,\s*1\.68rem\);[\s\S]*?font-weight:\s*500;[\s\S]*?letter-spacing:\s*0\.16em;[\s\S]*?text-align:\s*center;/);
-  assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;/);
+  assert.match(css, /\.home-title__tagline-word\s*\{[\s\S]*?animation:\s*home-title-shine var\(--tagline-cycle-duration,\s*14\.8s\) linear infinite;[\s\S]*?animation-delay:\s*calc\(var\(--tagline-entrance-delay,\s*3s\) \+ var\(--word-delay,\s*0s\)\);/);
 });

@@ -22,6 +22,6 @@ test("mobile home hero shows tagline words together and moves the cue upward", (
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*14\.8s\);[\s\S]*?animation-delay:\s*var\(--word-mobile-delay,\s*0s\);/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.home-title__tagline-word\s*\{[\s\S]*?animation-duration:\s*var\(--tagline-mobile-cycle-duration,\s*14\.8s\);[\s\S]*?animation-delay:\s*calc\(var\(--tagline-entrance-delay,\s*3s\) \+ var\(--word-mobile-delay,\s*0s\)\);/,
   );
 });
