@@ -95,6 +95,10 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__caption \.eyebrow\s*\{[\s\S]*?margin-bottom:\s*10px;/,
+  );
+  assert.match(
+    css,
     /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);/,
   );
   assert.match(

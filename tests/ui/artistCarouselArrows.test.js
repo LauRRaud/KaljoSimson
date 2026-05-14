@@ -166,11 +166,11 @@ test("artist carousel phone layout widens cards and aligns arrows with artist me
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*8px;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*14px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*8px;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*14px;/,
   );
 });
 

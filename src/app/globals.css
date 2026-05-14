@@ -4349,11 +4349,11 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .artist-stage__arrow--left {
-    left: 8px;
+    left: 14px;
   }
 
   .artist-stage__arrow--right {
-    right: 8px;
+    right: 14px;
   }
 
   .artist-card--carousel {
@@ -4538,7 +4538,7 @@ html[data-theme="dark"] .admin-divider {
     }
 
     .gallery-room__nav {
-      top: calc(76px + min(75vw, 332px) + 224px);
+      top: calc(76px + min(75vw, 332px) + 104px);
       bottom: auto;
       width: 54px;
       height: 54px;
@@ -4704,6 +4704,7 @@ html[data-theme="dark"] .admin-divider {
     .lightbox__caption .eyebrow {
       font-size: 1rem;
       line-height: 1.1;
+      margin-bottom: 10px;
     }
 
     .lightbox__caption h2 {
@@ -5128,4 +5129,5 @@ html[data-theme="dark"] .admin-divider {
     font-size: 0.76rem;
   }
 }
+
 
