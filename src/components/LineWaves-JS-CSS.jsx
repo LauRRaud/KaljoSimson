@@ -167,6 +167,7 @@ export default function LineWavesJSCSS({
   className = "",
 }) {
   const containerRef = useRef(null);
+  const programRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -188,6 +189,18 @@ export default function LineWavesJSCSS({
     isMobile && mobileOuterLineCount !== undefined ? mobileOuterLineCount : outerLineCount;
   const resolvedWarpIntensity =
     isMobile && mobileWarpIntensity !== undefined ? mobileWarpIntensity : warpIntensity;
+
+  useEffect(() => {
+    if (!programRef.current) {
+      return;
+    }
+
+    programRef.current.uniforms.uBrightness.value = brightness;
+    programRef.current.uniforms.uColorCycleSpeed.value = colorCycleSpeed;
+    programRef.current.uniforms.uColor1.value = hexToVec3(color1);
+    programRef.current.uniforms.uColor2.value = hexToVec3(color2);
+    programRef.current.uniforms.uColor3.value = hexToVec3(color3);
+  }, [brightness, colorCycleSpeed, color1, color2, color3]);
 
   useEffect(() => {
     if (!containerRef.current) {
@@ -227,6 +240,7 @@ export default function LineWavesJSCSS({
         uEnableMouse: { value: enableMouseInteraction },
       },
     });
+    programRef.current = program;
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
@@ -279,6 +293,7 @@ export default function LineWavesJSCSS({
     animationFrameId = window.requestAnimationFrame(render);
 
     return () => {
+      programRef.current = null;
       window.cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", resize);
 
@@ -294,11 +309,6 @@ export default function LineWavesJSCSS({
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [
-    brightness,
-    color1,
-    color2,
-    color3,
-    colorCycleSpeed,
     edgeFadeWidth,
     enableMouseInteraction,
     mouseInfluence,

@@ -104,11 +104,11 @@ test("mobile landscape gallery room gives artwork more height with compact capti
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?white-space:\s*normal;/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?white-space:\s*nowrap;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?font-size:\s*1\.1rem;/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?font-size:\s*1\.1rem;/,
   );
 });
 

@@ -48,8 +48,12 @@ test("artist profile portrait uses the same soft light shadow as the carousel", 
 });
 
 test("artist profile back link uses short copy", () => {
+  const profileNavRule = getRule(".profile-nav");
+
   assert.match(artistPage, /locale === "en" \? "Back" : "Tagasi"/);
   assert.doesNotMatch(artistPage, /Back to homepage|Tagasi avalehele/);
+  assert.match(profileNavRule, /margin-top:\s*-14px;/);
+  assert.match(profileNavRule, /margin-bottom:\s*-6px;/);
 });
 
 test("artist profile panel expands wider on mobile", () => {
