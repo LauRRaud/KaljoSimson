@@ -75,7 +75,26 @@ test("mobile gallery room captions split title and metadata into two rows", () =
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(76px \+ min\(75vw,\s*332px\) \+ 224px\);[\s\S]*?bottom:\s*auto;[\s\S]*?transform:\s*none;/,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(76px \+ min\(75vw,\s*332px\) \+ 124px\);[\s\S]*?bottom:\s*auto;[\s\S]*?transform:\s*none;/,
+  );
+});
+
+test("mobile landscape gallery room gives artwork more height with compact caption", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*[\s\S]*?42px[\s\S]*?24px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(68svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.64\)\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?white-space:\s*normal;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?font-size:\s*1\.65rem;/,
   );
 });
 

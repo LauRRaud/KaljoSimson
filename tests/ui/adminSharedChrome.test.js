@@ -12,7 +12,8 @@ test("admin login and content page use shared page-shell background chrome", () 
   assert.match(adminPage, /className="page-shell admin-page-shell"/);
   assert.match(siteAmbient, /pathname\?\.startsWith\("\/admin"\)/);
   assert.match(siteAmbient, /<PageLineWaves \/>/);
-  assert.match(siteAmbient, /isAdmin \? null : <SplashCursor \/>/);
+  assert.match(siteAmbient, /<\/div>[\s\S]*?\{isAdmin \? null : <SplashCursor \/>\}/);
+  assert.match(siteAmbient, /isAdmin \? null : <BrushCursor \/>/);
   assert.match(adminPage, /className="site-nav admin-topbar admin-topbar--login"/);
   assert.match(adminPage, /href="\/"[\s\S]*?Avalehele/);
 });

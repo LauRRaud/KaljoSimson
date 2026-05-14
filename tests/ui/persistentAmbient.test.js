@@ -19,7 +19,8 @@ test("persistent ambient layer keeps route-specific visibility rules", () => {
   assert.match(siteAmbient, /pathname\?\.startsWith\("\/admin"\)/);
   assert.match(siteAmbient, /site-ambient--gallery-room/);
   assert.match(siteAmbient, /<PageLineWaves \/>/);
-  assert.match(siteAmbient, /isAdmin \|\| isGalleryRoom \? null : <SplashCursor \/>/);
+  assert.match(siteAmbient, /<\/div>[\s\S]*?\{isAdmin \? null : <SplashCursor \/>\}/);
+  assert.match(siteAmbient, /isAdmin \? null : <BrushCursor \/>/);
 });
 
 test("ambient layer sits between page surfaces and page content", () => {

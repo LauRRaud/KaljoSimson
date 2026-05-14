@@ -87,11 +87,11 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?gap:\s*8px;[\s\S]*?padding:\s*14px 20px 16px;/,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?gap:\s*10px;[\s\S]*?padding:\s*16px 20px 18px;/,
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__caption\s*\{[\s\S]*?padding-top:\s*4px;/,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__caption\s*\{[\s\S]*?gap:\s*9px;[\s\S]*?padding-top:\s*6px;/,
   );
   assert.match(
     css,
@@ -100,6 +100,14 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   assert.match(
     css,
     /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__caption \.inline-copy\s*\{[\s\S]*?line-height:\s*1\.54;/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?gap:\s*7px 14px;[\s\S]*?line-height:\s*1\.32;/,
   );
   assert.match(
     css,

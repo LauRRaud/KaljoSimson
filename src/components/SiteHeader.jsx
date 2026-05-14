@@ -12,11 +12,11 @@ export default function SiteHeader({ locale = "et" }) {
           aria-label={locale === "en" ? "Main navigation" : "P\u00f5hinavigeerimine"}
         >
           <div className="site-nav__links">
-            <Link href={withLocale("/", locale, "#artists")}>
-              {locale === "en" ? "Artists" : "Kunstnikud"}
-            </Link>
             <Link href={withLocale("/gallery", locale)}>
               {locale === "en" ? "Gallery" : "Galerii"}
+            </Link>
+            <Link href={withLocale("/studio", locale)}>
+              {locale === "en" ? "Studio" : "Stuudio"}
             </Link>
             <Link href={withLocale("/", locale, "#contact")}>
               {locale === "en" ? "Contact" : "Kontakt"}
