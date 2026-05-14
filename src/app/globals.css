@@ -1444,7 +1444,7 @@ p {
 .artist-card--carousel h3 {
   max-width: 100%;
   margin-inline: auto;
-  font-size: clamp(1.96rem, 2.7vw, 2.7rem);
+  font-size: clamp(1.72rem, 2.45vw, 2.7rem);
   line-height: 1;
   letter-spacing: var(--tracking-display);
   text-wrap: balance;
@@ -1459,7 +1459,8 @@ p {
 
 .artist-card--carousel .artist-card__bio {
   align-self: stretch;
-  max-width: 31rem;
+  width: min(100%, 25rem);
+  max-width: 25rem;
   margin-top: 14px;
   margin-inline: auto;
   color: rgba(24, 21, 18, 0.66);
@@ -1475,7 +1476,7 @@ p {
 
 .artist-card--carousel .artist-card__meta,
 .artist-card--carousel .pill-row {
-  padding-inline: 4px;
+  padding-inline: 0;
 }
 
 .artist-card--carousel .artist-card__meta {
