@@ -36,11 +36,14 @@ test("page line waves use purple accent palette in both themes", () => {
 test("page line waves are crisp and visible in light mode and clearer in dark mode", () => {
   assert.match(css, /\.page-line-waves\s*\{[\s\S]*?--page-line-waves-opacity:\s*0\.26;/);
   assert.match(css, /\.page-line-waves\s*\{[\s\S]*?opacity:\s*var\(--page-line-waves-opacity\);/);
-  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?animation:\s*page-line-waves-enter 2800ms cubic-bezier\(0\.22,\s*1,\s*0\.36,\s*1\) both;/);
+  assert.match(css, /\.page-line-waves\s*\{[\s\S]*?animation:\s*page-line-waves-enter 4200ms cubic-bezier\(0\.16,\s*1,\s*0\.3,\s*1\) both;/);
+  assert.match(css, /\.page-line-waves canvas\s*\{[\s\S]*?animation:\s*page-line-waves-canvas-enter 4200ms cubic-bezier\(0\.16,\s*1,\s*0\.3,\s*1\) 180ms both;/);
   assert.match(css, /\.page-line-waves\s*\{[\s\S]*?filter:\s*none;/);
   assert.match(css, /html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?--page-line-waves-opacity:\s*0\.28;/);
-  assert.match(css, /@keyframes page-line-waves-enter\s*\{[\s\S]*?0%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?26%\s*\{[\s\S]*?opacity:\s*calc\(var\(--page-line-waves-opacity\) \* 0\.46\);[\s\S]*?72%\s*\{[\s\S]*?opacity:\s*calc\(var\(--page-line-waves-opacity\) \* 0\.86\);[\s\S]*?100%\s*\{[\s\S]*?opacity:\s*var\(--page-line-waves-opacity\);/);
+  assert.match(css, /@keyframes page-line-waves-enter\s*\{[\s\S]*?0%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?36%\s*\{[\s\S]*?opacity:\s*calc\(var\(--page-line-waves-opacity\) \* 0\.18\);[\s\S]*?78%\s*\{[\s\S]*?opacity:\s*calc\(var\(--page-line-waves-opacity\) \* 0\.72\);[\s\S]*?100%\s*\{[\s\S]*?opacity:\s*var\(--page-line-waves-opacity\);/);
+  assert.match(css, /@keyframes page-line-waves-canvas-enter\s*\{[\s\S]*?0%\s*\{[\s\S]*?opacity:\s*0;[\s\S]*?44%\s*\{[\s\S]*?opacity:\s*0\.2;[\s\S]*?100%\s*\{[\s\S]*?opacity:\s*1;/);
   assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?animation:\s*none;/);
+  assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\.page-line-waves canvas\s*\{[\s\S]*?animation:\s*none;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?--page-line-waves-opacity:\s*0\.22;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?html\[data-theme="dark"\] \.page-line-waves\s*\{[\s\S]*?--page-line-waves-opacity:\s*0\.22;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-line-waves\s*\{[\s\S]*?filter:\s*none;/);

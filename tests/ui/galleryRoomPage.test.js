@@ -63,22 +63,28 @@ test("gallery room styling creates a clean wall and responsive artwork rhythm", 
   assert.match(css, /\.gallery-room__viewport\s*\{[\s\S]*?min-height:\s*100svh;[\s\S]*?overflow-x:\s*auto;[\s\S]*?scroll-padding-inline:\s*var\(--gallery-room-edge\);/);
   assert.match(css, /\.gallery-room__wall\s*\{[\s\S]*?display:\s*flex;[\s\S]*?align-items:\s*flex-start;[\s\S]*?min-width:\s*max-content;/);
   assert.match(css, /\.gallery-room__slot\s*\{[\s\S]*?flex:\s*0 0 var\(--gallery-room-slot\);[\s\S]*?min-width:\s*0;/);
-  assert.match(css, /\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(286px,\s*23vw,\s*410px\);/);
+  assert.match(css, /\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?width:\s*fit-content;[\s\S]*?height:\s*auto;/);
   assert.doesNotMatch(css, /\.gallery-room__floor\s*\{/);
   assert.match(css, /\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*clamp\(18px,\s*3vw,\s*44px\);/);
   assert.match(css, /\.gallery-room__nav\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg\);[\s\S]*?box-shadow:\s*var\(--glass-panel-shadow\);/);
   assert.match(css, /\.gallery-room__nav:hover\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg-strong\);[\s\S]*?color:\s*var\(--text\);/);
   assert.match(css, /\.gallery-room__nav span\s*\{[\s\S]*?border-top:\s*5px solid currentColor;/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.page-main--gallery\s*\{[\s\S]*?padding-top:\s*0;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room\s*\{[\s\S]*?--gallery-room-mobile-slot:\s*min\(94vw,\s*390px\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room\s*\{[\s\S]*?--gallery-room-mobile-slot:\s*min\(98vw,\s*430px\);/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?calc\(\(100vw - var\(--gallery-room-mobile-slot\)\) \/ 2\)/);
   assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room__slot\s*\{[\s\S]*?flex-basis:\s*var\(--gallery-room-mobile-slot\);/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(75vw,\s*332px\);/);
-  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(76px \+ min\(75vw,\s*332px\) \+ 124px\);[\s\S]*?bottom:\s*auto;/);
-  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*calc\(50% - 152px\);/);
-  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(56vw,\s*540px\);/);
-  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*58px\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\)\s*34px;/);
-  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(58svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(80vw,\s*360px\);/);
+  assert.match(css, /\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?object-fit:\s*contain;/);
+  assert.match(css, /\.gallery-room \.artwork-frame__caption-meta\s*\{[\s\S]*?display:\s*none;/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?height:\s*auto;[\s\S]*?min-height:\s*0;[\s\S]*?padding-bottom:\s*14px;/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__controls\s*\{[\s\S]*?position:\s*relative;[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*space-between;[\s\S]*?padding-inline:\s*clamp\(22px,\s*7vw,\s*36px\);/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?position:\s*static;[\s\S]*?top:\s*auto;[\s\S]*?bottom:\s*auto;/);
+  assert.match(css, /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav--prev\s*\{[\s\S]*?left:\s*auto;/);
+  assert.match(css, /@media \(max-height:\s*620px\) and \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding-top:\s*42px;[\s\S]*?padding-bottom:\s*10px;/);
+  assert.match(css, /@media \(max-height:\s*620px\) and \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(46svh,\s*240px\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?--gallery-room-slot:\s*min\(64vw,\s*620px\);/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*34px\s*calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\)\s*18px;/);
+  assert.match(css, /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(74svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/);
 });
 
 test("dark mode keeps the gallery room consistent with the site atmosphere", () => {

@@ -48,8 +48,8 @@ export default function ThemeToggle({ locale = "et" }) {
   }
 
   const isDark = theme === "dark";
-  const toggleText =
-    locale === "en" ? (isDark ? "Light" : "Dark") : isDark ? "Hele" : "Tume";
+  const toDarkText = locale === "en" ? "Dark" : "Tume";
+  const toLightText = locale === "en" ? "Light" : "Hele";
   const label =
     locale === "en"
       ? `Switch to ${isDark ? "light" : "dark"} mode`
@@ -63,7 +63,12 @@ export default function ThemeToggle({ locale = "et" }) {
       title={label}
       type="button"
     >
-      {toggleText}
+      <span className="theme-toggle__label theme-toggle__label--to-dark">
+        {toDarkText}
+      </span>
+      <span className="theme-toggle__label theme-toggle__label--to-light">
+        {toLightText}
+      </span>
     </button>
   );
 }

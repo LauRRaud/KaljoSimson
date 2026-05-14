@@ -94,9 +94,20 @@ export default function ArtworkFrame({
         {showCaption ? (
           <div className="artwork-frame__caption">
             <p>
-              <span>{getCopy(artwork.title, locale)}</span>
-              <span>{getCaptionYear(artwork.year, locale)}</span>
-              <span>{getCaptionSize(artwork.size, locale)}</span>
+              <span className="artwork-frame__caption-title">
+                {getCopy(artwork.title, locale)}
+              </span>
+              {artwork.artistName ? (
+                <span className="artwork-frame__caption-artist">
+                  {artwork.artistName}
+                </span>
+              ) : null}
+              <span className="artwork-frame__caption-meta">
+                {getCaptionYear(artwork.year, locale)}
+              </span>
+              <span className="artwork-frame__caption-meta">
+                {getCaptionSize(artwork.size, locale)}
+              </span>
             </p>
           </div>
         ) : null}

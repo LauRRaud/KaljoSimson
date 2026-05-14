@@ -222,6 +222,27 @@ function drawBucketFill(context, item) {
 
   const visited = new Uint8Array(width * height);
   const stack = [startIndex];
+  let frontier = [];
+
+  const pushNeighbors = (index, collection) => {
+    const x = index % width;
+
+    if (x > 0) {
+      collection.push(index - 1);
+    }
+
+    if (x < width - 1) {
+      collection.push(index + 1);
+    }
+
+    if (index >= width) {
+      collection.push(index - width);
+    }
+
+    if (index < width * (height - 1)) {
+      collection.push(index + width);
+    }
+  };
 
   const matchesTarget = (index) => {
     const offset = index * 4;
@@ -254,24 +275,39 @@ function drawBucketFill(context, item) {
     data[offset + 1] = fill.g;
     data[offset + 2] = fill.b;
     data[offset + 3] = 255;
+    frontier.push(index);
 
-    const x = index % width;
+    pushNeighbors(index, stack);
+  }
 
-    if (x > 0) {
-      stack.push(index - 1);
-    }
+  const canAbsorbEdge = (index) => {
+    const offset = index * 4;
+    return data[offset + 3] < 248;
+  };
 
-    if (x < width - 1) {
-      stack.push(index + 1);
-    }
+  for (let pass = 0; pass < 3; pass += 1) {
+    const nextFrontier = [];
 
-    if (index >= width) {
-      stack.push(index - width);
-    }
+    frontier.forEach((index) => {
+      const candidates = [];
+      pushNeighbors(index, candidates);
 
-    if (index < width * (height - 1)) {
-      stack.push(index + width);
-    }
+      candidates.forEach((candidate) => {
+        if (visited[candidate] || !canAbsorbEdge(candidate)) {
+          return;
+        }
+
+        visited[candidate] = 1;
+        const offset = candidate * 4;
+        data[offset] = fill.r;
+        data[offset + 1] = fill.g;
+        data[offset + 2] = fill.b;
+        data[offset + 3] = 255;
+        nextFrontier.push(candidate);
+      });
+    });
+
+    frontier = nextFrontier;
   }
 
   context.putImageData(image, 0, 0);

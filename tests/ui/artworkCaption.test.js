@@ -12,7 +12,7 @@ function getRule(selector) {
   return match[1];
 }
 
-test("artwork captions show title, year, and size in one centered row", () => {
+test("artwork captions show title, optional artist, year, and size in one centered row", () => {
   const captionRule = getRule(".artwork-frame__caption");
   const rowRule = getRule(".artwork-frame__caption p");
   const titleRule = getRule(".artwork-frame__caption p span:first-child");
@@ -25,9 +25,11 @@ test("artwork captions show title, year, and size in one centered row", () => {
   assert.match(rowRule, /white-space:\s*nowrap;/);
   assert.match(titleRule, /font-family:\s*var\(--font-display\);/);
   assert.doesNotMatch(artworkFrame, /<h3>/);
-  assert.match(artworkFrame, /<span>\{getCopy\(artwork\.title,\s*locale\)\}<\/span>/);
-  assert.match(artworkFrame, /<span>\{getCaptionYear\(artwork\.year,\s*locale\)\}<\/span>/);
-  assert.match(artworkFrame, /<span>\{getCaptionSize\(artwork\.size,\s*locale\)\}<\/span>/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-title"[\s\S]*?\{getCopy\(artwork\.title,\s*locale\)\}/);
+  assert.match(artworkFrame, /artwork\.artistName \? \(/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-artist"[\s\S]*?\{artwork\.artistName\}/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-meta"[\s\S]*?\{getCaptionYear\(artwork\.year,\s*locale\)\}/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-meta"[\s\S]*?\{getCaptionSize\(artwork\.size,\s*locale\)\}/);
 });
 
 test("artist profile mobile gallery captions can wrap inside wider artwork cards", () => {
@@ -52,41 +54,53 @@ test("gallery room captions stay on one visible row under artwork frames", () =>
   );
   assert.match(
     css,
-    /\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*max-content;[\s\S]*?max-width:\s*calc\(100vw - 32px\);[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?overflow:\s*visible;[\s\S]*?white-space:\s*nowrap;/,
+    /\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*max-content;[\s\S]*?max-width:\s*calc\(100vw - 32px\);[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?overflow:\s*visible;[\s\S]*?white-space:\s*normal;/,
   );
   assert.match(
     css,
-    /\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex-shrink:\s*1;/,
+    /\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?white-space:\s*nowrap;/,
+  );
+  assert.match(
+    css,
+    /\.gallery-room \.artwork-frame__caption p span\.artwork-frame__caption-artist\s*\{[\s\S]*?max-width:\s*100%;[\s\S]*?text-overflow:\s*clip;[\s\S]*?white-space:\s*nowrap;/,
+  );
+  assert.match(
+    css,
+    /\.gallery-room \.artwork-frame__caption-meta\s*\{[\s\S]*?display:\s*none;/,
   );
 });
 
-test("mobile gallery room captions split title and metadata into two rows", () => {
+test("mobile gallery room captions show only full title and author", () => {
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*100%;[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?row-gap:\s*4px;[\s\S]*?white-space:\s*normal;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*max-content;[\s\S]*?max-width:\s*calc\(100vw - 28px\);[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?gap:\s*0 8px;[\s\S]*?overflow:\s*visible;[\s\S]*?white-space:\s*nowrap;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?white-space:\s*nowrap;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?font-size:\s*clamp\(1\.02rem,\s*4\.8vw,\s*1\.16rem\);[\s\S]*?text-overflow:\s*clip;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:nth-child\(2\)::before\s*\{[\s\S]*?content:\s*none;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span\.artwork-frame__caption-artist\s*\{[\s\S]*?flex:\s*0 0 auto;[\s\S]*?max-width:\s*100%;[\s\S]*?font-size:\s*clamp\(0\.82rem,\s*3\.7vw,\s*0\.92rem\);[\s\S]*?text-overflow:\s*clip;[\s\S]*?white-space:\s*nowrap;/,
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(76px \+ min\(75vw,\s*332px\) \+ 124px\);[\s\S]*?bottom:\s*auto;[\s\S]*?transform:\s*none;/,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__controls\s*\{[\s\S]*?position:\s*relative;[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?position:\s*static;[\s\S]*?top:\s*auto;[\s\S]*?bottom:\s*auto;[\s\S]*?transform:\s*none;/,
   );
 });
 
 test("mobile landscape gallery room gives artwork more height with compact caption", () => {
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*[\s\S]*?42px[\s\S]*?24px;/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*[\s\S]*?34px[\s\S]*?18px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__window\s*\{[\s\S]*?height:\s*min\(68svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.64\)\);/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(74svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/,
   );
   assert.match(
     css,
@@ -94,7 +108,7 @@ test("mobile landscape gallery room gives artwork more height with compact capti
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?font-size:\s*1\.65rem;/,
+    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?font-size:\s*1\.1rem;/,
   );
 });
 
@@ -104,8 +118,8 @@ test("gallery captions show label placeholders when artwork metadata is not conf
   assert.match(artworkFrame, /function getCaptionSize/);
   assert.match(artworkFrame, /return locale === "en" \? "Dimensions" : "Mõõtmed";/);
   assert.doesNotMatch(artworkFrame, /Dateerimata[\s\S]*<span>/);
-  assert.match(artworkFrame, /<span>\{getCaptionYear\(artwork\.year,\s*locale\)\}<\/span>/);
-  assert.match(artworkFrame, /<span>\{getCaptionSize\(artwork\.size,\s*locale\)\}<\/span>/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-meta"[\s\S]*?\{getCaptionYear\(artwork\.year,\s*locale\)\}/);
+  assert.match(artworkFrame, /className="artwork-frame__caption-meta"[\s\S]*?\{getCaptionSize\(artwork\.size,\s*locale\)\}/);
 });
 
 test("artwork frame variants use light and dark wood grain", () => {
