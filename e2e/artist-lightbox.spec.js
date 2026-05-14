@@ -40,6 +40,69 @@ test("mobile artwork is centered in the lightbox viewport", async ({ page }) => 
   expect(Math.abs(artworkCenter - viewportCenter)).toBeLessThanOrEqual(4);
 });
 
+test("artwork lightbox magnifier reveals a movable detail lens", async ({ page }) => {
+  await page.goto(`${baseURL}/artists/kaljo-simson?lang=et#works`);
+
+  await page.locator(".gallery-grid .artwork-frame--button").first().click();
+  await expect(page.locator(".lightbox")).toBeVisible();
+
+  const magnifierToggle = page.getByRole("button", { name: "Ava luup" });
+  await expect(magnifierToggle).toBeVisible();
+  await magnifierToggle.click();
+  await expect(magnifierToggle).toHaveAttribute("aria-pressed", "true");
+
+  const lens = page.locator(".lightbox__magnifier-lens");
+  await expect(lens).toBeVisible();
+  await expect(page.locator("body")).toHaveClass(/is-magnifying-artwork/);
+
+  const image = page.locator(".lightbox__artwork-frame .artwork-frame__image");
+  const imageBox = await image.boundingBox();
+  expect(imageBox).not.toBeNull();
+
+  const toggleBox = await magnifierToggle.boundingBox();
+  const initialLensBox = await lens.boundingBox();
+  expect(toggleBox).not.toBeNull();
+  expect(initialLensBox).not.toBeNull();
+  expect(toggleBox?.x ?? 0).toBeGreaterThanOrEqual(0);
+  expect((toggleBox?.x ?? 0) + (toggleBox?.width ?? 0)).toBeLessThan(
+    imageBox?.x ?? 0,
+  );
+  const toggleCenterX = (toggleBox?.x ?? 0) + (toggleBox?.width ?? 0) / 2;
+  const toggleCenterY = (toggleBox?.y ?? 0) + (toggleBox?.height ?? 0) / 2;
+  const lensCenterX = (initialLensBox?.x ?? 0) + (initialLensBox?.width ?? 0) / 2;
+  const lensCenterY = (initialLensBox?.y ?? 0) + (initialLensBox?.height ?? 0) / 2;
+  expect(Math.abs(lensCenterX - toggleCenterX)).toBeLessThanOrEqual(2);
+  expect(Math.abs(lensCenterY - toggleCenterY)).toBeLessThanOrEqual(2);
+  await expect(page.locator(".lightbox__image-window")).toHaveCSS("cursor", "none");
+
+  await page.mouse.move(
+    (imageBox?.x ?? 0) + (imageBox?.width ?? 0) * 0.62,
+    (imageBox?.y ?? 0) + (imageBox?.height ?? 0) * 0.42,
+  );
+
+  const backgroundSize = await lens.evaluate((element) => {
+    const [width] = window.getComputedStyle(element).backgroundSize.split(" ");
+    return Number.parseFloat(width);
+  });
+  expect(backgroundSize).toBeGreaterThan((imageBox?.width ?? 0) * 2.1);
+  expect(backgroundSize).toBeLessThan((imageBox?.width ?? 0) * 2.3);
+  await expect(lens).toHaveCSS("opacity", "1");
+
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".lightbox")).toBeVisible();
+  await expect(lens).toBeHidden();
+  await expect(page.locator("body")).not.toHaveClass(/is-magnifying-artwork/);
+
+  await magnifierToggle.click();
+  await expect(lens).toBeVisible();
+  await page.mouse.click(
+    (imageBox?.x ?? 0) + (imageBox?.width ?? 0) * 0.5,
+    (imageBox?.y ?? 0) + (imageBox?.height ?? 0) * 0.5,
+  );
+  await expect(lens).toBeHidden();
+  await expect(page.locator(".lightbox")).toBeVisible();
+});
+
 test("mobile artist gallery artworks stay inside the viewport", async ({ page }) => {
   const viewport = { width: 486, height: 765 };
   await page.setViewportSize(viewport);

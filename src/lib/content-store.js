@@ -15,6 +15,7 @@ const VALID_ARTWORK_PRESETS = new Set(artworkPresets.map((preset) => preset.id))
 const VALID_PORTRAIT_PRESETS = new Set(
   portraitPresets.map((preset) => preset.id),
 );
+const VALID_FRAME_PRESETS = new Set(["silver", "gold"]);
 
 function stringOrFallback(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -27,6 +28,10 @@ function booleanOrFallback(value, fallback = false) {
 function numberOrFallback(value, fallback = 0) {
   const number = Number.parseInt(String(value ?? ""), 10);
   return Number.isFinite(number) ? number : fallback;
+}
+
+function normalizeFramePreset(value) {
+  return VALID_FRAME_PRESETS.has(value) ? value : "silver";
 }
 
 function normalizeText(value, fallback) {
@@ -108,6 +113,7 @@ export function normalizeContent(value) {
     site: {
       title: stringOrFallback(content.site?.title, seedContent.site.title),
       domain: stringOrFallback(content.site?.domain, seedContent.site.domain),
+      framePreset: normalizeFramePreset(content.site?.framePreset),
       tagline: normalizeText(content.site?.tagline, seedContent.site.tagline),
       heroTitle: normalizeText(
         content.site?.heroTitle,

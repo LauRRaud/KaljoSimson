@@ -178,6 +178,10 @@ export default function AdminStudio({ initialContent }) {
     }));
   }
 
+  function updateFramePreset(framePreset) {
+    updateSite("framePreset", framePreset);
+  }
+
   function updateSiteText(field, locale, value) {
     setDraft((current) => ({
       ...current,
@@ -504,6 +508,33 @@ export default function AdminStudio({ initialContent }) {
             Siin näed avalehe esimest osa samas järjestuses nagu see päriselt välja
             renderdub. Muuda iga nähtava ploki all vastavat sisu.
           </p>
+          <div className="admin-frame-preset" aria-label="Raamide stiil" role="group">
+            <span>Raamide stiil</span>
+            <button
+              aria-pressed={(draft.site.framePreset || "silver") === "silver"}
+              className={
+                (draft.site.framePreset || "silver") === "silver"
+                  ? "admin-frame-preset__button admin-frame-preset__button--active"
+                  : "admin-frame-preset__button"
+              }
+              onClick={() => updateFramePreset("silver")}
+              type="button"
+            >
+              Hõbe
+            </button>
+            <button
+              aria-pressed={draft.site.framePreset === "gold"}
+              className={
+                draft.site.framePreset === "gold"
+                  ? "admin-frame-preset__button admin-frame-preset__button--active"
+                  : "admin-frame-preset__button"
+              }
+              onClick={() => updateFramePreset("gold")}
+              type="button"
+            >
+              Kuld
+            </button>
+          </div>
         </div>
 
         <div className="admin-home-editor__canvas">

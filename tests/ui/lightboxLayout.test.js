@@ -17,6 +17,9 @@ test("lightbox keeps artwork navigation anchored in a fixed right panel", () => 
   assert.match(css, /gap:\s*clamp\(28px,\s*2\.2vw,\s*44px\);/);
   assert.match(css, /align-items:\s*stretch;/);
   assert.match(css, /\.lightbox__aside\s*\{[\s\S]*?align-self:\s*center;/);
+  assert.match(css, /--lightbox-card-shadow:\s*[\s\S]*?0 10px 14px -7px rgba\(75,\s*52,\s*28,\s*0\.34\),[\s\S]*?0 22px 26px -15px rgba\(75,\s*52,\s*28,\s*0\.28\);/);
+  assert.match(css, /html\[data-theme="dark"\]\s*\{[\s\S]*?--lightbox-card-shadow:\s*[\s\S]*?0 10px 14px -7px rgba\(0,\s*0,\s*0,\s*0\.38\),[\s\S]*?0 22px 26px -15px rgba\(0,\s*0,\s*0,\s*0\.36\);/);
+  assert.match(css, /\.lightbox__aside\s*\{[\s\S]*?box-shadow:\s*var\(--lightbox-card-shadow\);/);
   assert.match(css, /height:\s*var\(--lightbox-detail-panel-height\);/);
   assert.match(css, /margin-top:\s*auto;/);
 });
@@ -45,9 +48,9 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
   assert.match(css, /\.lightbox__figure::before,\s*\.lightbox__figure::after\s*\{\s*display:\s*none;/);
   assert.match(galleryClient, /<div className="lightbox__artwork-frame">[\s\S]*?<ArtworkFrame/);
   assert.match(galleryClient, /<ArtworkFrame[\s\S]*?showCaption=\{false\}/);
-  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*fit-content;[\s\S]*?max-width:\s*min\(820px,\s*calc\(100% - clamp\(36px,\s*7vw,\s*112px\)\)\);/);
+  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*fit-content;[\s\S]*?max-width:\s*min\(1040px,\s*calc\(100% - clamp\(8px,\s*2vw,\s*32px\)\)\);/);
   assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__window\s*\{[\s\S]*?width:\s*fit-content;[\s\S]*?height:\s*auto;/);
-  assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__image\s*\{[\s\S]*?width:\s*auto;[\s\S]*?height:\s*auto;[\s\S]*?max-height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(90px,\s*13vh,\s*150px\)\);/);
+  assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__image\s*\{[\s\S]*?width:\s*calc\(\(var\(--lightbox-panel-height\) - clamp\(42px,\s*6vh,\s*78px\)\) \* 1\.34\);[\s\S]*?height:\s*auto;[\s\S]*?max-height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(42px,\s*6vh,\s*78px\)\);/);
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?justify-items:\s*end;/);
   assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?transform:\s*none;/);
   assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__mount,\s*\.lightbox__artwork-frame \.artwork-frame__surface\s*\{[\s\S]*?width:\s*fit-content;[\s\S]*?height:\s*auto;/);
@@ -65,6 +68,34 @@ test("lightbox presents artwork as a gallery wall with structured details", () =
   assert.doesNotMatch(galleryClient, /\.filter\(\(item\) => item\.value\)/);
   assert.match(galleryClient, /<dt>\{item\.label\}<\/dt>/);
   assert.match(galleryClient, /<dd>\{item\.value\}<\/dd>/);
+});
+
+test("lightbox includes an artwork magnifier toggle and lens layer", () => {
+  assert.match(galleryClient, /const \[isMagnifierActive, setIsMagnifierActive\] = useState\(false\);/);
+  assert.match(galleryClient, /aria-label=\{magnifierLabel\}/);
+  assert.match(galleryClient, /aria-pressed=\{isMagnifierActive\}/);
+  assert.match(galleryClient, /className="lightbox__magnifier-toggle"/);
+  assert.match(galleryClient, /className="lightbox__magnifier-lens"/);
+  assert.match(galleryClient, /backgroundImage:\s*`url\("\$\{activeArtwork\.image\}"\)`/);
+  assert.match(galleryClient, /"--magnifier-bg-width":\s*magnifierPosition\.backgroundWidth/);
+  assert.match(galleryClient, /"--magnifier-bg-x":\s*magnifierPosition\.backgroundX/);
+  assert.match(galleryClient, /document\.body\.classList\.toggle\("is-magnifying-artwork",\s*isMagnifierActive\)/);
+  assert.match(galleryClient, /const toggle = event\.currentTarget;/);
+  assert.match(galleryClient, /getMagnifierPositionByToggle\(toggle\)/);
+  assert.match(galleryClient, /function handleMagnifierPointerDown\(event\)/);
+  assert.match(galleryClient, /event\.target\.closest\?\.\("\.lightbox__magnifier-toggle"\)/);
+  assert.match(galleryClient, /if \(isMagnifierActive\)\s*\{[\s\S]*?event\.preventDefault\(\);[\s\S]*?setIsMagnifierActive\(false\);[\s\S]*?return;/);
+  assert.match(css, /\.lightbox__magnifier-toggle\s*\{[\s\S]*?border-radius:\s*999px;/);
+  assert.match(css, /\.lightbox__magnifier-toggle:hover,[\s\S]*?\.lightbox__magnifier-toggle\[aria-pressed="true"\]\s*\{[\s\S]*?color:\s*var\(--text\);[\s\S]*?background:\s*var\(--glass-control-bg\);/);
+  assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?--magnifier-control-space:\s*calc\([\s\S]*?padding-left:\s*var\(--magnifier-control-space\);/);
+  assert.match(css, /\.lightbox__magnifier-toggle\s*\{[\s\S]*?left:\s*0;[\s\S]*?top:\s*50%;[\s\S]*?transform:\s*translate\(calc\(-100% - var\(--magnifier-control-gap\)\),\s*-50%\);/);
+  assert.match(css, /\.lightbox__magnifier-toggle::before\s*\{[\s\S]*?border:\s*2px solid currentColor;/);
+  assert.match(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?background-size:\s*var\(--magnifier-bg-width,\s*220%\) var\(--magnifier-bg-height,\s*auto\);/);
+  assert.match(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?background-position:\s*var\(--magnifier-bg-x,\s*50%\) var\(--magnifier-bg-y,\s*50%\);/);
+  assert.match(css, /\.lightbox__image-window--magnifying\s*\{[\s\S]*?cursor:\s*none;/);
+  assert.match(css, /\.lightbox__image-window--magnifying \.lightbox__magnifier-lens,[\s\S]*?\{[\s\S]*?cursor:\s*none;/);
+  assert.match(css, /body\.is-magnifying-artwork,[\s\S]*?\{[\s\S]*?cursor:\s*none !important;/);
+  assert.match(css, /body\.is-magnifying-artwork \.brush-cursor\s*\{[\s\S]*?visibility:\s*hidden;/);
 });
 
 test("dark mode lightbox keeps the gallery room dark", () => {

@@ -1,6 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+
+const STORAGE_KEY = "beyondframes-theme";
+const THEME_CHANGE_EVENT = "beyondframes-theme-change";
+const LIGHT_SPLASH_COLOR_SCALE = 0.15;
+const DARK_SPLASH_COLOR_SCALE = 0.13;
+
+function getThemeSnapshot() {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  return document.documentElement.dataset.theme === "dark" ||
+    window.localStorage.getItem(STORAGE_KEY) === "dark"
+    ? "dark"
+    : "light";
+}
+
+function subscribeThemeChange(onStoreChange) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
+  };
+}
+
 export default function SplashCursor({
   SIM_RESOLUTION = 150,
   DYE_RESOLUTION = 1024,
@@ -22,6 +49,15 @@ export default function SplashCursor({
   TRANSPARENT = true
 }) {
   const canvasRef = useRef(null);
+  const theme = useSyncExternalStore(
+    subscribeThemeChange,
+    getThemeSnapshot,
+    () => "light",
+  );
+  const colorScale = theme === "light"
+    ? LIGHT_SPLASH_COLOR_SCALE
+    : DARK_SPLASH_COLOR_SCALE;
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -708,9 +744,9 @@ export default function SplashCursor({
     }
     function generateColor() {
       let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.11;
-      c.g *= 0.11;
-      c.b *= 0.11;
+      c.r *= colorScale;
+      c.g *= colorScale;
+      c.b *= colorScale;
       return c;
     }
     function HSVtoRGB(h, s, v) {
@@ -913,7 +949,7 @@ export default function SplashCursor({
       document.body.removeEventListener("touchstart", onTouchStartFirst);
       document.removeEventListener("visibilitychange", onVisChange);
     };
-  }, [SIM_RESOLUTION, DYE_RESOLUTION, CAPTURE_RESOLUTION, DENSITY_DISSIPATION, VELOCITY_DISSIPATION, PRESSURE, PRESSURE_ITERATIONS, CURL, SPLAT_RADIUS, SPLAT_FORCE, SHADING, COLOR_UPDATE_SPEED, BACK_COLOR, TRANSPARENT]);
+  }, [SIM_RESOLUTION, DYE_RESOLUTION, CAPTURE_RESOLUTION, DENSITY_DISSIPATION, VELOCITY_DISSIPATION, PRESSURE, PRESSURE_ITERATIONS, CURL, SPLAT_RADIUS, SPLAT_FORCE, SHADING, COLOR_UPDATE_SPEED, BACK_COLOR, TRANSPARENT, colorScale]);
   return <div style={{
     position: "fixed",
     inset: 0,

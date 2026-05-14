@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FramePresetSwitch from "@/components/FramePresetSwitch";
 import GalleryClient from "@/components/GalleryClient";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
@@ -56,9 +57,12 @@ export default async function GalleryPage({ searchParams }) {
       showFooter={false}
     >
       <section className="gallery-room-page">
-        <Link className="gallery-room-page__back inline-link" href={withLocale("/", locale)}>
-          {locale === "en" ? "Back" : "Tagasi"}
-        </Link>
+        <div className="gallery-room-page__topbar">
+          <Link className="gallery-room-page__back inline-link" href={withLocale("/", locale)}>
+            {locale === "en" ? "Back" : "Tagasi"}
+          </Link>
+          <FramePresetSwitch defaultPreset={content.site.framePreset} locale={locale} />
+        </div>
 
         <GalleryClient artist={galleryArtist} locale={locale} variant="room" />
       </section>

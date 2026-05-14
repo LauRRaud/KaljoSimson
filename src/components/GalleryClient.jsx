@@ -7,6 +7,18 @@ import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
 
+const defaultMagnifierPosition = {
+  x: 50,
+  y: 50,
+  left: "50%",
+  top: "50%",
+  backgroundWidth: "220%",
+  backgroundHeight: "auto",
+  backgroundX: "50%",
+  backgroundY: "50%",
+};
+const magnifierZoom = 2.2;
+
 function compactMetaValue(value) {
   const normalized = String(value ?? "").trim().toLocaleLowerCase("et-EE");
   const placeholders = new Set([
@@ -56,7 +68,10 @@ function waitForImageDecode(src) {
 
 export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [isMagnifierActive, setIsMagnifierActive] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState(defaultMagnifierPosition);
   const decodedRoomImagesRef = useRef(new Set());
+  const lightboxImageWindowRef = useRef(null);
   const roomViewportRef = useRef(null);
   const roomTravelFrameRef = useRef(null);
   const hasArtworks = artist.artworks.length > 0;
@@ -68,6 +83,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   const yearLabel = locale === "en" ? "Year" : "Aasta";
   const mediumLabel = locale === "en" ? "Medium" : "Tehnika";
   const sizeLabel = locale === "en" ? "Size" : "Mõõdud";
+  const magnifierLabel = locale === "en" ? "Open magnifier" : "Ava luup";
   const artworkMeta = activeArtwork
     ? [
         {
@@ -87,6 +103,19 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
         },
       ]
     : [];
+  const magnifierLensStyle = activeArtwork?.image
+    ? {
+        "--magnifier-x": `${magnifierPosition.x}%`,
+        "--magnifier-y": `${magnifierPosition.y}%`,
+        "--magnifier-left": magnifierPosition.left,
+        "--magnifier-top": magnifierPosition.top,
+        "--magnifier-bg-width": magnifierPosition.backgroundWidth,
+        "--magnifier-bg-height": magnifierPosition.backgroundHeight,
+        "--magnifier-bg-x": magnifierPosition.backgroundX,
+        "--magnifier-bg-y": magnifierPosition.backgroundY,
+        backgroundImage: `url("${activeArtwork.image}")`,
+      }
+    : undefined;
 
   function easeRoomScroll(progress) {
     return 0.5 - Math.cos(progress * Math.PI) / 2;
@@ -241,6 +270,164 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     animateRoomScrollTo(targetScrollLeft);
   }
 
+  function updateMagnifierPosition(event) {
+    if (!isMagnifierActive) {
+      return;
+    }
+
+    const imageWindow = lightboxImageWindowRef.current;
+    const image = imageWindow?.querySelector(".artwork-frame__image");
+
+    if (!imageWindow || !image) {
+      return;
+    }
+
+    setMagnifierPosition(
+      getMagnifierPositionFromPoint({
+        image,
+        imageWindow,
+        lensClientX: event.clientX,
+        lensClientY: event.clientY,
+        sourceClientX: event.clientX,
+        sourceClientY: event.clientY,
+      }),
+    );
+  }
+
+  function handleMagnifierPointerDown(event) {
+    if (!isMagnifierActive) {
+      return;
+    }
+
+    if (event.target.closest?.(".lightbox__magnifier-toggle")) {
+      return;
+    }
+
+    setIsMagnifierActive(false);
+    setMagnifierPosition(defaultMagnifierPosition);
+  }
+
+  function getMagnifierPositionFromPoint({
+    imageWindow,
+    image,
+    lensClientX,
+    lensClientY,
+    sourceClientX,
+    sourceClientY,
+  }) {
+    const imageRect = image.getBoundingClientRect();
+    const windowRect = imageWindow.getBoundingClientRect();
+    const clampedClientX = Math.min(
+      imageRect.right,
+      Math.max(imageRect.left, sourceClientX),
+    );
+    const clampedClientY = Math.min(
+      imageRect.bottom,
+      Math.max(imageRect.top, sourceClientY),
+    );
+    const sourceX = clampedClientX - imageRect.left;
+    const sourceY = clampedClientY - imageRect.top;
+    const x = Math.min(
+      100,
+      Math.max(0, (sourceX / imageRect.width) * 100),
+    );
+    const y = Math.min(
+      100,
+      Math.max(0, (sourceY / imageRect.height) * 100),
+    );
+    const lens = imageWindow.querySelector(".lightbox__magnifier-lens");
+    const lensRect = lens?.getBoundingClientRect();
+    const lensCenterX = (lensRect?.width ?? 174) / 2;
+    const lensCenterY = (lensRect?.height ?? 174) / 2;
+
+    return {
+      x,
+      y,
+      left: `${lensClientX - windowRect.left}px`,
+      top: `${lensClientY - windowRect.top}px`,
+      backgroundWidth: `${imageRect.width * magnifierZoom}px`,
+      backgroundHeight: `${imageRect.height * magnifierZoom}px`,
+      backgroundX: `${lensCenterX - sourceX * magnifierZoom}px`,
+      backgroundY: `${lensCenterY - sourceY * magnifierZoom}px`,
+    };
+  }
+
+  function getCenteredMagnifierPosition() {
+    const imageWindow = lightboxImageWindowRef.current;
+    const image = imageWindow?.querySelector(".artwork-frame__image");
+
+    if (!imageWindow || !image) {
+      return defaultMagnifierPosition;
+    }
+
+    const imageRect = image.getBoundingClientRect();
+
+    return getMagnifierPositionFromPoint({
+      imageWindow,
+      image,
+      lensClientX: imageRect.left + imageRect.width / 2,
+      lensClientY: imageRect.top + imageRect.height / 2,
+      sourceClientX: imageRect.left + imageRect.width / 2,
+      sourceClientY: imageRect.top + imageRect.height / 2,
+    });
+  }
+
+  function getMagnifierPositionByToggle(toggle) {
+    const imageWindow = lightboxImageWindowRef.current;
+    const image = imageWindow?.querySelector(".artwork-frame__image");
+
+    if (!imageWindow || !image || !toggle) {
+      return getCenteredMagnifierPosition();
+    }
+
+    const toggleRect = toggle.getBoundingClientRect();
+    const toggleCenterX = toggleRect.left + toggleRect.width / 2;
+    const toggleCenterY = toggleRect.top + toggleRect.height / 2;
+
+    return getMagnifierPositionFromPoint({
+      imageWindow,
+      image,
+      lensClientX: toggleCenterX,
+      lensClientY: toggleCenterY,
+      sourceClientX: toggleCenterX,
+      sourceClientY: toggleCenterY,
+    });
+  }
+
+  function toggleMagnifier(event) {
+    const toggle = event.currentTarget;
+
+    setIsMagnifierActive((current) => {
+      const next = !current;
+
+      if (next) {
+        setMagnifierPosition(getMagnifierPositionByToggle(toggle));
+      }
+
+      return next;
+    });
+  }
+
+  function resetMagnifier() {
+    setIsMagnifierActive(false);
+    setMagnifierPosition(defaultMagnifierPosition);
+  }
+
+  function openLightbox(index) {
+    resetMagnifier();
+    setActiveIndex(index);
+  }
+
+  function closeLightbox() {
+    resetMagnifier();
+    setActiveIndex(null);
+  }
+
+  function showLightboxIndex(index) {
+    resetMagnifier();
+    setActiveIndex(index);
+  }
+
   useEffect(() => {
     if (!hasArtworks || activeIndex === null) {
       return undefined;
@@ -248,16 +435,29 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
 
     function handleKeyDown(event) {
       if (event.key === "Escape") {
+        if (isMagnifierActive) {
+          event.preventDefault();
+          setIsMagnifierActive(false);
+          setMagnifierPosition(defaultMagnifierPosition);
+          return;
+        }
+
+        setIsMagnifierActive(false);
+        setMagnifierPosition(defaultMagnifierPosition);
         setActiveIndex(null);
       }
 
       if (event.key === "ArrowRight") {
+        setIsMagnifierActive(false);
+        setMagnifierPosition(defaultMagnifierPosition);
         setActiveIndex((current) =>
           current === null ? current : (current + 1) % artist.artworks.length,
         );
       }
 
       if (event.key === "ArrowLeft") {
+        setIsMagnifierActive(false);
+        setMagnifierPosition(defaultMagnifierPosition);
         setActiveIndex((current) =>
           current === null
             ? current
@@ -268,7 +468,15 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, artist.artworks.length, hasArtworks]);
+  }, [activeIndex, artist.artworks.length, hasArtworks, isMagnifierActive]);
+
+  useEffect(() => {
+    document.body.classList.toggle("is-magnifying-artwork", isMagnifierActive);
+
+    return () => {
+      document.body.classList.remove("is-magnifying-artwork");
+    };
+  }, [isMagnifierActive]);
 
   useLayoutEffect(() => {
     if (activeIndex === null) {
@@ -381,7 +589,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                     imageLoading={index < 4 ? "eager" : "lazy"}
                     interactive
                     locale={locale}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => openLightbox(index)}
                   />
                 </div>
               ))}
@@ -419,7 +627,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
               interactive
               key={artwork.slug}
               locale={locale}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => openLightbox(index)}
             />
           ))}
         </div>
@@ -429,7 +637,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
         <div
           aria-modal="true"
           className="lightbox"
-          onClick={() => setActiveIndex(null)}
+          onClick={closeLightbox}
           role="dialog"
         >
           <div
@@ -438,14 +646,40 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
           >
             <div className="lightbox__grid">
               <figure className="lightbox__figure">
-                <div className="lightbox__image-window">
+                <div
+                  className={`lightbox__image-window ${
+                    isMagnifierActive ? "lightbox__image-window--magnifying" : ""
+                  }`}
+                  onPointerDown={handleMagnifierPointerDown}
+                  onPointerMove={updateMagnifierPosition}
+                  ref={lightboxImageWindowRef}
+                >
                   <div className="lightbox__artwork-frame">
                     <ArtworkFrame
                       artwork={activeArtwork}
                       locale={locale}
                       showCaption={false}
                     />
+                    {activeArtwork.image ? (
+                      <button
+                        aria-label={magnifierLabel}
+                        aria-pressed={isMagnifierActive}
+                        className="lightbox__magnifier-toggle"
+                        onClick={toggleMagnifier}
+                        onPointerDown={(event) => event.stopPropagation()}
+                        type="button"
+                      >
+                        <span>{magnifierLabel}</span>
+                      </button>
+                    ) : null}
                   </div>
+                  {isMagnifierActive && activeArtwork.image ? (
+                    <div
+                      aria-hidden="true"
+                      className="lightbox__magnifier-lens"
+                      style={magnifierLensStyle}
+                    />
+                  ) : null}
                 </div>
               </figure>
 
@@ -453,7 +687,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                 <button
                   aria-label={locale === "en" ? "Close artwork view" : "Sulge teose vaade"}
                   className="lightbox__close"
-                  onClick={() => setActiveIndex(null)}
+                  onClick={closeLightbox}
                   type="button"
                 >
                   <span aria-hidden="true">×</span>
@@ -485,7 +719,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                   <button
                     className="lightbox__nav-button"
                     onClick={() =>
-                      setActiveIndex(
+                      showLightboxIndex(
                         (activeIndex - 1 + artist.artworks.length) %
                           artist.artworks.length,
                       )
@@ -497,7 +731,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                   <button
                     className="lightbox__nav-button"
                     onClick={() =>
-                      setActiveIndex((activeIndex + 1) % artist.artworks.length)
+                      showLightboxIndex((activeIndex + 1) % artist.artworks.length)
                     }
                     type="button"
                   >

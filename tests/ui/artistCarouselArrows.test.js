@@ -106,11 +106,35 @@ test("artist carousel portraits and titles use a calmer profile-style crop", () 
 
   assert.match(cardRule, /0\s+14px\s+14px\s+-16px\s+rgba\(75,\s*52,\s*28,\s*0\.28\)/);
   assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
+  assert.match(portraitRule, /border-radius:\s*6px;/);
   assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
+  assert.match(portraitRule, /0\s+30px\s+34px\s+-22px\s+rgba\(45,\s*31,\s*20,\s*0\.38\)/);
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?padding:\s*clamp\(12px,\s*1vw,\s*17px\);[\s\S]*?var\(--frame-active-metal\);[\s\S]*?box-shadow:\s*inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.42\);[\s\S]*?mask-composite:\s*exclude;/,
+  );
+  assert.doesNotMatch(css, /inset 3px 0 5px -4px rgba\(36,\s*46,\s*55,\s*0\.38\)/);
+  assert.doesNotMatch(css, /inset -3px 0 5px -4px rgba\(36,\s*46,\s*55,\s*0\.32\)/);
+  assert.doesNotMatch(css, /inset 0 -4px 7px -6px rgba\(36,\s*46,\s*55,\s*0\.46\)/);
+  assert.doesNotMatch(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?inset 0 0 0 1px rgba\(45,\s*56,\s*64,\s*0\.24\)/,
+  );
   assert.match(portraitImageRule, /object-position:\s*var\(--portrait-position,\s*center\s+center\);/);
   assert.match(headingRule, /max-width:\s*100%;/);
-  assert.match(headingRule, /font-size:\s*clamp\(1\.96rem,\s*2\.7vw,\s*2\.7rem\);/);
+  assert.match(headingRule, /font-size:\s*clamp\(1\.72rem,\s*2\.45vw,\s*2\.7rem\);/);
   assert.match(headingRule, /white-space:\s*nowrap;/);
+});
+
+test("artist image frames do not add corner vignette overlays", () => {
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell--image::after,\s*\.profile-hero > \.portrait-shell--image::after\s*\{[\s\S]*?display:\s*none;[\s\S]*?background:\s*none;/,
+  );
+  assert.doesNotMatch(
+    css,
+    /\.artist-card--carousel \.portrait-shell--image::after[\s\S]*?radial-gradient\(ellipse at 50% 48%/,
+  );
 });
 
 test("artist carousel hides only location metadata on homepage artist cards", () => {

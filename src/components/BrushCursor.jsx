@@ -61,7 +61,7 @@ export default function BrushCursor() {
     };
   }, []);
 
-  if (!point) return null;
+  if (!point || point.isOverStudioPaper) return null;
 
   return createPortal(
     <img

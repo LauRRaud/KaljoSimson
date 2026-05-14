@@ -2,6 +2,7 @@
   "site": {
     "title": "BeyondFrames",
     "domain": "beyondframes.net",
+    "framePreset": "silver",
     "tagline": {
       "et": "Kunst, raamidest väljas",
       "en": "Art beyond the frame"

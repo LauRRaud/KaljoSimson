@@ -44,15 +44,19 @@ export default function ArtistPortrait({ artist, priority = false }) {
           "--portrait-position": artist.portraitPosition || "center center",
         }}
       >
-        <Image
-          alt={artist.name}
-          className="portrait-shell__image"
-          fill
-          loading={priority ? "eager" : undefined}
-          priority={priority}
-          sizes="(max-width: 1100px) 100vw, 33vw"
-          src={artist.portraitImage}
-        />
+        <div className="portrait-shell__frame">
+          <div className="portrait-shell__window">
+            <Image
+              alt={artist.name}
+              className="portrait-shell__image"
+              fill
+              loading={priority ? "eager" : undefined}
+              priority={priority}
+              sizes="(max-width: 1100px) 100vw, 33vw"
+              src={artist.portraitImage}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -62,65 +66,69 @@ export default function ArtistPortrait({ artist, priority = false }) {
       className="portrait-shell portrait-shell--generated"
       style={{ "--portrait-bg": preset.background }}
     >
-      <svg
-        aria-label={`${artist.name} portree`}
-        className="portrait-shell__art"
-        role="img"
-        viewBox="0 0 420 500"
-      >
-        <defs>
-          <linearGradient id={`${preset.id}-garment`} x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor={preset.garment} />
-            <stop offset="100%" stopColor={preset.garmentShade} />
-          </linearGradient>
-          <linearGradient id={`${preset.id}-face`} x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor={preset.skin} />
-            <stop offset="100%" stopColor={preset.skinShade} />
-          </linearGradient>
-          <radialGradient id={`${preset.id}-halo`} cx="50%" cy="36%" r="54%">
-            <stop offset="0%" stopColor={preset.halo} stopOpacity="0.75" />
-            <stop offset="100%" stopColor={preset.halo} stopOpacity="0" />
-          </radialGradient>
-          <filter id={`${preset.id}-blur`} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="18" />
-          </filter>
-        </defs>
+      <div className="portrait-shell__frame">
+        <div className="portrait-shell__window">
+          <svg
+            aria-label={`${artist.name} portree`}
+            className="portrait-shell__art"
+            role="img"
+            viewBox="0 0 420 500"
+          >
+            <defs>
+              <linearGradient id={`${preset.id}-garment`} x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stopColor={preset.garment} />
+                <stop offset="100%" stopColor={preset.garmentShade} />
+              </linearGradient>
+              <linearGradient id={`${preset.id}-face`} x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stopColor={preset.skin} />
+                <stop offset="100%" stopColor={preset.skinShade} />
+              </linearGradient>
+              <radialGradient id={`${preset.id}-halo`} cx="50%" cy="36%" r="54%">
+                <stop offset="0%" stopColor={preset.halo} stopOpacity="0.75" />
+                <stop offset="100%" stopColor={preset.halo} stopOpacity="0" />
+              </radialGradient>
+              <filter id={`${preset.id}-blur`} x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="18" />
+              </filter>
+            </defs>
 
-        <ellipse
-          cx="210"
-          cy="104"
-          fill={`url(#${preset.id}-halo)`}
-          rx="136"
-          ry="118"
-        />
-        <path
-          d={variant.aura}
-          fill={preset.aura}
-          filter={`url(#${preset.id}-blur)`}
-          opacity="0.65"
-        />
-        <path d={variant.hairBack} fill={preset.hair} opacity="0.96" />
-        <path d={variant.garment} fill={`url(#${preset.id}-garment)`} />
-        <path d={variant.neck} fill={`url(#${preset.id}-face)`} opacity="0.95" />
-        <path d={variant.face} fill={`url(#${preset.id}-face)`} />
-        <path d={variant.hairFront} fill={preset.hairShade} opacity="0.95" />
-        <path
-          d={variant.profile}
-          fill="none"
-          opacity="0.55"
-          stroke={preset.ink}
-          strokeLinecap="round"
-          strokeWidth="4"
-        />
-        <path
-          d="M118 428c19-58 44-100 75-126 30-26 70-40 118-45"
-          fill="none"
-          opacity="0.08"
-          stroke="#fff"
-          strokeLinecap="round"
-          strokeWidth="24"
-        />
-      </svg>
+            <ellipse
+              cx="210"
+              cy="104"
+              fill={`url(#${preset.id}-halo)`}
+              rx="136"
+              ry="118"
+            />
+            <path
+              d={variant.aura}
+              fill={preset.aura}
+              filter={`url(#${preset.id}-blur)`}
+              opacity="0.65"
+            />
+            <path d={variant.hairBack} fill={preset.hair} opacity="0.96" />
+            <path d={variant.garment} fill={`url(#${preset.id}-garment)`} />
+            <path d={variant.neck} fill={`url(#${preset.id}-face)`} opacity="0.95" />
+            <path d={variant.face} fill={`url(#${preset.id}-face)`} />
+            <path d={variant.hairFront} fill={preset.hairShade} opacity="0.95" />
+            <path
+              d={variant.profile}
+              fill="none"
+              opacity="0.55"
+              stroke={preset.ink}
+              strokeLinecap="round"
+              strokeWidth="4"
+            />
+            <path
+              d="M118 428c19-58 44-100 75-126 30-26 70-40 118-45"
+              fill="none"
+              opacity="0.08"
+              stroke="#fff"
+              strokeLinecap="round"
+              strokeWidth="24"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }

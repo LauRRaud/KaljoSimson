@@ -9,6 +9,7 @@ export default function SiteAmbient() {
   const pathname = usePathname();
   const isGalleryRoom = pathname === "/gallery";
   const isAdmin = pathname?.startsWith("/admin");
+  const isStudio = pathname === "/studio";
 
   const className = `site-ambient ${isGalleryRoom ? "site-ambient--gallery-room" : ""}`.trim();
 
@@ -17,7 +18,7 @@ export default function SiteAmbient() {
       <div className={className} aria-hidden="true">
         <PageLineWaves />
       </div>
-      {isAdmin ? null : <SplashCursor />}
+      {isAdmin || isStudio ? null : <SplashCursor />}
       {isAdmin ? null : <BrushCursor />}
     </>
   );
