@@ -2427,120 +2427,31 @@ html[data-theme="dark"] .gallery-room-page__back {
 .lightbox__artwork-frame {
   position: relative;
   z-index: 3;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: min(100%, calc((var(--lightbox-panel-height) - clamp(16px, 2vh, 28px)) * 1.28));
-  height: calc(var(--lightbox-panel-height) - clamp(16px, 2vh, 28px));
+  display: block;
+  width: min(820px, calc(100% - clamp(36px, 7vw, 112px)));
   max-width: calc(100% - clamp(4px, 0.8vw, 16px));
-  max-height: var(--lightbox-panel-height);
-  padding: clamp(18px, 1.7vw, 26px);
-  box-sizing: border-box;
-  overflow: hidden;
+  max-height: none;
+  padding: 0;
   border: none;
-  border-radius: 12px;
-  background: var(--frame-dark-wood);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -2px 8px rgba(0, 0, 0, 0.36),
-    0 12px 16px -7px rgba(20, 18, 16, 0.4),
-    0 28px 32px -17px rgba(20, 18, 16, 0.32);
+  background: transparent;
+  box-shadow: none;
   transform: none;
 }
 
-.lightbox__artwork-frame::before,
-.lightbox__artwork-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.lightbox__artwork-frame::before {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, transparent 26% 68%, rgba(0, 0, 0, 0.24) 100%);
-  opacity: 0.74;
-}
-
-.lightbox__artwork-frame::after {
-  inset: clamp(10px, 0.9vw, 14px);
-  border-radius: 5px;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 0 18px rgba(0, 0, 0, 0.16);
-}
-
-.lightbox__artwork-frame--ivory {
-  background: var(--frame-light-wood);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.82),
-    inset 0 -2px 6px rgba(70, 66, 58, 0.1),
-    0 12px 16px -7px rgba(55, 45, 34, 0.36),
-    0 28px 32px -17px rgba(55, 45, 34, 0.28);
-}
-
-.lightbox__artwork-mount {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 3px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.lightbox__artwork-frame--ivory .lightbox__artwork-mount {
-  background: transparent;
-}
-
-.lightbox__artwork-image {
-  display: block;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  object-fit: cover;
-  border: none;
-  border-radius: 2px;
-  background: transparent;
-  box-shadow: none;
-  filter: none;
-  image-rendering: auto;
-}
-
-.lightbox__artwork-frame--fallback {
-  display: block;
-  width: min(820px, calc(100% - clamp(36px, 7vw, 112px)));
-  max-height: none;
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-.lightbox__artwork-frame--fallback .artwork-frame,
-.lightbox__artwork-frame--fallback .artwork-frame__assembly {
+.lightbox__artwork-frame .artwork-frame,
+.lightbox__artwork-frame .artwork-frame__assembly {
   width: 100%;
 }
 
-.lightbox__artwork-frame--fallback .artwork-frame__window {
+.lightbox__artwork-frame .artwork-frame__window {
   height: calc(var(--lightbox-panel-height) - clamp(90px, 13vh, 150px));
   min-height: 320px;
 }
 
-.lightbox__artwork-frame--fallback .artwork-frame__mount,
-.lightbox__artwork-frame--fallback .artwork-frame__surface {
+.lightbox__artwork-frame .artwork-frame__mount,
+.lightbox__artwork-frame .artwork-frame__surface {
   height: 100%;
+  width: 100%;
   min-height: 0;
 }
 
@@ -3863,42 +3774,20 @@ html[data-theme="dark"] .lightbox__image-window::after {
 }
 
 html[data-theme="dark"] .lightbox__image,
-html[data-theme="dark"] .lightbox__artwork-image,
 html[data-theme="dark"] .lightbox__artwork-frame .artwork-frame__image {
   background: transparent;
   box-shadow: none;
   filter: none;
 }
 
-html[data-theme="dark"] .lightbox__artwork-frame,
-html[data-theme="dark"] .lightbox__artwork-frame--obsidian {
+html[data-theme="dark"] .lightbox__artwork-frame {
   border: none;
-  background: var(--frame-light-wood);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.82),
-    inset 0 -2px 6px rgba(70, 66, 58, 0.1),
-    0 10px 14px -7px rgba(0, 0, 0, 0.44),
-    0 24px 28px -18px rgba(0, 0, 0, 0.32);
-}
-
-html[data-theme="dark"] .lightbox__artwork-frame--ivory {
-  border: none;
-  background: var(--frame-dark-wood);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -2px 8px rgba(0, 0, 0, 0.36),
-    0 10px 14px -7px rgba(0, 0, 0, 0.5),
-    0 24px 28px -18px rgba(0, 0, 0, 0.38);
-}
-
-html[data-theme="dark"] .lightbox__artwork-mount,
-html[data-theme="dark"] .lightbox__artwork-frame--obsidian .lightbox__artwork-mount {
-  padding: 0;
   background: transparent;
   box-shadow: none;
 }
 
-html[data-theme="dark"] .lightbox__artwork-frame--ivory .lightbox__artwork-mount {
+html[data-theme="dark"] .lightbox__artwork-frame .artwork-frame__mount {
+  padding: 0;
   background: transparent;
   box-shadow: none;
 }
@@ -4046,15 +3935,15 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__artwork-frame {
-    width: fit-content;
+    width: min(100%, calc(var(--lightbox-panel-height) * 1.28));
     max-width: calc(100% - 42px);
-    max-height: calc(var(--lightbox-panel-height) - 44px);
+    max-height: none;
     transform: translateY(-1.4vh);
   }
 
-  .lightbox__artwork-image {
-    height: calc(var(--lightbox-panel-height) - 72px);
-    max-height: calc(var(--lightbox-panel-height) - 72px);
+  .lightbox__artwork-frame .artwork-frame__window {
+    height: calc(var(--lightbox-panel-height) - 44px);
+    min-height: 0;
   }
 
   .lightbox__aside,
@@ -4614,25 +4503,13 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__artwork-frame {
-    width: fit-content;
+    width: min(100%, 620px);
     max-width: calc(100% - 24px);
-    max-height: calc(var(--lightbox-panel-height) - 36px);
-    padding: 10px;
+    max-height: none;
     transform: none;
   }
 
-  .lightbox__artwork-image {
-    height: calc(var(--lightbox-panel-height) - 64px);
-    max-height: calc(var(--lightbox-panel-height) - 64px);
-  }
-
-  .lightbox__artwork-frame--fallback {
-    width: min(100%, 620px);
-    max-width: calc(100% - 24px);
-    padding: 0;
-  }
-
-  .lightbox__artwork-frame--fallback .artwork-frame__window {
+  .lightbox__artwork-frame .artwork-frame__window {
     height: calc(var(--lightbox-panel-height) - 18px);
     min-height: 236px;
     padding: 12px;
@@ -4709,18 +4586,14 @@ html[data-theme="dark"] .admin-divider {
 
     .lightbox__artwork-frame {
       width: min(100%, calc((var(--lightbox-panel-height) - 8px) * 1.28));
-      height: calc(var(--lightbox-panel-height) - 8px);
       max-width: calc(100% - 8px);
-      max-height: calc(var(--lightbox-panel-height) - 8px);
-      padding: 14px;
+      max-height: none;
       transform: none;
     }
 
-    .lightbox__artwork-image {
-      width: 100%;
-      height: 100%;
-      max-height: none;
-      object-fit: cover;
+    .lightbox__artwork-frame .artwork-frame__window {
+      height: calc(var(--lightbox-panel-height) - 8px);
+      min-height: 0;
     }
 
     .lightbox__aside {
@@ -4766,18 +4639,14 @@ html[data-theme="dark"] .admin-divider {
 
     .lightbox__artwork-frame {
       width: min(100%, calc(var(--lightbox-panel-height) * 1.34));
-      height: var(--lightbox-panel-height);
       max-width: 100%;
-      max-height: var(--lightbox-panel-height);
-      padding: 12px;
+      max-height: none;
       transform: none;
     }
 
-    .lightbox__artwork-image {
-      width: 100%;
-      height: 100%;
-      max-height: none;
-      object-fit: cover;
+    .lightbox__artwork-frame .artwork-frame__window {
+      height: var(--lightbox-panel-height);
+      min-height: 0;
     }
 
     .lightbox__close {
@@ -4965,18 +4834,14 @@ html[data-theme="dark"] .admin-divider {
 
   .lightbox__artwork-frame {
     width: min(100%, calc(var(--lightbox-panel-height) * 1.34));
-    height: var(--lightbox-panel-height);
     max-width: 100%;
-    max-height: var(--lightbox-panel-height);
-    padding: 12px;
+    max-height: none;
     transform: none;
   }
 
-  .lightbox__artwork-image {
-    width: 100%;
-    height: 100%;
-    max-height: none;
-    object-fit: cover;
+  .lightbox__artwork-frame .artwork-frame__window {
+    height: var(--lightbox-panel-height);
+    min-height: 0;
   }
 
   .lightbox__close {

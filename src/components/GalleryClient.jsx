@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
@@ -246,16 +246,18 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeIndex, artist.artworks.length, hasArtworks]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (activeIndex === null) {
       return undefined;
     }
 
     const scrollY = window.scrollY;
+    const root = document.documentElement;
     const previousOverflow = document.body.style.overflow;
     const previousPosition = document.body.style.position;
     const previousTop = document.body.style.top;
     const previousWidth = document.body.style.width;
+    const previousScrollBehavior = root.style.scrollBehavior;
 
     document.body.style.overflow = "hidden";
     document.body.style.position = "fixed";
@@ -267,7 +269,12 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
       document.body.style.position = previousPosition;
       document.body.style.top = previousTop;
       document.body.style.width = previousWidth;
+      root.style.scrollBehavior = "auto";
       window.scrollTo(0, scrollY);
+
+      window.requestAnimationFrame(() => {
+        root.style.scrollBehavior = previousScrollBehavior;
+      });
     };
   }, [activeIndex]);
 
@@ -408,34 +415,13 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
             <div className="lightbox__grid">
               <figure className="lightbox__figure">
                 <div className="lightbox__image-window">
-                  {activeArtwork.image ? (
-                    <div
-                      className={`lightbox__artwork-frame ${
-                        activeArtwork.frame === "ivory"
-                          ? "lightbox__artwork-frame--ivory"
-                          : "lightbox__artwork-frame--obsidian"
-                      }`}
-                    >
-                      <div className="lightbox__artwork-mount">
-                        <img
-                          alt={
-                            activeArtwork.altText ||
-                            getCopy(activeArtwork.title, locale)
-                          }
-                          className="lightbox__artwork-image"
-                          src={activeArtwork.image}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="lightbox__artwork-frame lightbox__artwork-frame--fallback">
-                      <ArtworkFrame
-                        artwork={activeArtwork}
-                        locale={locale}
-                        showCaption={false}
-                      />
-                    </div>
-                  )}
+                  <div className="lightbox__artwork-frame">
+                    <ArtworkFrame
+                      artwork={activeArtwork}
+                      locale={locale}
+                      showCaption={false}
+                    />
+                  </div>
                 </div>
               </figure>
 
