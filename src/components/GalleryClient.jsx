@@ -92,12 +92,15 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     return 0.5 - Math.cos(progress * Math.PI) / 2;
   }
 
-  function getRoomImageSources(pairStartIndex, radius = 1) {
-    const startIndex = Math.max(0, pairStartIndex - radius * 2);
-    const endIndex = Math.min(artist.artworks.length, pairStartIndex + 2 + radius * 2);
+  function getRoomImageSources(startIndex, visibleCount = 1, radius = 1) {
+    const start = Math.max(0, startIndex - radius * visibleCount);
+    const end = Math.min(
+      artist.artworks.length,
+      startIndex + visibleCount + radius * visibleCount,
+    );
 
     return artist.artworks
-      .slice(startIndex, endIndex)
+      .slice(start, end)
       .map((artwork) => artwork.image)
       .filter(Boolean);
   }
@@ -159,7 +162,23 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     return Array.from(viewport?.querySelectorAll(".gallery-room__slot") ?? []);
   }
 
-  function getCurrentRoomPairStartIndex(viewport, slots) {
+  function getRoomScrollStep(viewport, slots) {
+    if (!viewport || slots.length < 2) {
+      return 1;
+    }
+
+    const viewportStyles = window.getComputedStyle(viewport);
+    const paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0");
+    const paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0");
+    const visibleWidth = viewport.clientWidth - paddingLeft - paddingRight;
+    const firstSlotRect = slots[0].getBoundingClientRect();
+    const secondSlotRect = slots[1].getBoundingClientRect();
+    const twoSlotSpan = secondSlotRect.right - firstSlotRect.left;
+
+    return visibleWidth + 1 >= twoSlotSpan ? 2 : 1;
+  }
+
+  function getCurrentRoomStartIndex(viewport, slots, step) {
     if (!viewport || slots.length === 0) {
       return 0;
     }
@@ -170,7 +189,7 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     let closestPairStartIndex = 0;
     let smallestDistance = Number.POSITIVE_INFINITY;
 
-    for (let index = 0; index < slots.length; index += 2) {
+    for (let index = 0; index < slots.length; index += step) {
       const distance = Math.abs(slots[index].getBoundingClientRect().left - focusLeft);
 
       if (distance < smallestDistance) {
@@ -182,8 +201,8 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
     return closestPairStartIndex;
   }
 
-  function getRoomPairScrollTarget(viewport, slots, pairStartIndex) {
-    const firstSlot = slots[pairStartIndex];
+  function getRoomScrollTarget(viewport, slots, startIndex) {
+    const firstSlot = slots[startIndex];
     const viewportRect = viewport.getBoundingClientRect();
     const viewportStyles = window.getComputedStyle(viewport);
     const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
@@ -205,15 +224,20 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
       return;
     }
 
-    const currentPairStartIndex = getCurrentRoomPairStartIndex(viewport, slots);
-    const maxPairStartIndex = Math.max(0, slots.length - (slots.length % 2 === 0 ? 2 : 1));
-    const targetIndex = Math.min(
-      maxPairStartIndex,
-      Math.max(0, currentPairStartIndex + direction * 2),
+    const scrollStep = getRoomScrollStep(viewport, slots);
+    const currentStartIndex = getCurrentRoomStartIndex(viewport, slots, scrollStep);
+    const remainder = slots.length % scrollStep;
+    const maxStartIndex = Math.max(
+      0,
+      slots.length - (remainder === 0 ? scrollStep : remainder),
     );
-    const targetScrollLeft = getRoomPairScrollTarget(viewport, slots, targetIndex);
+    const targetIndex = Math.min(
+      maxStartIndex,
+      Math.max(0, currentStartIndex + direction * scrollStep),
+    );
+    const targetScrollLeft = getRoomScrollTarget(viewport, slots, targetIndex);
 
-    await predecodeRoomImages(getRoomImageSources(targetIndex));
+    await predecodeRoomImages(getRoomImageSources(targetIndex, scrollStep));
     animateRoomScrollTo(targetScrollLeft);
   }
 
@@ -446,7 +470,10 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                 {artworkMeta.length ? (
                   <dl className="lightbox__details">
                     {artworkMeta.map((item) => (
-                      <div key={item.key}>
+                      <div
+                        className={`lightbox__details-row lightbox__details-row--${item.key}`}
+                        key={item.key}
+                      >
                         <dt>{item.label}</dt>
                         <dd>{item.value}</dd>
                       </div>

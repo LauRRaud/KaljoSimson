@@ -35,26 +35,33 @@ function getArrowButtonBlock(direction) {
   return match[0];
 }
 
-test("artist carousel arrows stay near the screen edge with a soft hover treatment", () => {
+test("artist carousel desktop arrows sit inside the lower outer side portraits", () => {
   const baseRule = getRule(".artist-stage__arrow");
   const hoverRule = getRule(".artist-stage__arrow:hover");
   const arrowGlyphRule = getRule(".artist-stage__arrow span");
   const leftRule = getRule(".artist-stage__arrow--left");
   const rightRule = getRule(".artist-stage__arrow--right");
 
-  assert.match(baseRule, /top:\s*34%;/);
+  assert.match(baseRule, /top:\s*var\(--carousel-arrow-top\);/);
   assert.match(baseRule, /bottom:\s*auto;/);
   assert.match(baseRule, /width:\s*76px;/);
   assert.match(baseRule, /height:\s*76px;/);
+  assert.match(baseRule, /--carousel-arrow-translate-x:\s*0px;/);
+  assert.match(baseRule, /transform:\s*translate\(var\(--carousel-arrow-translate-x\),\s*-50%\);/);
   assert.doesNotMatch(baseRule, /inset\s+0\s+1px/);
   assert.match(baseRule, /background:\s*var\(--glass-panel-bg\);/);
   assert.match(baseRule, /box-shadow:\s*var\(--glass-panel-shadow\);/);
   assert.match(hoverRule, /background:\s*var\(--glass-panel-bg-strong\);/);
   assert.match(hoverRule, /color:\s*var\(--text\);/);
-  assert.match(hoverRule, /transform:\s*translateY\(-50%\);/);
+  assert.match(hoverRule, /transform:\s*translate\(var\(--carousel-arrow-translate-x\),\s*-50%\);/);
   assert.match(arrowGlyphRule, /border-radius:\s*3px;/);
-  assert.match(leftRule, /left:\s*clamp\(4px,\s*2\.4vw,\s*28px\);/);
-  assert.match(rightRule, /right:\s*clamp\(4px,\s*2\.4vw,\s*28px\);/);
+  assert.match(leftRule, /left:\s*max\(\s*0px,\s*calc\(\s*50% - var\(--carousel-side-offset\) - \(var\(--carousel-width\) \/ 2\) \+\s*var\(--carousel-arrow-inset\)\s*\)\s*\);/);
+  assert.match(rightRule, /right:\s*max\(\s*0px,\s*calc\(\s*50% - var\(--carousel-side-offset\) - \(var\(--carousel-width\) \/ 2\) \+\s*var\(--carousel-arrow-inset\)\s*\)\s*\);/);
+  assert.match(css, /--carousel-arrow-top:\s*clamp\(292px,\s*23vw,\s*330px\);/);
+  assert.match(css, /--carousel-arrow-inset:\s*-86px;/);
+  assert.match(css, /--carousel-arrow-outer-shift:\s*34px;/);
+  assert.match(leftRule, /--carousel-arrow-translate-x:\s*calc\(-1 \* var\(--carousel-arrow-outer-shift\)\);/);
+  assert.match(rightRule, /--carousel-arrow-translate-x:\s*var\(--carousel-arrow-outer-shift\);/);
 });
 
 test("artist carousel cards center short metadata while keeping bio left aligned", () => {
@@ -140,10 +147,37 @@ test("artist carousel mobile arrows sit higher and farther apart", () => {
   );
 });
 
+test("artist carousel phone layout widens cards and aligns arrows with artist metadata", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage\s*\{[\s\S]*?width:\s*100vw;[\s\S]*?margin-inline:\s*calc\(50% - 50vw\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__frame\s*\{[\s\S]*?--mobile-carousel-card-width:\s*min\(calc\(100vw - 20px\),\s*410px\);[\s\S]*?padding-bottom:\s*0;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__slot\s*\{[\s\S]*?width:\s*var\(--mobile-carousel-card-width\);[\s\S]*?max-width:\s*var\(--mobile-carousel-card-width\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow\s*\{[\s\S]*?top:\s*clamp\(312px,\s*calc\(71vw \+ 57px\),\s*362px\);[\s\S]*?bottom:\s*auto;[\s\S]*?width:\s*52px;[\s\S]*?height:\s*52px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--left\s*\{[\s\S]*?left:\s*8px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__arrow--right\s*\{[\s\S]*?right:\s*8px;/,
+  );
+});
+
 test("artist carousel mobile tags stay on one horizontal row", () => {
   assert.match(
     css,
-    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__slot\s*\{[\s\S]*?width:\s*min\(calc\(100vw - 56px\),\s*360px\);[\s\S]*?max-width:\s*min\(calc\(100vw - 56px\),\s*360px\);/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.artist-stage__slot\s*\{[\s\S]*?width:\s*var\(--mobile-carousel-card-width\);[\s\S]*?max-width:\s*var\(--mobile-carousel-card-width\);/,
   );
   assert.match(
     css,

@@ -43,18 +43,16 @@ test("lightbox close button lives inside the right panel and title stays restrai
 
 test("lightbox presents artwork as a gallery wall with structured details", () => {
   assert.match(css, /\.lightbox__figure::before,\s*\.lightbox__figure::after\s*\{\s*display:\s*none;/);
-  assert.match(galleryClient, /className=\{`lightbox__artwork-frame \$\{/);
-  assert.match(galleryClient, /className="lightbox__artwork-image"/);
-  assert.match(galleryClient, /<div className="lightbox__artwork-frame lightbox__artwork-frame--fallback">[\s\S]*?<ArtworkFrame/);
+  assert.match(galleryClient, /<div className="lightbox__artwork-frame">[\s\S]*?<ArtworkFrame/);
   assert.match(galleryClient, /<ArtworkFrame[\s\S]*?showCaption=\{false\}/);
-  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*min\(100%,\s*calc\(\(var\(--lightbox-panel-height\) - clamp\(16px,\s*2vh,\s*28px\)\) \* 1\.28\)\);/);
-  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(16px,\s*2vh,\s*28px\)\);/);
+  assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?width:\s*min\(820px,\s*calc\(100% - clamp\(36px,\s*7vw,\s*112px\)\)\);/);
+  assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__window\s*\{[\s\S]*?height:\s*calc\(var\(--lightbox-panel-height\) - clamp\(90px,\s*13vh,\s*150px\)\);/);
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?justify-items:\s*end;/);
   assert.match(css, /\.lightbox__artwork-frame\s*\{[\s\S]*?transform:\s*none;/);
-  assert.match(css, /\.lightbox__artwork-mount\s*\{[\s\S]*?padding:\s*0;/);
-  assert.match(css, /\.lightbox__artwork-mount\s*\{[\s\S]*?width:\s*100%;[\s\S]*?height:\s*100%;/);
-  assert.match(css, /\.lightbox__artwork-image\s*\{[\s\S]*?height:\s*100%;[\s\S]*?object-fit:\s*cover;/);
+  assert.match(css, /\.lightbox__artwork-frame \.artwork-frame__mount,\s*\.lightbox__artwork-frame \.artwork-frame__surface\s*\{[\s\S]*?height:\s*100%;[\s\S]*?width:\s*100%;/);
+  assert.match(css, /\.lightbox__image,\s*\.lightbox__artwork-frame \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*100%;/);
   assert.match(galleryClient, /<dl className="lightbox__details">/);
+  assert.match(galleryClient, /lightbox__details-row--\$\{item\.key\}/);
   assert.match(css, /\.lightbox__actions\s*\{[\s\S]*?display:\s*flex;[\s\S]*?justify-content:\s*center;[\s\S]*?width:\s*fit-content;/);
   assert.match(css, /\.lightbox__nav-button\s*\{[\s\S]*?width:\s*auto;[\s\S]*?padding:\s*0 17px;/);
   assert.match(css, /--glass-control-shadow:\s*[\s\S]*?0 6px 12px rgba\(75,\s*52,\s*28,\s*0\.14\);/);
@@ -74,9 +72,8 @@ test("dark mode lightbox keeps the gallery room dark", () => {
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox__image-window\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);
   assert.match(css, /html\[data-theme="dark"\] \.lightbox::after\s*\{[\s\S]*?display:\s*none;[\s\S]*?background:\s*none;/);
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame,\s*html\[data-theme="dark"\] \.lightbox__artwork-frame--obsidian\s*\{[\s\S]*?background:\s*var\(--frame-light-wood\);/);
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory\s*\{[\s\S]*?background:\s*var\(--frame-dark-wood\);/);
-  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame--ivory \.lightbox__artwork-mount\s*\{[\s\S]*?background:\s*transparent;/);
+  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame\s*\{[\s\S]*?background:\s*transparent;[\s\S]*?box-shadow:\s*none;/);
+  assert.match(css, /html\[data-theme="dark"\] \.lightbox__artwork-frame \.artwork-frame__mount\s*\{[\s\S]*?padding:\s*0;[\s\S]*?background:\s*transparent;/);
 });
 
 test("mobile lightbox gives portrait artwork more room and keeps landscape balanced", () => {
@@ -90,7 +87,19 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__artwork-frame\s*\{[\s\S]*?padding:\s*14px;/,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?gap:\s*8px;[\s\S]*?padding:\s*14px 20px 16px;/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__caption\s*\{[\s\S]*?padding-top:\s*4px;/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__details-row--medium\s*\{[\s\S]*?grid-column:\s*1 \/ -1;/,
   );
   assert.match(
     css,

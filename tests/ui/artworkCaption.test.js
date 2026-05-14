@@ -45,6 +45,40 @@ test("artist profile mobile gallery captions can wrap inside wider artwork cards
   );
 });
 
+test("gallery room captions stay on one visible row under artwork frames", () => {
+  assert.match(
+    css,
+    /\.gallery-room \.artwork-frame__caption,\s*\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?min-width:\s*0;/,
+  );
+  assert.match(
+    css,
+    /\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*max-content;[\s\S]*?max-width:\s*calc\(100vw - 32px\);[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?overflow:\s*visible;[\s\S]*?white-space:\s*nowrap;/,
+  );
+  assert.match(
+    css,
+    /\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex-shrink:\s*1;/,
+  );
+});
+
+test("mobile gallery room captions split title and metadata into two rows", () => {
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?width:\s*100%;[\s\S]*?flex-wrap:\s*wrap;[\s\S]*?row-gap:\s*4px;[\s\S]*?white-space:\s*normal;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 0 100%;[\s\S]*?white-space:\s*nowrap;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:nth-child\(2\)::before\s*\{[\s\S]*?content:\s*none;/,
+  );
+  assert.match(
+    css,
+    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.gallery-room__nav\s*\{[\s\S]*?top:\s*calc\(76px \+ min\(75vw,\s*332px\) \+ 224px\);[\s\S]*?bottom:\s*auto;[\s\S]*?transform:\s*none;/,
+  );
+});
+
 test("gallery captions show label placeholders when artwork metadata is not confirmed", () => {
   assert.match(artworkFrame, /function getCaptionYear/);
   assert.match(artworkFrame, /return locale === "en" \? "Year" : "Aasta";/);

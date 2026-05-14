@@ -94,6 +94,19 @@ test("artwork lightbox navigation stays inside tablet and mobile viewports", asy
       expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(viewport.height);
     }
 
+    if (viewport.width === 486) {
+      const yearRow = page.locator(".lightbox__details-row--year");
+      const sizeRow = page.locator(".lightbox__details-row--size");
+      await expect(yearRow).toBeVisible();
+      await expect(sizeRow).toBeVisible();
+
+      const yearBox = await yearRow.boundingBox();
+      const sizeBox = await sizeRow.boundingBox();
+      expect(yearBox).not.toBeNull();
+      expect(sizeBox).not.toBeNull();
+      expect(Math.abs((yearBox?.y ?? 0) - (sizeBox?.y ?? 0))).toBeLessThanOrEqual(1);
+    }
+
     await page.keyboard.press("Escape");
     await expect(page.locator(".lightbox")).toBeHidden();
   }
