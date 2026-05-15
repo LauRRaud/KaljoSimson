@@ -290,84 +290,32 @@ function drawCanvasBackground(context, width, height, presetId) {
   }
 
   if (presetId === "vintage") {
-    context.fillStyle = "#fff0d7";
+    context.fillStyle = "#efe9dc";
     context.fillRect(0, 0, width, height);
 
     const light = context.createRadialGradient(
       width * 0.5,
-      height * 0.44,
+      height * 0.42,
       Math.min(width, height) * 0.12,
       width * 0.5,
       height * 0.5,
       Math.max(width, height) * 0.76,
     );
-    light.addColorStop(0, "rgba(255, 250, 235, 0.62)");
-    light.addColorStop(0.58, "rgba(255, 250, 235, 0.12)");
-    light.addColorStop(1, "rgba(122, 78, 32, 0.16)");
+    light.addColorStop(0, "rgba(255, 253, 246, 0.58)");
+    light.addColorStop(0.58, "rgba(255, 248, 235, 0.16)");
+    light.addColorStop(1, "rgba(119, 98, 74, 0.13)");
     context.fillStyle = light;
     context.fillRect(0, 0, width, height);
-
-    const stains = [
-      { alpha: 0.05, radius: 0.25, x: 0.18, y: 0.2 },
-      { alpha: 0.042, radius: 0.24, x: 0.78, y: 0.7 },
-      { alpha: 0.035, radius: 0.18, x: 0.52, y: 0.38 },
-      { alpha: 0.026, radius: 0.16, x: 0.72, y: 0.22 },
-    ];
-
-    stains.forEach((stain) => {
-      const radius = Math.min(width, height) * stain.radius;
-      const gradient = context.createRadialGradient(
-        width * stain.x,
-        height * stain.y,
-        0,
-        width * stain.x,
-        height * stain.y,
-        radius,
-      );
-
-      gradient.addColorStop(0, `rgba(148, 96, 38, ${stain.alpha})`);
-      gradient.addColorStop(1, "rgba(141, 101, 61, 0)");
-      context.fillStyle = gradient;
-      context.fillRect(0, 0, width, height);
-    });
 
     const random = (index) => {
       const value = Math.sin(index * 127.1 + 19.7) * 43758.5453123;
       return value - Math.floor(value);
     };
-    const creaseCount = 34;
     const creaseScale = Math.min(width, height);
 
-    context.lineCap = "round";
-    for (let index = 0; index < creaseCount; index += 1) {
-      const startX = random(index) * width;
-      const startY = random(index + 83) * height;
-      const angle = random(index + 211) * Math.PI * 2;
-      const length = creaseScale * (0.035 + random(index + 31) * 0.07);
-      const bend = creaseScale * (random(index + 17) - 0.5) * 0.045;
-      const endX = startX + Math.cos(angle) * length;
-      const endY = startY + Math.sin(angle) * length;
-      const controlX = (startX + endX) / 2 + Math.cos(angle + Math.PI / 2) * bend;
-      const controlY = (startY + endY) / 2 + Math.sin(angle + Math.PI / 2) * bend;
-      const alpha = 0.018 + random(index + 419) * 0.032;
-
-      context.lineWidth = Math.max(0.55, creaseScale / 1700);
-      context.strokeStyle = `rgba(92, 62, 32, ${alpha})`;
-      context.beginPath();
-      context.moveTo(startX, startY);
-      context.quadraticCurveTo(controlX, controlY, endX, endY);
-      context.stroke();
-
-      context.strokeStyle = `rgba(255, 255, 255, ${alpha * 1.35})`;
-      context.beginPath();
-      context.moveTo(startX + 2, startY + 2);
-      context.quadraticCurveTo(controlX + 2, controlY + 2, endX + 2, endY + 2);
-      context.stroke();
-    }
-
-    context.globalAlpha = 0.08;
-    context.strokeStyle = "rgba(100, 66, 30, 0.4)";
-    context.lineWidth = Math.max(0.5, creaseScale / 1900);
+    context.globalAlpha = 0.06;
+    context.strokeStyle = "rgba(105, 88, 68, 0.45)";
+    context.lineWidth = Math.max(0.5, creaseScale / 2400);
     for (let y = 0; y < height; y += Math.max(6, Math.round(height / 130))) {
       context.beginPath();
       context.moveTo(0, y + random(y) * 2);
@@ -375,6 +323,20 @@ function drawCanvasBackground(context, width, height, presetId) {
       context.stroke();
     }
     context.globalAlpha = 1;
+
+    const edgeTone = context.createRadialGradient(
+      width * 0.5,
+      height * 0.5,
+      Math.min(width, height) * 0.42,
+      width * 0.5,
+      height * 0.5,
+      Math.max(width, height) * 0.74,
+    );
+    edgeTone.addColorStop(0, "rgba(111, 89, 66, 0)");
+    edgeTone.addColorStop(0.86, "rgba(111, 89, 66, 0.07)");
+    edgeTone.addColorStop(1, "rgba(93, 73, 53, 0.18)");
+    context.fillStyle = edgeTone;
+    context.fillRect(0, 0, width, height);
   }
 
   context.restore();
@@ -970,7 +932,7 @@ export default function StudioCanvas({ locale = "et" }) {
     if (backgroundPresetId === "vintage") {
       try {
         const image = await loadCanvasImage(VINTAGE_BACKGROUND_SRC);
-        context.fillStyle = "#fff0d7";
+        context.fillStyle = "#efe9dc";
         context.fillRect(0, 0, width, height);
         drawImageCover(context, image, width, height);
       } catch {
