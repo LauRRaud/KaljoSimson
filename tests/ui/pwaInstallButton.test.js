@@ -14,6 +14,8 @@ test("PWA install button renders an iOS home screen fallback hint", () => {
   assert.match(button, /installHintVisible/);
   assert.match(button, /Jaga - Lisa avalehele/);
   assert.match(button, /Share - Add to Home Screen/);
+  assert.doesNotMatch(button, /iosInstallFallback/);
+  assert.doesNotMatch(button, /isIosInstallFallback/);
   assert.match(button, /className="pwa-install__hint"/);
   assert.match(button, /aria-live="polite"/);
   assert.match(globals, /\.pwa-install__hint\s*{/);

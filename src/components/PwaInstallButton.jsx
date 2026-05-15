@@ -9,26 +9,13 @@ function isStandalone() {
   );
 }
 
-function isIosSafariInstallFallback() {
-  const navigator = window.navigator;
-  const userAgent = navigator.userAgent || "";
-  const platform = navigator.platform || "";
-  const isIosDevice = /iPad|iPhone|iPod/.test(userAgent);
-  const isTouchMac = platform === "MacIntel" && navigator.maxTouchPoints > 1;
-  const isSafari = /^((?!CriOS|FxiOS|EdgiOS|OPiOS).)*Safari/i.test(userAgent);
-
-  return (isIosDevice || isTouchMac) && isSafari;
-}
-
 export default function PwaInstallButton({ locale = "et" }) {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [installHintVisible, setInstallHintVisible] = useState(false);
-  const [iosInstallFallback, setIosInstallFallback] = useState(false);
   const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      setIosInstallFallback(isIosSafariInstallFallback());
       setInstalled(isStandalone());
     });
 
@@ -73,10 +60,7 @@ export default function PwaInstallButton({ locale = "et" }) {
     const prompt = installPrompt;
 
     if (!prompt) {
-      if (iosInstallFallback) {
-        setInstallHintVisible(true);
-      }
-
+      setInstallHintVisible(true);
       return;
     }
 
