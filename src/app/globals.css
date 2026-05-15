@@ -676,10 +676,17 @@ html[data-theme="dark"] .site-nav__links a::after {
 .theme-toggle__icon {
   width: 28px;
   height: 28px;
+  opacity: 0.9;
   stroke: currentColor;
   stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: opacity 180ms ease;
+}
+
+.theme-toggle:hover .theme-toggle__icon,
+.theme-toggle:focus-visible .theme-toggle__icon {
+  opacity: 1;
 }
 
 .theme-toggle__icon--moon {
@@ -748,10 +755,17 @@ html[data-theme="dark"] .theme-toggle__icon--sun {
 .pwa-install-button__icon {
   width: 28px;
   height: 28px;
+  opacity: 0.9;
   stroke: currentColor;
   stroke-width: 1.65;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: opacity 180ms ease;
+}
+
+.pwa-install-button:hover .pwa-install-button__icon,
+.pwa-install-button:focus-visible .pwa-install-button__icon {
+  opacity: 1;
 }
 
 .pwa-install-button__icon--mobile {
