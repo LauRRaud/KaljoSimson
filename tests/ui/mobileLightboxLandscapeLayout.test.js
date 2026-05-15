@@ -16,15 +16,15 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
 
   assert.match(
     landscapeRule,
-    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(96svh,\s*500px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 28px\);[^}]*transform:\s*translateX\(clamp\(-56px,\s*-5vw,\s*-28px\)\);/s,
+    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(96svh,\s*500px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 54px\);[^}]*transform:\s*translateX\(clamp\(-56px,\s*-5vw,\s*-28px\)\);/s,
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(245px,\s*27vw,\s*325px\);[^}]*gap:\s*clamp\(6px,\s*0\.8vw,\s*12px\);/s,
+    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(270px,\s*29vw,\s*355px\);[^}]*gap:\s*clamp\(22px,\s*3vw,\s*40px\);/s,
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__image-window\s*{[^}]*padding-left:\s*var\(--magnifier-control-space\);[^}]*padding-bottom:\s*0;[^}]*transform:\s*translateY\(clamp\(-16px,\s*-2\.6vh,\s*-8px\)\);/s,
+    /\.lightbox__image-window\s*{[^}]*padding-left:\s*var\(--magnifier-control-space\);[^}]*padding-bottom:\s*0;[^}]*transform:\s*translateY\(clamp\(-6px,\s*-0\.8vh,\s*2px\)\);/s,
   );
   assert.match(
     landscapeRule,
@@ -36,7 +36,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__artwork-frame \.artwork-frame__image\s*{[^}]*max-height:\s*calc\(var\(--lightbox-panel-height\) \+ 18px\);/s,
+    /\.lightbox__artwork-frame \.artwork-frame__image\s*{[^}]*max-height:\s*calc\(var\(--lightbox-panel-height\) \+ 30px\);/s,
   );
   assert.match(
     landscapeRule,
@@ -44,7 +44,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__aside\s*{[^}]*transform:\s*translateY\(clamp\(-12px,\s*-1\.8vh,\s*-5px\)\);/s,
+    /\.lightbox__aside\s*{[^}]*padding-right:\s*clamp\(10px,\s*1\.2vw,\s*16px\);[^}]*transform:\s*translateY\(clamp\(-12px,\s*-1\.8vh,\s*-5px\)\);/s,
   );
   assert.match(
     landscapeRule,
