@@ -6754,6 +6754,64 @@ html[data-theme="dark"] .admin-divider {
   }
 }
 
+@media (max-width: 1280px) and (max-height: 620px) and (orientation: landscape) {
+  .lightbox__sheet {
+    --lightbox-detail-panel-height: calc(var(--lightbox-panel-height) - 72px);
+  }
+
+  .lightbox__grid {
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 30vw, 360px);
+    gap: clamp(8px, 1.1vw, 14px);
+  }
+
+  .lightbox__image-window {
+    justify-items: end;
+    padding-left: var(--magnifier-control-space);
+    padding-bottom: 0;
+  }
+
+  .lightbox__magnifier-toggle {
+    left: 0;
+    top: 50%;
+    right: auto;
+    transform: translate(calc(-100% - var(--magnifier-control-gap)), -50%);
+  }
+
+  .lightbox__artwork-frame {
+    max-width: calc(100% - var(--magnifier-control-space));
+    margin-left: var(--magnifier-control-space);
+  }
+
+  .lightbox__artwork-frame .artwork-frame__image {
+    max-width: 100%;
+  }
+
+  .lightbox__aside {
+    padding-left: clamp(14px, 1.8vw, 22px);
+    padding-right: clamp(14px, 2vw, 24px);
+  }
+
+  .lightbox__details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 22px);
+    row-gap: 4px;
+  }
+
+  .lightbox__details-row--medium {
+    grid-column: 1 / -1;
+  }
+
+  .lightbox__details div {
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .lightbox__details dd {
+    min-width: 0;
+  }
+}
+
 @media (max-width: 430px) {
   .site-nav {
     width: calc(100vw - 24px);
