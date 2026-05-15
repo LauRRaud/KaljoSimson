@@ -67,18 +67,6 @@ export default function RootLayout({ children }) {
       className={`${headingFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                var theme = localStorage.getItem("beyondframes-theme");
-                document.documentElement.dataset.theme = theme === "dark" ? "dark" : "light";
-              } catch (_) {}
-            `,
-          }}
-        />
-      </head>
       <body>
         <PwaRegistration />
         <SiteAmbient />

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LanguageSwitch from "@/components/LanguageSwitch";
+import PwaInstallButton from "@/components/PwaInstallButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import { withLocale } from "@/lib/locale";
 
@@ -25,6 +26,7 @@ export default function SiteHeader({ locale = "et" }) {
 
           <div className="site-nav__controls">
             <LanguageSwitch locale={locale} />
+            <PwaInstallButton locale={locale} />
             <ThemeToggle locale={locale} />
           </div>
         </nav>

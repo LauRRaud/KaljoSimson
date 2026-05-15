@@ -4,6 +4,20 @@ import { useEffect } from "react";
 
 export default function PwaRegistration() {
   useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      navigator.serviceWorker?.getRegistrations?.().then((registrations) => {
+        registrations.forEach((registration) => registration.unregister());
+      });
+
+      window.caches?.keys?.().then((keys) => {
+        keys
+          .filter((key) => key.startsWith("beyondframes-"))
+          .forEach((key) => window.caches.delete(key));
+      });
+
+      return undefined;
+    }
+
     if (
       !("serviceWorker" in navigator) ||
       (window.location.protocol !== "https:" &&

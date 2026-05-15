@@ -71,6 +71,8 @@ const BACKGROUND_PRESETS = [
   { id: "vintage", labelEn: "Vintage", labelEt: "Vintage" },
 ];
 
+const VINTAGE_BACKGROUND_SRC = "/Vintage.svg";
+
 function copy(locale, et, en) {
   return locale === "en" ? en : et;
 }
@@ -122,6 +124,83 @@ function hexToRgb(hex) {
     g: (number >> 8) & 255,
     r: (number >> 16) & 255,
   };
+}
+
+function rgbToHex({ b, g, r }) {
+  return `#${[r, g, b]
+    .map((channel) => Math.round(clamp(channel, 0, 255)).toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function mixRgb(first, second, amount) {
+  return {
+    b: first.b + (second.b - first.b) * amount,
+    g: first.g + (second.g - first.g) * amount,
+    r: first.r + (second.r - first.r) * amount,
+  };
+}
+
+function getColorFieldHex(x, y) {
+  const stops = [
+    { color: "#e03434", position: 0 },
+    { color: "#f18a28", position: 0.16 },
+    { color: "#f4d545", position: 0.31 },
+    { color: "#54b95a", position: 0.47 },
+    { color: "#24b6b0", position: 0.62 },
+    { color: "#4267d9", position: 0.78 },
+    { color: "#8f47c7", position: 0.91 },
+    { color: "#c6517a", position: 1 },
+  ];
+  const nextIndex = stops.findIndex((stop) => x <= stop.position);
+  const nextStop = stops[Math.max(1, nextIndex === -1 ? stops.length - 1 : nextIndex)];
+  const previousStop = stops[stops.indexOf(nextStop) - 1];
+  const localX = (x - previousStop.position) / (nextStop.position - previousStop.position);
+  const base = mixRgb(hexToRgb(previousStop.color), hexToRgb(nextStop.color), clamp(localX, 0, 1));
+  const lit = mixRgb(base, { b: 255, g: 255, r: 255 }, y < 0.46 ? (1 - y / 0.46) * 0.9 : 0);
+  const shaded = mixRgb(lit, { b: 18, g: 21, r: 24 }, y > 0.46 ? ((y - 0.46) / 0.54) * 0.22 : 0);
+
+  return rgbToHex(shaded);
+}
+
+function loadCanvasImage(src) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
+  });
+}
+
+function drawImageCover(context, image, width, height) {
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const canvasRatio = width / height;
+
+  if (canvasRatio < 1) {
+    const targetWidth = height;
+    const targetHeight = width;
+    const targetRatio = targetWidth / targetHeight;
+    const cropScale = 1.08;
+    const drawHeight = (imageRatio > targetRatio ? targetHeight : targetWidth / imageRatio) * cropScale;
+    const drawWidth = (imageRatio > targetRatio ? targetHeight * imageRatio : targetWidth) * cropScale;
+    const drawX = (targetWidth - drawWidth) / 2 - targetWidth / 2;
+    const drawY = (targetHeight - drawHeight) / 2 - targetHeight / 2;
+
+    context.save();
+    context.translate(width / 2, height / 2);
+    context.rotate(Math.PI / 2);
+    context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+    context.restore();
+    return;
+  }
+
+  const cropScale = 1.08;
+  const drawHeight = (imageRatio > canvasRatio ? height : width / imageRatio) * cropScale;
+  const drawWidth = (imageRatio > canvasRatio ? height * imageRatio : width) * cropScale;
+  const drawX = (width - drawWidth) / 2;
+  const drawY = (height - drawHeight) / 2;
+
+  context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
 }
 
 function getPoint(event, canvas) {
@@ -211,97 +290,91 @@ function drawCanvasBackground(context, width, height, presetId) {
   }
 
   if (presetId === "vintage") {
-    context.fillStyle = "#fff7ea";
+    context.fillStyle = "#fff0d7";
     context.fillRect(0, 0, width, height);
 
-    const smudges = [
-      { alpha: 0.036, radius: 0.22, x: 0.2, y: 0.18 },
-      { alpha: 0.028, radius: 0.2, x: 0.78, y: 0.7 },
-      { alpha: 0.022, radius: 0.16, x: 0.48, y: 0.42 },
-      { alpha: 0.018, radius: 0.14, x: 0.66, y: 0.2 },
+    const light = context.createRadialGradient(
+      width * 0.5,
+      height * 0.44,
+      Math.min(width, height) * 0.12,
+      width * 0.5,
+      height * 0.5,
+      Math.max(width, height) * 0.76,
+    );
+    light.addColorStop(0, "rgba(255, 250, 235, 0.62)");
+    light.addColorStop(0.58, "rgba(255, 250, 235, 0.12)");
+    light.addColorStop(1, "rgba(122, 78, 32, 0.16)");
+    context.fillStyle = light;
+    context.fillRect(0, 0, width, height);
+
+    const stains = [
+      { alpha: 0.05, radius: 0.25, x: 0.18, y: 0.2 },
+      { alpha: 0.042, radius: 0.24, x: 0.78, y: 0.7 },
+      { alpha: 0.035, radius: 0.18, x: 0.52, y: 0.38 },
+      { alpha: 0.026, radius: 0.16, x: 0.72, y: 0.22 },
     ];
 
-    smudges.forEach((smudge) => {
-      const radius = Math.min(width, height) * smudge.radius;
+    stains.forEach((stain) => {
+      const radius = Math.min(width, height) * stain.radius;
       const gradient = context.createRadialGradient(
-        width * smudge.x,
-        height * smudge.y,
+        width * stain.x,
+        height * stain.y,
         0,
-        width * smudge.x,
-        height * smudge.y,
+        width * stain.x,
+        height * stain.y,
         radius,
       );
 
-      gradient.addColorStop(0, `rgba(141, 101, 61, ${smudge.alpha})`);
+      gradient.addColorStop(0, `rgba(148, 96, 38, ${stain.alpha})`);
       gradient.addColorStop(1, "rgba(141, 101, 61, 0)");
       context.fillStyle = gradient;
       context.fillRect(0, 0, width, height);
     });
 
-    context.lineCap = "round";
-    context.lineWidth = Math.max(1, Math.round(width / 1300));
-    context.strokeStyle = "rgba(92, 67, 42, 0.018)";
-    context.beginPath();
-    context.moveTo(width * 0.2, height * 0.03);
-    context.bezierCurveTo(
-      width * 0.18,
-      height * 0.3,
-      width * 0.25,
-      height * 0.54,
-      width * 0.19,
-      height * 0.95,
-    );
-    context.moveTo(width * 0.67, height * 0.02);
-    context.bezierCurveTo(
-      width * 0.71,
-      height * 0.28,
-      width * 0.63,
-      height * 0.58,
-      width * 0.69,
-      height * 0.98,
-    );
-    context.moveTo(width * 0.02, height * 0.72);
-    context.bezierCurveTo(
-      width * 0.28,
-      height * 0.68,
-      width * 0.58,
-      height * 0.75,
-      width * 0.98,
-      height * 0.69,
-    );
-    context.moveTo(width * 0.36, height * 0.06);
-    context.bezierCurveTo(
-      width * 0.4,
-      height * 0.22,
-      width * 0.36,
-      height * 0.44,
-      width * 0.42,
-      height * 0.74,
-    );
-    context.stroke();
+    const random = (index) => {
+      const value = Math.sin(index * 127.1 + 19.7) * 43758.5453123;
+      return value - Math.floor(value);
+    };
+    const creaseCount = 34;
+    const creaseScale = Math.min(width, height);
 
-    context.strokeStyle = "rgba(255, 255, 255, 0.08)";
-    context.lineWidth = Math.max(1, Math.round(width / 1000));
-    context.beginPath();
-    context.moveTo(width * 0.215, height * 0.03);
-    context.bezierCurveTo(
-      width * 0.195,
-      height * 0.3,
-      width * 0.265,
-      height * 0.54,
-      width * 0.205,
-      height * 0.95,
-    );
-    context.moveTo(width * 0.685, height * 0.02);
-    context.bezierCurveTo(
-      width * 0.725,
-      height * 0.28,
-      width * 0.645,
-      height * 0.58,
-      width * 0.705,
-      height * 0.98,
-    );
-    context.stroke();
+    context.lineCap = "round";
+    for (let index = 0; index < creaseCount; index += 1) {
+      const startX = random(index) * width;
+      const startY = random(index + 83) * height;
+      const angle = random(index + 211) * Math.PI * 2;
+      const length = creaseScale * (0.035 + random(index + 31) * 0.07);
+      const bend = creaseScale * (random(index + 17) - 0.5) * 0.045;
+      const endX = startX + Math.cos(angle) * length;
+      const endY = startY + Math.sin(angle) * length;
+      const controlX = (startX + endX) / 2 + Math.cos(angle + Math.PI / 2) * bend;
+      const controlY = (startY + endY) / 2 + Math.sin(angle + Math.PI / 2) * bend;
+      const alpha = 0.018 + random(index + 419) * 0.032;
+
+      context.lineWidth = Math.max(0.55, creaseScale / 1700);
+      context.strokeStyle = `rgba(92, 62, 32, ${alpha})`;
+      context.beginPath();
+      context.moveTo(startX, startY);
+      context.quadraticCurveTo(controlX, controlY, endX, endY);
+      context.stroke();
+
+      context.strokeStyle = `rgba(255, 255, 255, ${alpha * 1.35})`;
+      context.beginPath();
+      context.moveTo(startX + 2, startY + 2);
+      context.quadraticCurveTo(controlX + 2, controlY + 2, endX + 2, endY + 2);
+      context.stroke();
+    }
+
+    context.globalAlpha = 0.08;
+    context.strokeStyle = "rgba(100, 66, 30, 0.4)";
+    context.lineWidth = Math.max(0.5, creaseScale / 1900);
+    for (let y = 0; y < height; y += Math.max(6, Math.round(height / 130))) {
+      context.beginPath();
+      context.moveTo(0, y + random(y) * 2);
+      context.lineTo(width, y + random(y + 11) * 2);
+      context.stroke();
+    }
+    context.globalAlpha = 1;
   }
 
   context.restore();
@@ -572,6 +645,7 @@ export default function StudioCanvas({ locale = "et" }) {
   const colorControlRef = useRef(null);
   const currentStrokeRef = useRef(null);
   const frameRef = useRef(null);
+  const sheetRef = useRef(null);
   const strokesRef = useRef([]);
   const textInputRef = useRef(null);
   const [strokes, setStrokes] = useState([]);
@@ -635,11 +709,8 @@ export default function StudioCanvas({ locale = "et" }) {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = clamp((event.clientX - rect.left) / rect.width, 0, 1);
     const y = clamp((event.clientY - rect.top) / rect.height, 0, 1);
-    const hue = x * 360;
-    const saturation = 0.38 + (1 - y) * 0.54;
-    const lightness = 0.84 - y * 0.58;
 
-    setBrushColor(hslToHex(hue, saturation, lightness));
+    setBrushColor(getColorFieldHex(x, y));
   };
 
   const redraw = useCallback(() => {
@@ -694,6 +765,8 @@ export default function StudioCanvas({ locale = "et" }) {
 
       canvas.width = Math.max(1, Math.round(rect.width * pixelRatio));
       canvas.height = Math.max(1, Math.round(rect.height * pixelRatio));
+      sheetRef.current?.style.setProperty("--studio-sheet-width", `${rect.width}px`);
+      sheetRef.current?.style.setProperty("--studio-sheet-height", `${rect.height}px`);
       redraw();
     };
 
@@ -875,7 +948,7 @@ export default function StudioCanvas({ locale = "et" }) {
     setStrokes((current) => current.slice(0, -1));
   };
 
-  const downloadCanvas = () => {
+  const downloadCanvas = async () => {
     const canvas = canvasRef.current;
 
     if (!canvas) {
@@ -894,7 +967,18 @@ export default function StudioCanvas({ locale = "et" }) {
     exportCanvas.height = height;
     contentCanvas.width = width;
     contentCanvas.height = height;
-    drawCanvasBackground(context, width, height, backgroundPresetId);
+    if (backgroundPresetId === "vintage") {
+      try {
+        const image = await loadCanvasImage(VINTAGE_BACKGROUND_SRC);
+        context.fillStyle = "#fff0d7";
+        context.fillRect(0, 0, width, height);
+        drawImageCover(context, image, width, height);
+      } catch {
+        drawCanvasBackground(context, width, height, backgroundPresetId);
+      }
+    } else {
+      drawCanvasBackground(context, width, height, backgroundPresetId);
+    }
     strokesRef.current.forEach((item) => {
       if (item.type) {
         drawCanvasItem(
@@ -1084,7 +1168,7 @@ export default function StudioCanvas({ locale = "et" }) {
             <button
               aria-expanded={colorPanelOpen}
               aria-label={copy(locale, "Vali värv", "Choose color")}
-              className="studio-color-wheel"
+              className={`studio-color-wheel ${colorPanelOpen ? "studio-color-wheel--hidden" : ""}`}
               onPointerDown={handleColorWheelPointerDown}
               style={{ "--studio-current-color": color }}
               type="button"
@@ -1163,7 +1247,7 @@ export default function StudioCanvas({ locale = "et" }) {
           <div
             className={`studio-paper__surface studio-paper__surface--frame-${framePresetId}`}
           >
-            <div className="studio-paper__sheet">
+            <div className="studio-paper__sheet" ref={sheetRef}>
           <canvas
             aria-label={copy(locale, "Joonistamise lõuend", "Drawing canvas")}
             className="studio-canvas"

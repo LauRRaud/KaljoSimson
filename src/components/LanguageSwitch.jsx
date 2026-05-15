@@ -7,7 +7,7 @@ export default function LanguageSwitch({ locale }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const nextLocale = locale === "en" ? "et" : "en";
-  const currentLabel = locale === "en" ? "English" : "Eesti";
+  const currentCode = locale === "en" ? "EN" : "ET";
   const nextLabel = nextLocale === "en" ? "English" : "Eesti";
   const switchText =
     locale === "en" ? `Switch language: ${nextLabel}` : `Vaheta keel: ${nextLabel}`;
@@ -28,12 +28,12 @@ export default function LanguageSwitch({ locale }) {
         href={getHref(nextLocale)}
         aria-label={switchText}
       >
-        <span
-          className={`language-switch__flag language-switch__flag--${locale}`}
-          aria-hidden="true"
-        />
+        <span className="language-switch__code" aria-hidden="true">
+          {currentCode}
+        </span>
+        <span className="language-switch__chevron" aria-hidden="true" />
         <span className="language-switch__label">
-          {currentLabel}. {switchText}
+          {currentCode}. {switchText}
         </span>
       </Link>
     </div>
