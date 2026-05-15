@@ -29,8 +29,15 @@ export default function FramePresetSwitch({ defaultPreset = "silver", locale = "
   useEffect(() => {
     const storedPreset = window.localStorage.getItem(STORAGE_KEY);
     const nextPreset = isFramePreset(storedPreset) ? storedPreset : initialPreset;
-    setActivePreset(nextPreset);
     applyPreset(nextPreset);
+
+    const frame = window.requestAnimationFrame(() => {
+      setActivePreset(nextPreset);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, [initialPreset]);
 
   function choosePreset(preset) {

@@ -1,4 +1,5 @@
 import { Cormorant_Garamond, Manrope } from "next/font/google";
+import PwaRegistration from "@/components/PwaRegistration";
 import SiteAmbient from "@/components/SiteAmbient";
 import "./globals.css";
 
@@ -16,6 +17,8 @@ const bodyFont = Manrope({
 
 export const metadata = {
   metadataBase: new URL("https://beyondframes.net"),
+  applicationName: "BeyondFrames",
+  manifest: "/manifest.webmanifest",
   title: {
     default: "BeyondFrames",
     template: "%s | BeyondFrames",
@@ -28,10 +31,31 @@ export const metadata = {
         url: "/favicon.svg",
         type: "image/svg+xml",
       },
+      {
+        url: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
     ],
     shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BeyondFrames",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f1e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#16130f" },
+  ],
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }) {
@@ -56,6 +80,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <PwaRegistration />
         <SiteAmbient />
         {children}
       </body>

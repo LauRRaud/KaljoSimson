@@ -19,8 +19,64 @@ const COLOR_PRESETS = [
   "#fffaf1",
 ];
 
+const TEXT_STYLES = [
+  {
+    canvasFont: 'Georgia, "Times New Roman", serif',
+    cssFont: 'Georgia, "Times New Roman", serif',
+    fontStyle: "normal",
+    fontWeight: "500",
+    id: "classic",
+    labelEn: "Classic",
+    labelEt: "Klassika",
+  },
+  {
+    canvasFont: '"Helvetica Neue", Arial, sans-serif',
+    cssFont: '"Helvetica Neue", Arial, sans-serif',
+    fontStyle: "normal",
+    fontWeight: "600",
+    id: "modern",
+    labelEn: "Modern",
+    labelEt: "Modernne",
+  },
+  {
+    canvasFont: '"Brush Script MT", "Segoe Script", cursive',
+    cssFont: '"Brush Script MT", "Segoe Script", cursive',
+    fontStyle: "normal",
+    fontWeight: "500",
+    id: "script",
+    labelEn: "Script",
+    labelEt: "Käsikiri",
+  },
+  {
+    canvasFont: '"Arial Black", Impact, sans-serif',
+    cssFont: '"Arial Black", Impact, sans-serif',
+    fontStyle: "normal",
+    fontWeight: "700",
+    id: "statement",
+    labelEn: "Bold",
+    labelEt: "Julge",
+  },
+];
+
+const FRAME_PRESETS = [
+  { id: "none", labelEn: "None", labelEt: "Puudub" },
+  { id: "gold", labelEn: "Gold", labelEt: "Kuld" },
+  { id: "silver", labelEn: "Silver", labelEt: "Hõbe" },
+];
+
+const BACKGROUND_PRESETS = [
+  { id: "plain", labelEn: "Plain", labelEt: "Puhas" },
+  { id: "grid", labelEn: "Grid", labelEt: "Ruuduline" },
+  { id: "paper", labelEn: "Striped", labelEt: "Triibuline" },
+  { id: "vintage", labelEn: "Vintage", labelEt: "Vintage" },
+];
+
 function copy(locale, et, en) {
   return locale === "en" ? en : et;
+}
+
+function getTextStyle(styleId) {
+  return TEXT_STYLES.find((style) => style.id === styleId) || TEXT_STYLES[0];
 }
 
 function hslToHex(hue, saturation, lightness) {
@@ -104,6 +160,7 @@ function smoothPoints(points) {
 }
 
 function drawTextItem(context, item, width, height) {
+  const textStyle = getTextStyle(item.textStyleId);
   const fontSize = Math.max(18, item.size * 2.15);
   const lineHeight = fontSize * 1.16;
   const lines = item.value.split("\n");
@@ -112,11 +169,186 @@ function drawTextItem(context, item, width, height) {
 
   context.save();
   context.fillStyle = item.color;
-  context.font = `500 ${fontSize}px Georgia, "Times New Roman", serif`;
+  context.font = `${textStyle.fontStyle} ${textStyle.fontWeight} ${fontSize}px ${textStyle.canvasFont}`;
   context.textBaseline = "top";
   lines.forEach((line, index) => {
     context.fillText(line, x, y + index * lineHeight);
   });
+  context.restore();
+}
+
+function drawCanvasBackground(context, width, height, presetId) {
+  context.save();
+  context.fillStyle = "#fffaf4";
+  context.fillRect(0, 0, width, height);
+
+  if (presetId === "grid") {
+    const step = Math.max(24, Math.round(Math.min(width, height) / 24));
+
+    context.strokeStyle = "rgba(74, 52, 32, 0.045)";
+    context.lineWidth = Math.max(1, Math.round(width / 900));
+
+    for (let x = 0; x <= width; x += step) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, height);
+      context.stroke();
+    }
+
+    for (let y = 0; y <= height; y += step) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(width, y);
+      context.stroke();
+    }
+  }
+
+  if (presetId === "paper") {
+    context.fillStyle = "rgba(141, 101, 61, 0.065)";
+    for (let y = 0; y < height; y += 12) {
+      context.fillRect(0, y, width, 1);
+    }
+  }
+
+  if (presetId === "vintage") {
+    context.fillStyle = "#fff7ea";
+    context.fillRect(0, 0, width, height);
+
+    const smudges = [
+      { alpha: 0.036, radius: 0.22, x: 0.2, y: 0.18 },
+      { alpha: 0.028, radius: 0.2, x: 0.78, y: 0.7 },
+      { alpha: 0.022, radius: 0.16, x: 0.48, y: 0.42 },
+      { alpha: 0.018, radius: 0.14, x: 0.66, y: 0.2 },
+    ];
+
+    smudges.forEach((smudge) => {
+      const radius = Math.min(width, height) * smudge.radius;
+      const gradient = context.createRadialGradient(
+        width * smudge.x,
+        height * smudge.y,
+        0,
+        width * smudge.x,
+        height * smudge.y,
+        radius,
+      );
+
+      gradient.addColorStop(0, `rgba(141, 101, 61, ${smudge.alpha})`);
+      gradient.addColorStop(1, "rgba(141, 101, 61, 0)");
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, width, height);
+    });
+
+    context.lineCap = "round";
+    context.lineWidth = Math.max(1, Math.round(width / 1300));
+    context.strokeStyle = "rgba(92, 67, 42, 0.018)";
+    context.beginPath();
+    context.moveTo(width * 0.2, height * 0.03);
+    context.bezierCurveTo(
+      width * 0.18,
+      height * 0.3,
+      width * 0.25,
+      height * 0.54,
+      width * 0.19,
+      height * 0.95,
+    );
+    context.moveTo(width * 0.67, height * 0.02);
+    context.bezierCurveTo(
+      width * 0.71,
+      height * 0.28,
+      width * 0.63,
+      height * 0.58,
+      width * 0.69,
+      height * 0.98,
+    );
+    context.moveTo(width * 0.02, height * 0.72);
+    context.bezierCurveTo(
+      width * 0.28,
+      height * 0.68,
+      width * 0.58,
+      height * 0.75,
+      width * 0.98,
+      height * 0.69,
+    );
+    context.moveTo(width * 0.36, height * 0.06);
+    context.bezierCurveTo(
+      width * 0.4,
+      height * 0.22,
+      width * 0.36,
+      height * 0.44,
+      width * 0.42,
+      height * 0.74,
+    );
+    context.stroke();
+
+    context.strokeStyle = "rgba(255, 255, 255, 0.08)";
+    context.lineWidth = Math.max(1, Math.round(width / 1000));
+    context.beginPath();
+    context.moveTo(width * 0.215, height * 0.03);
+    context.bezierCurveTo(
+      width * 0.195,
+      height * 0.3,
+      width * 0.265,
+      height * 0.54,
+      width * 0.205,
+      height * 0.95,
+    );
+    context.moveTo(width * 0.685, height * 0.02);
+    context.bezierCurveTo(
+      width * 0.725,
+      height * 0.28,
+      width * 0.645,
+      height * 0.58,
+      width * 0.705,
+      height * 0.98,
+    );
+    context.stroke();
+  }
+
+  context.restore();
+}
+
+function drawFramePreset(context, width, height, presetId) {
+  if (presetId === "none") {
+    return;
+  }
+
+  const thickness = Math.max(18, Math.round(Math.min(width, height) * 0.032));
+  const gradient = context.createLinearGradient(0, 0, width, height);
+
+  if (presetId === "silver") {
+    gradient.addColorStop(0, "#edf2f3");
+    gradient.addColorStop(0.43, "#c8d1d7");
+    gradient.addColorStop(1, "#aeb9c2");
+  } else {
+    gradient.addColorStop(0, "#fff2cf");
+    gradient.addColorStop(0.48, "#dfbd73");
+    gradient.addColorStop(1, "#b3893d");
+  }
+
+  context.save();
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, width, thickness);
+  context.fillRect(0, height - thickness, width, thickness);
+  context.fillRect(0, 0, thickness, height);
+  context.fillRect(width - thickness, 0, thickness, height);
+
+  context.strokeStyle =
+    presetId === "silver" ? "rgba(45, 56, 64, 0.34)" : "rgba(162, 123, 48, 0.3)";
+  context.lineWidth = Math.max(1, Math.round(thickness * 0.08));
+  context.strokeRect(
+    thickness * 0.68,
+    thickness * 0.68,
+    width - thickness * 1.36,
+    height - thickness * 1.36,
+  );
+  context.strokeStyle =
+    presetId === "silver" ? "rgba(255, 255, 255, 0.34)" : "rgba(248, 228, 168, 0.42)";
+  context.strokeRect(
+    thickness * 0.78,
+    thickness * 0.78,
+    width - thickness * 1.56,
+    height - thickness * 1.56,
+  );
   context.restore();
 }
 
@@ -346,9 +578,40 @@ export default function StudioCanvas({ locale = "et" }) {
   const [tool, setTool] = useState("brush");
   const [color, setColor] = useState("#181512");
   const [colorPanelOpen, setColorPanelOpen] = useState(false);
+  const [backgroundPresetId, setBackgroundPresetId] = useState("plain");
+  const [framePresetId, setFramePresetId] = useState("none");
   const [size, setSize] = useState(12);
   const [textDraft, setTextDraft] = useState(null);
+  const [textStyleId, setTextStyleId] = useState("classic");
   const sizePercent = ((size - 2) / (38 - 2)) * 100;
+  const currentTextStyle = getTextStyle(textDraft?.textStyleId || textStyleId);
+
+  const selectTool = (nextTool) => {
+    setTool(nextTool);
+    setColorPanelOpen(false);
+    if (nextTool !== "text") {
+      setTextDraft(null);
+    }
+  };
+
+  const selectTextStyle = (nextStyleId) => {
+    setTextStyleId(nextStyleId);
+    setTextDraft((draft) =>
+      draft ? { ...draft, textStyleId: nextStyleId } : draft,
+    );
+  };
+
+  useEffect(() => {
+    document.body.dataset.studioTool = tool;
+    document.body.dataset.studioSize = String(size);
+    window.dispatchEvent(new CustomEvent("beyondframes-studio-tool-change"));
+
+    return () => {
+      delete document.body.dataset.studioTool;
+      delete document.body.dataset.studioSize;
+      window.dispatchEvent(new CustomEvent("beyondframes-studio-tool-change"));
+    };
+  }, [size, tool]);
 
   const setBrushColor = (nextColor) => {
     setColor(nextColor);
@@ -497,6 +760,7 @@ export default function StudioCanvas({ locale = "et" }) {
           {
             color: draft.color,
             size: draft.size,
+            textStyleId: draft.textStyleId,
             type: "text",
             value,
             x: draft.x,
@@ -536,10 +800,16 @@ export default function StudioCanvas({ locale = "et" }) {
       setTextDraft({
         color,
         size,
+        textStyleId,
         value: "",
         x: point.x,
         y: point.y,
       });
+      return;
+    }
+
+    if (tool === "frame" || tool === "background") {
+      setTextDraft(null);
       return;
     }
 
@@ -617,15 +887,18 @@ export default function StudioCanvas({ locale = "et" }) {
     const width = Math.round(rect.width * 2);
     const height = Math.round(rect.height * 2);
     const context = exportCanvas.getContext("2d");
+    const contentCanvas = document.createElement("canvas");
+    const contentContext = contentCanvas.getContext("2d");
 
     exportCanvas.width = width;
     exportCanvas.height = height;
-    context.fillStyle = "#fffaf4";
-    context.fillRect(0, 0, width, height);
+    contentCanvas.width = width;
+    contentCanvas.height = height;
+    drawCanvasBackground(context, width, height, backgroundPresetId);
     strokesRef.current.forEach((item) => {
       if (item.type) {
         drawCanvasItem(
-          context,
+          contentContext,
           item.type === "text" ? { ...item, size: item.size * 2 } : item,
           width,
           height,
@@ -634,17 +907,18 @@ export default function StudioCanvas({ locale = "et" }) {
       }
 
       drawStroke(
-        context,
+        contentContext,
         {
           ...item,
-          color: item.tool === "eraser" ? "#fffaf4" : item.color,
           size: item.size * 2,
-          tool: "brush",
+          tool: item.tool,
         },
         width,
         height,
       );
     });
+    context.drawImage(contentCanvas, 0, 0);
+    drawFramePreset(context, width, height, framePresetId);
 
     const link = document.createElement("a");
     link.download = "beyondframes-stuudio.png";
@@ -671,15 +945,23 @@ export default function StudioCanvas({ locale = "et" }) {
               <button
                 aria-pressed={tool === "brush"}
                 className={`studio-tool ${tool === "brush" ? "studio-tool--active" : ""}`}
-                onClick={() => setTool("brush")}
+                onClick={() => selectTool("brush")}
                 type="button"
               >
                 {copy(locale, "Pintsel", "Brush")}
               </button>
               <button
+                aria-pressed={tool === "eraser"}
+                className={`studio-tool ${tool === "eraser" ? "studio-tool--active" : ""}`}
+                onClick={() => selectTool("eraser")}
+                type="button"
+              >
+                {copy(locale, "Kustukas", "Eraser")}
+              </button>
+              <button
                 aria-pressed={tool === "fill"}
                 className={`studio-tool ${tool === "fill" ? "studio-tool--active" : ""}`}
-                onClick={() => setTool("fill")}
+                onClick={() => selectTool("fill")}
                 type="button"
               >
                 {copy(locale, "Täida", "Fill")}
@@ -687,22 +969,113 @@ export default function StudioCanvas({ locale = "et" }) {
               <button
                 aria-pressed={tool === "text"}
                 className={`studio-tool ${tool === "text" ? "studio-tool--active" : ""}`}
-                onClick={() => setTool("text")}
+                onClick={() => selectTool("text")}
                 type="button"
               >
                 {copy(locale, "Tekst", "Text")}
               </button>
               <button
-                aria-pressed={tool === "eraser"}
-                className={`studio-tool ${tool === "eraser" ? "studio-tool--active" : ""}`}
-                onClick={() => setTool("eraser")}
+                aria-pressed={tool === "background"}
+                className={`studio-tool ${tool === "background" ? "studio-tool--active" : ""}`}
+                onClick={() => selectTool("background")}
                 type="button"
               >
-                {copy(locale, "Kustukumm", "Eraser")}
+                {copy(locale, "Taust", "Background")}
+              </button>
+              <button
+                aria-pressed={tool === "frame"}
+                className={`studio-tool ${tool === "frame" ? "studio-tool--active" : ""}`}
+                onClick={() => selectTool("frame")}
+                type="button"
+              >
+                {copy(locale, "Raam", "Frame")}
               </button>
             </div>
           </div>
 
+          {tool === "text" ? (
+            <div
+              className="studio-toolbar__group studio-preset-panel"
+              aria-label={copy(locale, "Teksti stiilid", "Text styles")}
+            >
+              <span className="studio-toolbar__label">
+                {copy(locale, "Teksti stiil", "Text style")}
+              </span>
+              <div className="studio-choice-grid studio-choice-grid--text">
+                {TEXT_STYLES.map((style) => (
+                  <button
+                    aria-pressed={textStyleId === style.id}
+                    className="studio-choice"
+                    key={style.id}
+                    onClick={() => selectTextStyle(style.id)}
+                    style={{
+                      "--studio-choice-font": style.cssFont,
+                      "--studio-choice-weight": style.fontWeight,
+                    }}
+                    type="button"
+                  >
+                    <span className="studio-choice__label">
+                      {copy(locale, style.labelEt, style.labelEn)}
+                    </span>
+                    <span className="studio-choice__sample">Aa</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {tool === "frame" ? (
+            <div
+              className="studio-toolbar__group studio-preset-panel"
+              aria-label={copy(locale, "Raamid", "Frames")}
+            >
+              <span className="studio-toolbar__label">
+                {copy(locale, "Raam", "Frame")}
+              </span>
+              <div className="studio-choice-grid">
+                {FRAME_PRESETS.map((preset) => (
+                  <button
+                    aria-pressed={framePresetId === preset.id}
+                    className={`studio-choice studio-choice--frame studio-choice--frame-${preset.id}`}
+                    key={preset.id}
+                    onClick={() => setFramePresetId(preset.id)}
+                    type="button"
+                  >
+                    <span className="studio-choice__preview" aria-hidden="true" />
+                    <span>{copy(locale, preset.labelEt, preset.labelEn)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {tool === "background" ? (
+            <div
+              className="studio-toolbar__group studio-preset-panel"
+              aria-label={copy(locale, "Taustad", "Backgrounds")}
+            >
+              <span className="studio-toolbar__label">
+                {copy(locale, "Taust", "Background")}
+              </span>
+              <div className="studio-choice-grid">
+                {BACKGROUND_PRESETS.map((preset) => (
+                  <button
+                    aria-pressed={backgroundPresetId === preset.id}
+                    className={`studio-choice studio-choice--background studio-choice--background-${preset.id}`}
+                    key={preset.id}
+                    onClick={() => setBackgroundPresetId(preset.id)}
+                    type="button"
+                  >
+                    <span className="studio-choice__preview" aria-hidden="true" />
+                    <span>{copy(locale, preset.labelEt, preset.labelEn)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {tool !== "frame" && tool !== "background" ? (
+            <>
           <div
             className="studio-toolbar__group studio-color-control"
             aria-label={copy(locale, "Värv", "Color")}
@@ -768,6 +1141,8 @@ export default function StudioCanvas({ locale = "et" }) {
               value={size}
             />
           </label>
+            </>
+          ) : null}
 
           <div className="studio-toolbar__actions">
             <button className="studio-action" disabled={!strokes.length} onClick={undoStroke} type="button">
@@ -782,8 +1157,13 @@ export default function StudioCanvas({ locale = "et" }) {
           </div>
         </div>
 
-        <div className="studio-paper">
-          <div className="studio-paper__surface">
+        <div
+          className={`studio-paper studio-paper--background-${backgroundPresetId} studio-paper--frame-${framePresetId}`}
+        >
+          <div
+            className={`studio-paper__surface studio-paper__surface--frame-${framePresetId}`}
+          >
+            <div className="studio-paper__sheet">
           <canvas
             aria-label={copy(locale, "Joonistamise lõuend", "Drawing canvas")}
             className="studio-canvas"
@@ -824,13 +1204,16 @@ export default function StudioCanvas({ locale = "et" }) {
                 ref={textInputRef}
                 style={{
                   "--studio-text-color": textDraft.color,
+                  "--studio-text-font": currentTextStyle.cssFont,
                   "--studio-text-size": `${Math.max(18, textDraft.size * 2.15)}px`,
+                  "--studio-text-weight": currentTextStyle.fontWeight,
                   left: `${textDraft.x * 100}%`,
                   top: `${textDraft.y * 100}%`,
                 }}
                 value={textDraft.value}
               />
             ) : null}
+            </div>
           </div>
         </div>
       </div>

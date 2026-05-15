@@ -10,9 +10,6 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
 # next.js
 /.next/
 /out/
@@ -50,16 +47,5 @@ next-env.d.ts
 # logs
 *.log
 
-# test output
-test-results/
-playwright-report/
-
 # Next.js
 .next/
-
-# Playwright
-node_modules/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/

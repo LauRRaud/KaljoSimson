@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 
 const STORAGE_KEY = "beyondframes-theme";
 const THEME_CHANGE_EVENT = "beyondframes-theme-change";
+const STUDIO_TOOL_CHANGE_EVENT = "beyondframes-studio-tool-change";
 
 function getThemeSnapshot() {
   if (typeof window === "undefined") {
@@ -27,12 +28,46 @@ function subscribeThemeChange(onStoreChange) {
   };
 }
 
+function getStudioToolSnapshot() {
+  if (typeof document === "undefined") {
+    return "brush";
+  }
+
+  return document.body.dataset.studioTool || "brush";
+}
+
+function getStudioSizeSnapshot() {
+  if (typeof document === "undefined") {
+    return "12";
+  }
+
+  return document.body.dataset.studioSize || "12";
+}
+
+function subscribeStudioToolChange(onStoreChange) {
+  window.addEventListener(STUDIO_TOOL_CHANGE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener(STUDIO_TOOL_CHANGE_EVENT, onStoreChange);
+  };
+}
+
 export default function BrushCursor() {
   const [point, setPoint] = useState(null);
   const theme = useSyncExternalStore(
     subscribeThemeChange,
     getThemeSnapshot,
     () => "light",
+  );
+  const studioTool = useSyncExternalStore(
+    subscribeStudioToolChange,
+    getStudioToolSnapshot,
+    () => "brush",
+  );
+  const studioSize = useSyncExternalStore(
+    subscribeStudioToolChange,
+    getStudioSizeSnapshot,
+    () => "12",
   );
 
   useEffect(() => {
@@ -56,6 +91,24 @@ export default function BrushCursor() {
   }, []);
 
   if (!point) return null;
+
+  const isEraser = studioTool === "eraser";
+  const eraserSize = Math.max(6, Number(studioSize) || 12);
+
+  if (isEraser) {
+    return createPortal(
+      <span
+        className="brush-cursor brush-cursor--eraser-dot"
+        aria-hidden="true"
+        style={{
+          height: `${eraserSize}px`,
+          transform: `translate3d(${point.x - eraserSize / 2}px, ${point.y - eraserSize / 2}px, 0)`,
+          width: `${eraserSize}px`,
+        }}
+      />,
+      document.body,
+    );
+  }
 
   return createPortal(
     <img
