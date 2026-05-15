@@ -3,6 +3,18 @@ import PwaRegistration from "@/components/PwaRegistration";
 import SiteAmbient from "@/components/SiteAmbient";
 import "./globals.css";
 
+const framePresetBootstrap = `
+(() => {
+  try {
+    const preset = window.localStorage.getItem("beyondframes-frame-preset");
+    if (preset === "gold" || preset === "silver") {
+      document.documentElement.dataset.framePreset = preset;
+    }
+  } catch {
+  }
+})();
+`;
+
 const headingFont = Cormorant_Garamond({
   variable: "--font-heading",
   subsets: ["latin"],
@@ -62,11 +74,15 @@ export default function RootLayout({ children }) {
   return (
     <html
       data-scroll-behavior="smooth"
+      data-frame-preset="silver"
       data-theme="light"
       lang="et"
       className={`${headingFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: framePresetBootstrap }} />
+      </head>
       <body>
         <PwaRegistration />
         <SiteAmbient />

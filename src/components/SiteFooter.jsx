@@ -21,6 +21,7 @@ export default function SiteFooter({ content }) {
           </span>
           <span className="site-footer__year">2026</span>
         </div>
+        <span className="site-footer__byline">by L. Raudsoo</span>
       </div>
     </footer>
   );

@@ -10,6 +10,7 @@ function isFramePreset(value) {
 }
 
 function applyPreset(preset) {
+  document.documentElement?.setAttribute("data-frame-preset", preset);
   document.querySelector(".page-shell")?.setAttribute("data-frame-preset", preset);
   document.body?.setAttribute("data-frame-preset", preset);
 }
