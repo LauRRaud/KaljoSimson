@@ -1,4 +1,3 @@
-import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import ArtistPortrait from "@/components/ArtistPortrait";
 import GalleryClient from "@/components/GalleryClient";
@@ -48,13 +47,14 @@ export default async function ArtistPage({ params, searchParams }) {
     <PageShell
       content={content}
       locale={locale}
+      mainClassName="page-main--profile"
       shellClassName="page-shell--gallery-surface"
     >
       <section className="section profile-hero">
         <div className="profile-nav">
-          <Link className="inline-link profile-back-link" href={withLocale("/", locale)}>
+          <a className="inline-link profile-back-link" href={withLocale("/", locale)}>
             {locale === "en" ? "Back" : "Tagasi"}
-          </Link>
+          </a>
         </div>
 
         <ArtistPortrait artist={artist} priority />
@@ -75,7 +75,7 @@ export default async function ArtistPage({ params, searchParams }) {
           </div>
         </div>
 
-        <div className="profile-biography">
+        <div className="profile-biography" lang={locale}>
           <p className="eyebrow">{locale === "en" ? "Biography" : "Biograafia"}</p>
           {biographyParagraphs.map((paragraph) => (
             <p className="section-copy" key={paragraph}>

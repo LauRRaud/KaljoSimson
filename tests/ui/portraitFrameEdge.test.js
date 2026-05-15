@@ -13,11 +13,18 @@ test("artist portrait frames use warm light edge shadows instead of dark stripes
     /\.artist-card--carousel \.portrait-shell__window,[\s\S]*?\.profile-hero > \.portrait-shell \.portrait-shell__window\s*{(?<body>[\s\S]*?)\n}/,
   );
   const windowRule = windowRuleMatch?.groups?.body || "";
+  const frameRuleMatch = globals.match(
+    /\.artist-card--carousel \.portrait-shell__frame,[\s\S]*?\.profile-hero > \.portrait-shell \.portrait-shell__frame\s*{(?<body>[\s\S]*?)\n}/,
+  );
+  const frameRule = frameRuleMatch?.groups?.body || "";
 
   assert.match(
     globals,
     /\.artist-card--carousel \.portrait-shell::before,[\s\S]*?inset -1px 0 0 rgba\(246, 226, 166, 0\.18\)/,
   );
+  assert.match(frameRule, /display:\s*grid;/);
+  assert.match(frameRule, /padding:\s*var\(--portrait-frame-width\);/);
+  assert.match(frameRule, /background:\s*var\(--frame-active-metal\);/);
   assert.match(windowRule, /0 0 0 1px rgba\(174, 136, 56, 0\.1\)/);
   assert.match(windowRule, /0 0 0 2px rgba\(255, 250, 231, 0\.2\)/);
   assert.doesNotMatch(

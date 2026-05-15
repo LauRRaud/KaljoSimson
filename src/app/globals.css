@@ -694,8 +694,28 @@ html[data-theme="dark"] .site-nav__links a::after {
   stroke-width: 1.65;
 }
 
+.theme-toggle__moon-edge {
+  stroke: rgba(232, 226, 216, 0.72);
+  stroke-width: 2.18;
+}
+
+.theme-toggle__moon-face {
+  stroke: currentColor;
+  stroke-width: 1.65;
+}
+
 .theme-toggle__icon--sun {
   display: none;
+}
+
+.theme-toggle__sun-edge {
+  stroke: rgba(232, 226, 216, 0.72);
+  stroke-width: 2.18;
+}
+
+.theme-toggle__sun-face {
+  stroke: currentColor;
+  stroke-width: 1.65;
 }
 
 html[data-theme="dark"] .theme-toggle__icon--moon {
@@ -2643,7 +2663,7 @@ p {
   --portrait-frame-width: clamp(12px, 1vw, 17px);
   aspect-ratio: 1.22 / 1;
   overflow: hidden;
-  padding: var(--portrait-frame-width);
+  padding: 0;
   border: none;
   border-radius: 0;
   background: var(--frame-active-metal);
@@ -2675,6 +2695,13 @@ p {
   box-shadow:
     0 0 0 1px rgba(174, 136, 56, 0.1),
     0 0 0 2px rgba(255, 250, 231, 0.2);
+}
+
+.artist-card--carousel .portrait-shell__frame,
+.profile-hero > .portrait-shell .portrait-shell__frame {
+  display: grid;
+  padding: var(--portrait-frame-width);
+  background: var(--frame-active-metal);
 }
 
 .artist-card--carousel .portrait-shell--image::after,
@@ -2912,7 +2939,7 @@ p {
   min-height: unset;
   aspect-ratio: 1.2 / 1;
   overflow: hidden;
-  padding: var(--portrait-frame-width);
+  padding: 0;
   border-radius: 0;
   background: var(--frame-active-metal);
   box-shadow: var(--artwork-object-shadow);
@@ -2979,6 +3006,10 @@ p {
   max-width: none;
   font-size: clamp(1.06rem, 1.28vw, 1.2rem);
   line-height: 1.72;
+  hyphens: auto;
+  overflow-wrap: normal;
+  text-wrap: pretty;
+  word-break: normal;
 }
 
 .profile-detail-grid {
@@ -5511,6 +5542,7 @@ html[data-theme="dark"] .admin-divider {
     margin: 0;
     padding: 14px 16px 0;
     align-items: center;
+    transform: none;
   }
 
   .site-nav {
@@ -5875,18 +5907,22 @@ html[data-theme="dark"] .admin-divider {
     padding: 24px;
   }
 
+  .page-main--profile {
+    width: min(100%, calc(100vw - 16px));
+  }
+
   .profile-hero {
     width: 100%;
-    max-width: calc(100vw - 40px);
+    max-width: 100%;
     margin-inline: 0;
-    padding-inline: 22px;
+    padding-inline: clamp(14px, 4vw, 18px);
     overflow: hidden;
   }
 
   .profile-hero > .portrait-shell {
     justify-self: stretch;
-    width: min(100%, calc(100vw - 84px));
-    max-width: calc(100vw - 84px);
+    width: min(100%, calc(100vw - 48px));
+    max-width: calc(100vw - 48px);
     border-radius: 0;
   }
 
@@ -5895,14 +5931,17 @@ html[data-theme="dark"] .admin-divider {
   .profile-tags-actions,
   .profile-tags-actions .pill-row {
     width: 100%;
-    max-width: calc(100vw - 84px);
+    max-width: calc(100vw - 48px);
     min-width: 0;
   }
 
   .profile-copy .section-copy,
   .profile-biography .section-copy {
     max-width: 100%;
-    overflow-wrap: break-word;
+    hyphens: auto;
+    overflow-wrap: normal;
+    text-wrap: pretty;
+    word-break: normal;
   }
 
   .profile-tags-actions .pill-row {
