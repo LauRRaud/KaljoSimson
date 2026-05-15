@@ -34,10 +34,32 @@ function normalizeFramePreset(value) {
   return VALID_FRAME_PRESETS.has(value) ? value : "silver";
 }
 
-function normalizeText(value, fallback) {
+function toLocalizedFallback(value) {
+  if (typeof value === "string") {
+    return {
+      et: value,
+      en: value,
+    };
+  }
+
   return {
-    et: stringOrFallback(value?.et, fallback.et),
-    en: stringOrFallback(value?.en, fallback.en),
+    et: stringOrFallback(value?.et),
+    en: stringOrFallback(value?.en),
+  };
+}
+
+function normalizeText(value, fallback) {
+  const base = toLocalizedFallback(fallback);
+  const source =
+    typeof value === "string"
+      ? { et: value, en: value }
+      : value && typeof value === "object"
+        ? value
+        : {};
+
+  return {
+    et: stringOrFallback(source.et, base.et),
+    en: stringOrFallback(source.en, base.en),
   };
 }
 
@@ -68,6 +90,11 @@ function normalizeArtist(artist, index) {
   const artworksSource = Array.isArray(artist?.artworks)
     ? artist.artworks
     : base.artworks;
+  const fallbackFocus = Array.isArray(base.focus) ? base.focus : [];
+  const focusSource =
+    Array.isArray(artist?.focus) && artist.focus.length
+      ? artist.focus
+      : fallbackFocus;
 
   return {
     slug:
@@ -88,13 +115,12 @@ function normalizeArtist(artist, index) {
     biography: normalizeText(artist?.biography, base.biography),
     statement: normalizeText(artist?.statement, base.statement),
     galleryIntro: normalizeText(artist?.galleryIntro, base.galleryIntro),
-    focus:
-      Array.isArray(artist?.focus) && artist.focus.length
-        ? artist.focus
-            .map((item) => stringOrFallback(item))
-            .filter(Boolean)
-            .slice(0, 8)
-        : base.focus,
+    focus: focusSource
+      .map((item, itemIndex) =>
+        normalizeText(item, fallbackFocus[itemIndex % fallbackFocus.length] || ""),
+      )
+      .filter((item) => item.et || item.en)
+      .slice(0, 8),
     artworks: artworksSource.map((artwork, artworkIndex) =>
       normalizeArtwork(artwork, index, artworkIndex),
     ),

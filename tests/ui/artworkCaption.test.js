@@ -97,19 +97,19 @@ test("mobile gallery room captions show only full title and author", () => {
 test("mobile landscape gallery room gives artwork more height with compact caption", () => {
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*[\s\S]*?34px[\s\S]*?18px;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room__viewport\s*\{[\s\S]*?padding:\s*[\s\S]*?34px[\s\S]*?18px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(74svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__image\s*\{[\s\S]*?max-height:\s*min\(74svh,\s*calc\(var\(--gallery-room-slot\) \* 0\.58\)\);/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?white-space:\s*nowrap;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p\s*\{[\s\S]*?flex-wrap:\s*nowrap;[\s\S]*?white-space:\s*nowrap;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?font-size:\s*1\.1rem;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.gallery-room \.artwork-frame__caption p span:first-child\s*\{[\s\S]*?flex:\s*0 1 auto;[\s\S]*?font-size:\s*1\.1rem;/,
   );
 });
 
@@ -147,7 +147,9 @@ test("artwork frames use one square active metallic frame in both themes", () =>
     /--frame-silver-metal:[\s\S]*?linear-gradient\(180deg,\s*rgba\(255,\s*255,\s*255,\s*0\.54\)[\s\S]*?linear-gradient\(90deg,[\s\S]*?linear-gradient\(180deg,\s*#edf2f3\s*0%,\s*#c8d1d7\s*43%,\s*#aeb9c2\s*100%/,
   );
   assert.match(css, /--frame-active-metal:\s*var\(--frame-silver-metal\);/);
-  assert.match(css, /\.page-shell\[data-frame-preset="gold"\]\s*\{[\s\S]*?--frame-active-metal:\s*var\(--frame-gold-metal\);/);
+  assert.match(css, /body\[data-frame-preset="gold"\],\s*\.page-shell\[data-frame-preset="gold"\]\s*\{[\s\S]*?--frame-active-metal:\s*var\(--frame-gold-metal\);/);
+  assert.match(css, /body\[data-frame-preset="gold"\],\s*\.page-shell\[data-frame-preset="gold"\]\s*\{[\s\S]*?--frame-surface-ring:\s*rgba\(174,\s*136,\s*56,\s*0\.28\);/);
+  assert.match(css, /body\[data-frame-preset="gold"\],\s*\.page-shell\[data-frame-preset="gold"\]\s*\{[\s\S]*?--frame-surface-ring-highlight:\s*rgba\(248,\s*226,\s*160,\s*0\.48\);/);
   assert.doesNotMatch(css, /rgba\(42,\s*50,\s*56,\s*0\.16\)/);
   assert.doesNotMatch(css, /#89939a/);
   assert.doesNotMatch(css, /#747b82/);
@@ -159,7 +161,7 @@ test("artwork frames use one square active metallic frame in both themes", () =>
   assert.match(windowRule, /border:\s*none;/);
   assert.match(
     windowRule,
-    /box-shadow:\s*[\s\S]*?inset 10px 0 14px -15px rgba\(18,\s*24,\s*29,\s*0\.42\),[\s\S]*?inset 0 -12px 16px -15px rgba\(18,\s*24,\s*29,\s*0\.42\),[\s\S]*?0 10px 14px -9px rgba\(75,\s*52,\s*28,\s*0\.3\),[\s\S]*?0 22px 26px -20px rgba\(75,\s*52,\s*28,\s*0\.24\);/,
+    /box-shadow:\s*[\s\S]*?inset 10px 0 14px -15px rgba\(18,\s*24,\s*29,\s*0\.42\),[\s\S]*?inset 0 -12px 16px -15px rgba\(18,\s*24,\s*29,\s*0\.42\),[\s\S]*?var\(--artwork-object-shadow\);/,
   );
   assert.doesNotMatch(windowRule, /0 28px 32px -18px rgba\(75,\s*52,\s*28,\s*0\.34\)/);
   assert.match(
@@ -168,7 +170,11 @@ test("artwork frames use one square active metallic frame in both themes", () =>
   );
   assert.match(
     css,
-    /html\[data-theme="dark"\]\s+\.artwork-frame__window\s*\{[\s\S]*?inset 10px 0 14px -15px rgba\(0,\s*0,\s*0,\s*0\.52\),[\s\S]*?0 22px 26px -20px rgba\(0,\s*0,\s*0,\s*0\.28\);/,
+    /body\[data-frame-preset="gold"\] \.artwork-frame__window::before,\s*\.page-shell\[data-frame-preset="gold"\] \.artwork-frame__window::before\s*\{[\s\S]*?rgba\(126,\s*91,\s*30,\s*0\.08\)[\s\S]*?opacity:\s*0\.56;/,
+  );
+  assert.match(
+    css,
+    /html\[data-theme="dark"\]\s+\.artwork-frame__window\s*\{[\s\S]*?inset 10px 0 14px -15px rgba\(0,\s*0,\s*0,\s*0\.52\),[\s\S]*?var\(--artwork-object-shadow\);/,
   );
   assert.match(
     css,
@@ -176,13 +182,13 @@ test("artwork frames use one square active metallic frame in both themes", () =>
   );
   assert.match(
     css,
-    /html\[data-theme="dark"\]\s+\.artwork-frame__window::after\s*\{[\s\S]*?inset 0 0 0 1px rgba\(16,\s*19,\s*22,\s*0\.54\),[\s\S]*?inset 0 0 0 2px rgba\(255,\s*255,\s*255,\s*0\.26\)/,
+    /html\[data-theme="dark"\]\s+\.artwork-frame__window::after\s*\{[\s\S]*?inset 0 0 0 1px var\(--frame-window-inner-line\),[\s\S]*?inset 0 0 0 2px var\(--frame-window-inner-highlight\)/,
   );
   assert.doesNotMatch(css, /linear-gradient\(118deg/);
   assert.doesNotMatch(css, /repeating-linear-gradient\(90deg/);
   assert.match(
     css,
-    /\.artwork-frame__window::after\s*\{[\s\S]*?inset:\s*clamp\(10px,\s*0\.88vw,\s*13px\);[\s\S]*?inset 0 0 0 1px rgba\(45,\s*56,\s*64,\s*0\.34\)[\s\S]*?inset 0 0 0 2px rgba\(255,\s*255,\s*255,\s*0\.34\)/,
+    /\.artwork-frame__window::after\s*\{[\s\S]*?inset:\s*clamp\(10px,\s*0\.88vw,\s*13px\);[\s\S]*?inset 0 0 0 1px var\(--frame-window-inner-line\)[\s\S]*?inset 0 0 0 2px var\(--frame-window-inner-highlight\)/,
   );
   assert.doesNotMatch(css, /inset 0 -2px 6px/);
   assert.doesNotMatch(css, /inset 0 0 18px rgba\(50,\s*58,\s*64,\s*0\.28\)/);
@@ -193,15 +199,15 @@ test("artwork frames use one square active metallic frame in both themes", () =>
   assert.match(surfaceShadowRule, /border-radius:\s*0;/);
   assert.match(
     surfaceShadowRule,
-    /box-shadow:\s*[\s\S]*?inset 0 0 0 1px rgba\(36,\s*46,\s*55,\s*0\.2\),[\s\S]*?inset 10px 0 12px -13px rgba\(18,\s*24,\s*29,\s*0\.46\),[\s\S]*?inset 0 -10px 14px -13px rgba\(18,\s*24,\s*29,\s*0\.42\);/,
+    /box-shadow:\s*[\s\S]*?inset 0 0 0 1px var\(--frame-surface-inner-line\),[\s\S]*?inset 10px 0 12px -13px var\(--frame-surface-inner-side-shadow\),[\s\S]*?inset 0 -10px 14px -13px var\(--frame-surface-inner-bottom-shadow\);/,
   );
   assert.match(
     surfaceShadowRule,
-    /radial-gradient\(circle at 0 0,\s*rgba\(24,\s*30,\s*36,\s*0\.16\),\s*transparent 18%\)/,
+    /radial-gradient\(circle at 0 0,\s*var\(--frame-surface-corner-shadow\),\s*transparent 18%\)/,
   );
   assert.match(
     surfaceRule,
-    /box-shadow:\s*[\s\S]*?0 0 0 clamp\(7px,\s*0\.7vw,\s*10px\) rgba\(55,\s*65,\s*73,\s*0\.34\),[\s\S]*?0 0 0 calc\(clamp\(7px,\s*0\.7vw,\s*10px\) \+ 1px\) rgba\(255,\s*255,\s*255,\s*0\.38\),[\s\S]*?0 2px 5px rgba\(37,\s*28,\s*20,\s*0\.14\);/,
+    /box-shadow:\s*[\s\S]*?0 0 0 clamp\(7px,\s*0\.7vw,\s*10px\) var\(--frame-surface-ring\),[\s\S]*?0 0 0 calc\(clamp\(7px,\s*0\.7vw,\s*10px\) \+ 1px\) var\(--frame-surface-ring-highlight\),[\s\S]*?0 2px 5px var\(--frame-surface-drop-shadow\);/,
   );
   assert.doesNotMatch(css, /\.artwork-frame__window--obsidian\s*\{[\s\S]*?background:/);
   assert.doesNotMatch(css, /\.artwork-frame__window--ivory\s*\{[\s\S]*?background:/);

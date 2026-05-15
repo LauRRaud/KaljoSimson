@@ -74,6 +74,14 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   const lightboxImageWindowRef = useRef(null);
   const roomViewportRef = useRef(null);
   const roomTravelFrameRef = useRef(null);
+  const magnifierTouchRef = useRef({
+    lastTapAt: 0,
+    lastTapX: 0,
+    lastTapY: 0,
+    moved: false,
+    startX: 0,
+    startY: 0,
+  });
   const hasArtworks = artist.artworks.length > 0;
   const isRoom = variant === "room";
   const roomTravelDuration = 3200;
@@ -275,6 +283,17 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
       return;
     }
 
+    if (event.pointerType === "touch") {
+      const distance = Math.hypot(
+        event.clientX - magnifierTouchRef.current.startX,
+        event.clientY - magnifierTouchRef.current.startY,
+      );
+
+      if (distance > 8) {
+        magnifierTouchRef.current.moved = true;
+      }
+    }
+
     const imageWindow = lightboxImageWindowRef.current;
     const image = imageWindow?.querySelector(".artwork-frame__image");
 
@@ -303,8 +322,72 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
       return;
     }
 
+    if (event.pointerType === "touch") {
+      event.preventDefault();
+      magnifierTouchRef.current.startX = event.clientX;
+      magnifierTouchRef.current.startY = event.clientY;
+      magnifierTouchRef.current.moved = false;
+      try {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+      } catch {
+        // Some synthetic pointer events cannot be captured; position updates still work.
+      }
+      updateMagnifierPosition(event);
+      return;
+    }
+
     setIsMagnifierActive(false);
     setMagnifierPosition(defaultMagnifierPosition);
+  }
+
+  function handleMagnifierPointerUp(event) {
+    if (!isMagnifierActive || event.pointerType !== "touch") {
+      return;
+    }
+
+    event.preventDefault();
+    try {
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+    } catch {
+      // Ignore release attempts for pointers the browser did not capture.
+    }
+
+    if (magnifierTouchRef.current.moved) {
+      magnifierTouchRef.current.lastTapAt = 0;
+      return;
+    }
+
+    const now = window.performance.now();
+    const tapDistance = Math.hypot(
+      event.clientX - magnifierTouchRef.current.lastTapX,
+      event.clientY - magnifierTouchRef.current.lastTapY,
+    );
+    const isDoubleTap =
+      now - magnifierTouchRef.current.lastTapAt < 320 && tapDistance < 34;
+
+    if (isDoubleTap) {
+      setIsMagnifierActive(false);
+      setMagnifierPosition(defaultMagnifierPosition);
+      magnifierTouchRef.current.lastTapAt = 0;
+      return;
+    }
+
+    magnifierTouchRef.current.lastTapAt = now;
+    magnifierTouchRef.current.lastTapX = event.clientX;
+    magnifierTouchRef.current.lastTapY = event.clientY;
+  }
+
+  function handleMagnifierPointerCancel(event) {
+    if (event.pointerType !== "touch") {
+      return;
+    }
+
+    try {
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+    } catch {
+      // Ignore release attempts for pointers the browser did not capture.
+    }
+    magnifierTouchRef.current.moved = false;
   }
 
   function getMagnifierPositionFromPoint({
@@ -652,6 +735,8 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
                   }`}
                   onPointerDown={handleMagnifierPointerDown}
                   onPointerMove={updateMagnifierPosition}
+                  onPointerUp={handleMagnifierPointerUp}
+                  onPointerCancel={handleMagnifierPointerCancel}
                   ref={lightboxImageWindowRef}
                 >
                   <div className="lightbox__artwork-frame">

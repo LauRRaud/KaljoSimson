@@ -36,12 +36,17 @@ test("artist profile panels use the same glass surface as contact", () => {
 
   assert.match(
     css,
-    /\.section--contact\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg\);[\s\S]*?box-shadow:\s*var\(--glass-panel-shadow\);[\s\S]*?border-radius:\s*28px;[\s\S]*?backdrop-filter:\s*var\(--glass-blur\);/,
+    /\.section--contact\s*\{[\s\S]*?background:\s*var\(--glass-panel-bg\);[\s\S]*?box-shadow:\s*[\s\S]*?0 0 0 1px var\(--glass-ring\),[\s\S]*?var\(--artwork-object-shadow\);[\s\S]*?border-radius:\s*28px;[\s\S]*?backdrop-filter:\s*var\(--glass-blur\);/,
   );
   assert.doesNotMatch(profileHeroRule, /--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);/);
+  assert.match(profileHeroRule, /background:\s*var\(--glass-panel-bg\);/);
+  assert.match(profileHeroRule, /0 0 0 1px var\(--glass-ring\)/);
+  assert.match(profileHeroRule, /var\(--artwork-object-shadow\)/);
   assert.match(profileHeroRule, /border-radius:\s*28px;/);
   assert.doesNotMatch(profileGalleryRule, /--glass-panel-bg:\s*var\(--glass-panel-bg-strong\);/);
   assert.match(profileGalleryRule, /background:\s*var\(--glass-panel-bg\);/);
+  assert.match(profileGalleryRule, /0 0 0 1px var\(--glass-ring\)/);
+  assert.match(profileGalleryRule, /var\(--artwork-object-shadow\)/);
   assert.match(profileGalleryRule, /border-radius:\s*28px;/);
   assert.match(
     css,

@@ -88,6 +88,32 @@ function renderContactCopy(copy) {
   );
 }
 
+function getFocusKey(focus, index) {
+  return `${getCopy(focus, "et") || getCopy(focus, "en") || "focus"}-${index}`;
+}
+
+function getFocusInputValue(focusItems, locale) {
+  return focusItems
+    .map((focus) => getCopy(focus, locale))
+    .filter(Boolean)
+    .join(", ");
+}
+
+function parseFocusInput(value, focusItems, locale) {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item, index) => {
+      const current = focusItems[index] || {};
+
+      return {
+        et: locale === "et" ? item : getCopy(current, "et"),
+        en: locale === "en" ? item : getCopy(current, "en"),
+      };
+    });
+}
+
 function AdminSectionActions({ isPending, onExport, onSave, status, editorLocale }) {
   return (
     <div className="admin-section-actions">
@@ -941,9 +967,9 @@ export default function AdminStudio({ initialContent }) {
 
                         <div className="profile-tags-actions admin-artist-editor__tags">
                           <div className="pill-row">
-                            {artist.focus.map((focus) => (
-                              <span className="pill" key={focus}>
-                                {focus}
+                            {artist.focus.map((focus, focusIndex) => (
+                              <span className="pill" key={getFocusKey(focus, focusIndex)}>
+                                {getCopy(focus, editorLocale)}
                               </span>
                             ))}
                           </div>
@@ -963,13 +989,14 @@ export default function AdminStudio({ initialContent }) {
                                 updateArtist(
                                   artistIndex,
                                   "focus",
-                                  event.target.value
-                                    .split(",")
-                                    .map((item) => item.trim())
-                                    .filter(Boolean),
+                                  parseFocusInput(
+                                    event.target.value,
+                                    artist.focus,
+                                    editorLocale,
+                                  ),
                                 )
                               }
-                              value={artist.focus.join(", ")}
+                              value={getFocusInputValue(artist.focus, editorLocale)}
                             />
                             <span className="field-hint">Eralda komadega.</span>
                           </div>

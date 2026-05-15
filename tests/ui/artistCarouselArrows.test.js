@@ -50,9 +50,10 @@ test("artist carousel desktop arrows sit inside the lower outer side portraits",
   assert.match(baseRule, /transform:\s*translate\(var\(--carousel-arrow-translate-x\),\s*-50%\);/);
   assert.doesNotMatch(baseRule, /inset\s+0\s+1px/);
   assert.match(baseRule, /background:\s*var\(--glass-panel-bg\);/);
-  assert.match(baseRule, /box-shadow:\s*var\(--glass-panel-shadow\);/);
+  assert.match(baseRule, /box-shadow:\s*var\(--floating-control-shadow\);/);
   assert.match(hoverRule, /background:\s*var\(--glass-panel-bg-strong\);/);
   assert.match(hoverRule, /color:\s*var\(--text\);/);
+  assert.match(hoverRule, /box-shadow:\s*var\(--floating-control-shadow-hover\);/);
   assert.match(hoverRule, /transform:\s*translate\(var\(--carousel-arrow-translate-x\),\s*-50%\);/);
   assert.match(arrowGlyphRule, /border-radius:\s*3px;/);
   assert.match(leftRule, /left:\s*max\(\s*0px,\s*calc\(\s*50% - var\(--carousel-side-offset\) - \(var\(--carousel-width\) \/ 2\) \+\s*var\(--carousel-arrow-inset\)\s*\)\s*\);/);
@@ -104,15 +105,39 @@ test("artist carousel portraits and titles use a calmer profile-style crop", () 
   const portraitImageRule = getRule(".artist-card--carousel .portrait-shell__image");
   const headingRule = getRule(".artist-card--carousel h3");
 
-  assert.match(cardRule, /0\s+14px\s+14px\s+-16px\s+rgba\(75,\s*52,\s*28,\s*0\.28\)/);
-  assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
-  assert.match(portraitRule, /border-radius:\s*6px;/);
-  assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
-  assert.match(portraitRule, /0\s+30px\s+34px\s+-22px\s+rgba\(45,\s*31,\s*20,\s*0\.38\)/);
+  assert.match(cardRule, /transition:\s*none;/);
+  assert.match(cardRule, /0 0 0 1px var\(--glass-ring\)/);
+  assert.match(cardRule, /var\(--artwork-object-shadow\)/);
   assert.match(
     css,
-    /\.artist-card--carousel \.portrait-shell::before,\s*\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?padding:\s*clamp\(12px,\s*1vw,\s*17px\);[\s\S]*?var\(--frame-active-metal\);[\s\S]*?box-shadow:\s*inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.42\);[\s\S]*?mask-composite:\s*exclude;/,
+    /\.artist-card--carousel:hover\s*\{[\s\S]*?0 0 0 1px var\(--glass-ring\),[\s\S]*?var\(--artwork-object-shadow\);/,
   );
+  assert.match(portraitRule, /aspect-ratio:\s*1\.22\s*\/\s*1;/);
+  assert.match(portraitRule, /padding:\s*var\(--portrait-frame-width\);/);
+  assert.match(portraitRule, /border-radius:\s*0;/);
+  assert.match(portraitRule, /background:\s*var\(--frame-active-metal\);/);
+  assert.match(portraitRule, /box-shadow:\s*var\(--artwork-object-shadow\);/);
+  assert.match(
+    css,
+    /html\[data-theme="dark"\] \.artist-card--carousel \.portrait-shell\s*\{[\s\S]*?background:\s*var\(--frame-active-metal\);[\s\S]*?box-shadow:\s*var\(--artwork-object-shadow\);/,
+  );
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell__window,\s*\.profile-hero > \.portrait-shell \.portrait-shell__window\s*\{[\s\S]*?border-radius:\s*0;[\s\S]*?0 0 0 1px rgba\(45,\s*56,\s*64,\s*0\.3\)/,
+  );
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\r?\n\.profile-hero > \.portrait-shell::before\s*\{/,
+  );
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\r?\n\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?background:\s*none;/,
+  );
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\r?\n\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.54\)/,
+  );
+  assert.doesNotMatch(css, /mask-composite:\s*exclude;/);
   assert.doesNotMatch(css, /inset 3px 0 5px -4px rgba\(36,\s*46,\s*55,\s*0\.38\)/);
   assert.doesNotMatch(css, /inset -3px 0 5px -4px rgba\(36,\s*46,\s*55,\s*0\.32\)/);
   assert.doesNotMatch(css, /inset 0 -4px 7px -6px rgba\(36,\s*46,\s*55,\s*0\.46\)/);

@@ -82,9 +82,18 @@
         "en": "Kalevi Poiss's gallery will be added once the works and artwork data have been assembled."
       },
       "focus": [
-        "portree",
-        "maal",
-        "kohalolu"
+        {
+          "et": "portree",
+          "en": "portrait"
+        },
+        {
+          "et": "maal",
+          "en": "painting"
+        },
+        {
+          "et": "kohalolu",
+          "en": "presence"
+        }
       ],
       "artworks": []
     },
@@ -117,9 +126,18 @@
         "en": "Kaljo Simson's gallery brings together the available works from the provided folder. A unified frame language allows the colour and figurative tension of the paintings to come forward."
       },
       "focus": [
-        "värv",
-        "kujundlikkus",
-        "teatraalsus"
+        {
+          "et": "värv",
+          "en": "colour"
+        },
+        {
+          "et": "kujundlikkus",
+          "en": "figuration"
+        },
+        {
+          "et": "teatraalsus",
+          "en": "theatricality"
+        }
       ],
       "artworks": [
         {
@@ -257,9 +275,18 @@
         "en": "A dedicated selection of van Gogh's works will be added here."
       },
       "focus": [
-        "värv",
-        "pintslikiri",
-        "intensiivsus"
+        {
+          "et": "värv",
+          "en": "colour"
+        },
+        {
+          "et": "pintslikiri",
+          "en": "brushwork"
+        },
+        {
+          "et": "intensiivsus",
+          "en": "intensity"
+        }
       ],
       "artworks": []
     }

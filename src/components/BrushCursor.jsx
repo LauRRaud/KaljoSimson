@@ -41,13 +41,7 @@ export default function BrushCursor() {
     const onPointerMove = (event) => {
       if (event.pointerType && event.pointerType !== "mouse") return;
 
-      const target = event.target;
-      const isOverStudioPaper =
-        target instanceof Element &&
-        Boolean(target.closest(".studio-canvas, .studio-paper"));
-
       setPoint({
-        isOverStudioPaper,
         x: event.clientX,
         y: event.clientY,
       });
@@ -61,16 +55,12 @@ export default function BrushCursor() {
     };
   }, []);
 
-  if (!point || point.isOverStudioPaper) return null;
+  if (!point) return null;
 
   return createPortal(
     <img
       className="brush-cursor brush-cursor--paint-brush2"
-      src={
-        theme === "dark" && !point.isOverStudioPaper
-          ? "/paint-brush2-dark.svg"
-          : "/paint-brush2.svg"
-      }
+      src={theme === "dark" ? "/paint-brush2-dark.svg" : "/paint-brush2.svg"}
       alt=""
       aria-hidden="true"
       style={{

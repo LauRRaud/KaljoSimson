@@ -36,9 +36,11 @@ test("lightbox close button lives inside the right panel and title stays restrai
   assert.match(css, /\.lightbox__aside\s*\{[\s\S]*?overflow:\s*hidden;/);
   assert.match(css, /\.lightbox__aside\s*\{[\s\S]*?scrollbar-width:\s*none;/);
   assert.match(css, /\.lightbox__aside::-webkit-scrollbar\s*\{[\s\S]*?display:\s*none;/);
-  assert.match(css, /\.lightbox__close\s*\{[\s\S]*?width:\s*36px;[\s\S]*?background:\s*rgba\(255,\s*252,\s*246,\s*0\.08\);[\s\S]*?box-shadow:\s*inset 0 0 0 1px rgba\(255,\s*255,\s*255,\s*0\.16\);/);
+  assert.match(css, /\.lightbox__close\s*\{[\s\S]*?width:\s*36px;[\s\S]*?background:\s*rgba\(255,\s*252,\s*246,\s*0\.08\);[\s\S]*?box-shadow:[\s\S]*?inset 0 0 0 1px rgba\(255,\s*255,\s*255,\s*0\.18\),[\s\S]*?var\(--floating-control-shadow\);/);
+  assert.match(css, /\.lightbox__close\s*\{[\s\S]*?top:\s*clamp\(14px,\s*1\.35vw,\s*18px\);[\s\S]*?right:\s*clamp\(14px,\s*1\.35vw,\s*18px\);/);
+  assert.match(css, /\.lightbox__close:hover\s*\{[\s\S]*?box-shadow:[\s\S]*?inset 0 0 0 1px rgba\(255,\s*255,\s*255,\s*0\.3\),[\s\S]*?var\(--floating-control-shadow-hover\);/);
   assert.match(css, /\.lightbox__close::before,\s*\.lightbox__close::after\s*\{[\s\S]*?width:\s*17px;[\s\S]*?height:\s*1\.5px;/);
-  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.lightbox__close\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?top:\s*14px;[\s\S]*?right:\s*14px;[\s\S]*?align-self:\s*auto;/);
+  assert.match(css, /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.lightbox__close\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?top:\s*10px;[\s\S]*?right:\s*10px;[\s\S]*?align-self:\s*auto;/);
   assert.match(css, /font-size:\s*clamp\(1\.95rem,\s*2\.3vw,\s*2\.65rem\);/);
   assert.match(css, /line-height:\s*1\.02;/);
   assert.match(css, /\.lightbox__caption \.inline-copy\s*\{[\s\S]*?font-size:\s*clamp\(1rem,\s*1\.1vw,\s*1\.16rem\);/);
@@ -84,15 +86,22 @@ test("lightbox includes an artwork magnifier toggle and lens layer", () => {
   assert.match(galleryClient, /getMagnifierPositionByToggle\(toggle\)/);
   assert.match(galleryClient, /function handleMagnifierPointerDown\(event\)/);
   assert.match(galleryClient, /event\.target\.closest\?\.\("\.lightbox__magnifier-toggle"\)/);
-  assert.match(galleryClient, /if \(isMagnifierActive\)\s*\{[\s\S]*?event\.preventDefault\(\);[\s\S]*?setIsMagnifierActive\(false\);[\s\S]*?return;/);
+  assert.match(galleryClient, /if \(event\.pointerType === "touch"\)\s*\{[\s\S]*?event\.preventDefault\(\);[\s\S]*?setPointerCapture\?\.\(event\.pointerId\);[\s\S]*?updateMagnifierPosition\(event\);[\s\S]*?return;/);
+  assert.match(galleryClient, /function handleMagnifierPointerUp\(event\)/);
+  assert.match(galleryClient, /const isDoubleTap =[\s\S]*?now - magnifierTouchRef\.current\.lastTapAt < 320 && tapDistance < 34;/);
+  assert.match(galleryClient, /if \(isDoubleTap\)\s*\{[\s\S]*?setIsMagnifierActive\(false\);[\s\S]*?setMagnifierPosition\(defaultMagnifierPosition\);/);
   assert.match(css, /\.lightbox__magnifier-toggle\s*\{[\s\S]*?border-radius:\s*999px;/);
   assert.match(css, /\.lightbox__magnifier-toggle:hover,[\s\S]*?\.lightbox__magnifier-toggle\[aria-pressed="true"\]\s*\{[\s\S]*?color:\s*var\(--text\);[\s\S]*?background:\s*var\(--glass-control-bg\);/);
   assert.match(css, /\.lightbox__image-window\s*\{[\s\S]*?--magnifier-control-space:\s*calc\([\s\S]*?padding-left:\s*var\(--magnifier-control-space\);/);
   assert.match(css, /\.lightbox__magnifier-toggle\s*\{[\s\S]*?left:\s*0;[\s\S]*?top:\s*50%;[\s\S]*?transform:\s*translate\(calc\(-100% - var\(--magnifier-control-gap\)\),\s*-50%\);/);
   assert.match(css, /\.lightbox__magnifier-toggle::before\s*\{[\s\S]*?border:\s*2px solid currentColor;/);
+  assert.match(css, /--magnifier-lens-ring:\s*#c8d1d7;/);
+  assert.match(css, /body\[data-frame-preset="gold"\],[\s\S]*?--magnifier-lens-ring:\s*#dfbd73;/);
+  assert.match(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?border:\s*2\.5px solid var\(--magnifier-lens-ring\);/);
+  assert.doesNotMatch(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?0 0 0 8px rgba\(255,\s*252,\s*246,\s*0\.22\)/);
   assert.match(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?background-size:\s*var\(--magnifier-bg-width,\s*220%\) var\(--magnifier-bg-height,\s*auto\);/);
   assert.match(css, /\.lightbox__magnifier-lens\s*\{[\s\S]*?background-position:\s*var\(--magnifier-bg-x,\s*50%\) var\(--magnifier-bg-y,\s*50%\);/);
-  assert.match(css, /\.lightbox__image-window--magnifying\s*\{[\s\S]*?cursor:\s*none;/);
+  assert.match(css, /\.lightbox__image-window--magnifying\s*\{[\s\S]*?cursor:\s*none;[\s\S]*?touch-action:\s*none;/);
   assert.match(css, /\.lightbox__image-window--magnifying \.lightbox__magnifier-lens,[\s\S]*?\{[\s\S]*?cursor:\s*none;/);
   assert.match(css, /body\.is-magnifying-artwork,[\s\S]*?\{[\s\S]*?cursor:\s*none !important;/);
   assert.match(css, /body\.is-magnifying-artwork \.brush-cursor\s*\{[\s\S]*?visibility:\s*hidden;/);
@@ -124,7 +133,11 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(orientation:\s*portrait\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?gap:\s*10px;[\s\S]*?padding:\s*16px 20px 12px;/,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.lightbox__magnifier-toggle\s*\{[\s\S]*?left:\s*50%;[\s\S]*?top:\s*100%;[\s\S]*?transform:\s*translate\(-50%,\s*10px\);[\s\S]*?\.lightbox__image-window\s*\{[\s\S]*?padding-left:\s*0;[\s\S]*?padding-bottom:\s*54px;/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*760px\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?gap:\s*10px;[\s\S]*?padding:\s*18px 18px 18px 22px;[\s\S]*?transform:\s*translateY\(-10px\);/,
   );
   assert.match(
     css,
@@ -152,47 +165,51 @@ test("mobile lightbox gives portrait artwork more room and keeps landscape balan
   );
   assert.match(
     css,
-    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*calc\(var\(--lightbox-panel-height\) \* 1\.34\)\)\s*clamp\(294px,\s*31vw,\s*360px\);[\s\S]*?gap:\s*clamp\(14px,\s*1\.8vw,\s*24px\);[\s\S]*?transform:\s*none;/,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*calc\(var\(--lightbox-panel-height\) \* 1\.48\)\)\s*clamp\(230px,\s*25vw,\s*300px\);[\s\S]*?gap:\s*clamp\(10px,\s*1\.4vw,\s*16px\);[\s\S]*?transform:\s*none;/,
   );
   assert.match(
     css,
-    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(88svh,\s*400px\);/,
+    /@media \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-panel-height:\s*min\(92svh,\s*460px\);/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*calc\(var\(--lightbox-panel-height\) \* 1\.34\)\)\s*clamp\(294px,\s*31vw,\s*360px\);[\s\S]*?gap:\s*clamp\(14px,\s*1\.8vw,\s*24px\);[\s\S]*?transform:\s*none;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*calc\(var\(--lightbox-panel-height\) \* 1\.48\)\)\s*clamp\(230px,\s*25vw,\s*300px\);[\s\S]*?gap:\s*clamp\(10px,\s*1\.4vw,\s*16px\);[\s\S]*?transform:\s*none;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?overflow-y:\s*auto;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__sheet\s*\{[\s\S]*?--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 44px\);/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__caption\s*\{[\s\S]*?flex:\s*0 0 auto;[\s\S]*?min-height:\s*auto;[\s\S]*?padding-top:\s*0;[\s\S]*?padding-right:\s*10px;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__aside\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?overflow-y:\s*auto;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__caption\s*\{[\s\S]*?flex:\s*0 0 auto;[\s\S]*?min-height:\s*auto;[\s\S]*?padding-top:\s*0;[\s\S]*?padding-right:\s*10px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?gap:\s*4px;[\s\S]*?line-height:\s*1\.12;[\s\S]*?margin-top:\s*4px;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details div\s*\{[\s\S]*?display:\s*flex;[\s\S]*?gap:\s*8px;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details\s*\{[\s\S]*?gap:\s*4px;[\s\S]*?line-height:\s*1\.12;[\s\S]*?margin-top:\s*4px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details dd\s*\{[\s\S]*?display:\s*block;[\s\S]*?white-space:\s*nowrap;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details div\s*\{[\s\S]*?display:\s*flex;[\s\S]*?gap:\s*8px;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__caption \.eyebrow\s*\{[\s\S]*?font-size:\s*0\.86rem;[\s\S]*?white-space:\s*nowrap;[\s\S]*?\.lightbox__caption h2\s*\{[\s\S]*?font-size:\s*clamp\(1\.52rem,\s*4vw,\s*1\.84rem\);/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__details dd\s*\{[\s\S]*?display:\s*block;[\s\S]*?white-space:\s*nowrap;/,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*1100px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__nav-button\s*\{[\s\S]*?min-height:\s*32px;[\s\S]*?font-size:\s*0\.84rem;/,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__caption \.eyebrow\s*\{[\s\S]*?font-size:\s*0\.86rem;[\s\S]*?white-space:\s*nowrap;[\s\S]*?\.lightbox__caption h2\s*\{[\s\S]*?font-size:\s*clamp\(1\.52rem,\s*4vw,\s*1\.84rem\);/,
+  );
+  assert.match(
+    css,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*\{[\s\S]*?\.lightbox__nav-button\s*\{[\s\S]*?min-height:\s*32px;[\s\S]*?font-size:\s*0\.84rem;/,
   );
 });
 
@@ -200,3 +217,4 @@ test("gallery artwork frames use a consistent visual footprint", () => {
   assert.match(css, /\.gallery-grid \.artwork-frame__window\s*\{[\s\S]*?height:\s*clamp\(300px,\s*25vw,\s*430px\);/);
   assert.match(css, /\.gallery-grid \.artwork-frame__mount,\s*\.gallery-grid \.artwork-frame__surface\s*\{[\s\S]*?height:\s*100%;/);
 });
+

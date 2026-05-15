@@ -103,6 +103,109 @@ test("artwork lightbox magnifier reveals a movable detail lens", async ({ page }
   await expect(page.locator(".lightbox")).toBeVisible();
 });
 
+test("mobile artwork lightbox places magnifier below the image", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${baseURL}/artists/kaljo-simson?lang=et#works`);
+
+  await page.locator(".gallery-grid .artwork-frame--button").first().click();
+  await expect(page.locator(".lightbox")).toBeVisible();
+
+  const image = page.locator(".lightbox__artwork-frame .artwork-frame__image");
+  const magnifierToggle = page.getByRole("button", { name: "Ava luup" });
+  const imageBox = await image.boundingBox();
+  const toggleBox = await magnifierToggle.boundingBox();
+
+  expect(imageBox).not.toBeNull();
+  expect(toggleBox).not.toBeNull();
+
+  const imageCenterX = (imageBox?.x ?? 0) + (imageBox?.width ?? 0) / 2;
+  const toggleCenterX = (toggleBox?.x ?? 0) + (toggleBox?.width ?? 0) / 2;
+
+  expect(toggleBox?.y ?? 0).toBeGreaterThan((imageBox?.y ?? 0) + (imageBox?.height ?? 0));
+  expect(Math.abs(toggleCenterX - imageCenterX)).toBeLessThanOrEqual(8);
+
+  await magnifierToggle.click();
+  const lens = page.locator(".lightbox__magnifier-lens");
+  await expect(lens).toBeVisible();
+
+  const startX = (imageBox?.x ?? 0) + (imageBox?.width ?? 0) * 0.35;
+  const startY = (imageBox?.y ?? 0) + (imageBox?.height ?? 0) * 0.42;
+  const endX = (imageBox?.x ?? 0) + (imageBox?.width ?? 0) * 0.68;
+  const endY = (imageBox?.y ?? 0) + (imageBox?.height ?? 0) * 0.58;
+  const initialLensBox = await lens.boundingBox();
+
+  await page.locator(".lightbox__image-window").dispatchEvent("pointerdown", {
+    bubbles: true,
+    cancelable: true,
+    clientX: startX,
+    clientY: startY,
+    pointerId: 11,
+    pointerType: "touch",
+  });
+  await page.locator(".lightbox__image-window").dispatchEvent("pointermove", {
+    bubbles: true,
+    cancelable: true,
+    clientX: endX,
+    clientY: endY,
+    pointerId: 11,
+    pointerType: "touch",
+  });
+  await page.locator(".lightbox__image-window").dispatchEvent("pointerup", {
+    bubbles: true,
+    cancelable: true,
+    clientX: endX,
+    clientY: endY,
+    pointerId: 11,
+    pointerType: "touch",
+  });
+
+  await expect(lens).toBeVisible();
+  const movedLensBox = await lens.boundingBox();
+  expect(Math.abs((movedLensBox?.x ?? 0) - (initialLensBox?.x ?? 0))).toBeGreaterThan(10);
+
+  const tapX = (imageBox?.x ?? 0) + (imageBox?.width ?? 0) * 0.5;
+  const tapY = (imageBox?.y ?? 0) + (imageBox?.height ?? 0) * 0.5;
+
+  for (const pointerId of [12, 13]) {
+    await page.locator(".lightbox__image-window").dispatchEvent("pointerdown", {
+      bubbles: true,
+      cancelable: true,
+      clientX: tapX,
+      clientY: tapY,
+      pointerId,
+      pointerType: "touch",
+    });
+    await page.locator(".lightbox__image-window").dispatchEvent("pointerup", {
+      bubbles: true,
+      cancelable: true,
+      clientX: tapX,
+      clientY: tapY,
+      pointerId,
+      pointerType: "touch",
+    });
+  }
+
+  await expect(lens).toBeHidden();
+});
+
+test("landscape artwork lightbox gives more width to artwork than details", async ({ page }) => {
+  await page.setViewportSize({ width: 1180, height: 579 });
+  await page.goto(`${baseURL}/artists/kaljo-simson?lang=et#works`);
+
+  await page.locator(".gallery-grid .artwork-frame--button").nth(1).click();
+  await expect(page.locator(".lightbox")).toBeVisible();
+
+  const artworkFrame = page.locator(".lightbox__artwork-frame");
+  const detailsPanel = page.locator(".lightbox__aside");
+  const artworkBox = await artworkFrame.boundingBox();
+  const detailsBox = await detailsPanel.boundingBox();
+
+  expect(artworkBox).not.toBeNull();
+  expect(detailsBox).not.toBeNull();
+  expect(artworkBox?.width ?? 0).toBeGreaterThan((detailsBox?.width ?? 0) * 1.55);
+  expect(detailsBox?.width ?? 0).toBeLessThanOrEqual(310);
+});
+
 test("mobile artist gallery artworks stay inside the viewport", async ({ page }) => {
   const viewport = { width: 486, height: 765 };
   await page.setViewportSize(viewport);

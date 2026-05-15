@@ -29,8 +29,8 @@ export default function ArtistCard({
 
       <div className="pill-row">
         {artist.focus.map((focus) => (
-          <span className="pill" key={focus}>
-            {focus}
+          <span className="pill" key={getCopy(focus, "et") || getCopy(focus, "en")}>
+            {getCopy(focus, locale)}
           </span>
         ))}
       </div>

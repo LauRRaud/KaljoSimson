@@ -20,24 +20,23 @@ test("splash cursor renders above glass panels without blocking interaction", ()
 
 test("desktop pointer uses a DOM paint-brush cursor instead of native cursor image URLs", () => {
   assert.match(siteAmbient, /import BrushCursor from "@\/components\/BrushCursor";/);
-  assert.match(siteAmbient, /<\/div>[\s\S]*?\{isAdmin \? null : <SplashCursor \/>\}/);
+  assert.match(siteAmbient, /<\/div>[\s\S]*?\{isAdmin \|\| isStudio \? null : <SplashCursor \/>\}/);
   assert.match(siteAmbient, /isAdmin \? null : <BrushCursor \/>/);
   assert.doesNotMatch(styles, /cursor:\s*url\(/);
   assert.doesNotMatch(styles, /--brush-cursor/);
   assert.match(styles, /\.has-brush-cursor\s*\{[\s\S]*?cursor:\s*none;/);
-  assert.match(styles, /\.brush-cursor\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?z-index:\s*2147483647;[\s\S]*?object-fit:\s*contain;[\s\S]*?filter:\s*opacity\(0\.9\);/);
-  assert.match(styles, /\.brush-cursor--paint-brush2\s*\{[\s\S]*?width:\s*58px;[\s\S]*?height:\s*58px;/);
-  assert.match(styles, /html\[data-theme="dark"\] \.brush-cursor\s*\{[\s\S]*?filter:\s*grayscale\(1\) invert\(1\) brightness\(1\) opacity\(0\.95\);/);
+  assert.match(styles, /\.brush-cursor\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?z-index:\s*2147483647;[\s\S]*?object-fit:\s*contain;[\s\S]*?filter:\s*none;/);
+  assert.match(styles, /\.brush-cursor--paint-brush2\s*\{[\s\S]*?width:\s*52px;[\s\S]*?height:\s*52px;/);
+  assert.match(styles, /html\[data-theme="dark"\] \.brush-cursor\s*\{[\s\S]*?filter:\s*none;/);
   assert.match(brushCursor, /document\.body\.classList\.add\("has-brush-cursor"\)/);
   assert.match(brushCursor, /createPortal\(/);
   assert.match(brushCursor, /document\.body,\s*\)/);
   assert.match(brushCursor, /className="brush-cursor brush-cursor--paint-brush2"/);
-  assert.match(brushCursor, /src="\/paint-brush2\.svg"/);
+  assert.match(brushCursor, /src=\{theme === "dark" \? "\/paint-brush2-dark\.svg" : "\/paint-brush2\.svg"\}/);
   assert.match(brushCursor, /translate3d\(\$\{point\.x - 29\}px, \$\{point\.y - 5\}px, 0\) rotate\(-4deg\)/);
-  assert.match(brush2, /width="128px"/);
-  assert.match(brush2, /height="128px"/);
-  assert.match(brush2, /viewBox="-9 -9 54 54"/);
-  assert.match(brush2, /overflow="visible"/);
-  assert.match(brush2, /<path fill="#111111"/);
-  assert.match(brush2, /<path fill="#b56a43"/);
+  assert.match(brush2, /viewBox="0 0 128 128"/);
+  assert.match(brush2, /stop-color="#caa582"/);
+  assert.match(brush2, /stop-color="#3a3228"/);
+  assert.match(brush2, /<path class="st3"/);
+  assert.match(brush2, /<path class="st0"/);
 });

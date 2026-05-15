@@ -19,6 +19,7 @@ function getPresetLabel(preset, locale) {
 
 function applyPreset(preset) {
   document.querySelector(".page-shell")?.setAttribute("data-frame-preset", preset);
+  document.body?.setAttribute("data-frame-preset", preset);
 }
 
 export default function FramePresetSwitch({ defaultPreset = "silver", locale = "et" }) {

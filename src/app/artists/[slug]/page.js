@@ -67,8 +67,8 @@ export default async function ArtistPage({ params, searchParams }) {
           <div className="profile-tags-actions">
             <div className="pill-row">
               {artist.focus.map((focus) => (
-                <span className="pill" key={focus}>
-                  {focus}
+                <span className="pill" key={getCopy(focus, "et") || getCopy(focus, "en")}>
+                  {getCopy(focus, locale)}
                 </span>
               ))}
             </div>

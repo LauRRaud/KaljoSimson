@@ -43,13 +43,19 @@ test("artist profile keeps biography heading in eyebrow style but larger", () =>
 test("artist profile portrait uses the same soft light shadow as the carousel", () => {
   const portraitRule = getRule(".profile-hero > .portrait-shell");
 
-  assert.match(portraitRule, /border-radius:\s*6px;/);
-  assert.match(portraitRule, /0\s+16px\s+18px\s+-14px\s+rgba\(75,\s*52,\s*28,\s*0\.36\)/);
-  assert.match(portraitRule, /0\s+30px\s+34px\s+-22px\s+rgba\(45,\s*31,\s*20,\s*0\.38\)/);
+  assert.match(portraitRule, /padding:\s*var\(--portrait-frame-width\);/);
+  assert.match(portraitRule, /border-radius:\s*0;/);
+  assert.match(portraitRule, /background:\s*var\(--frame-active-metal\);/);
+  assert.match(portraitRule, /box-shadow:\s*var\(--artwork-object-shadow\);/);
   assert.match(
     css,
-    /\.artist-card--carousel \.portrait-shell::before,\s*\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?var\(--frame-active-metal\);[\s\S]*?box-shadow:\s*inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.42\);[\s\S]*?mask-composite:\s*exclude;/,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\r?\n\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?background:\s*none;/,
   );
+  assert.match(
+    css,
+    /\.artist-card--carousel \.portrait-shell::before,\s*\r?\n\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.54\)/,
+  );
+  assert.doesNotMatch(css, /mask-composite:\s*exclude;/);
   assert.doesNotMatch(
     css,
     /\.artist-card--carousel \.portrait-shell::before,\s*\.profile-hero > \.portrait-shell::before\s*\{[\s\S]*?inset 0 0 0 1px rgba\(45,\s*56,\s*64,\s*0\.24\)/,
