@@ -76,7 +76,7 @@ export default function ThemeToggle({ locale = "et" }) {
         viewBox="0 0 24 24"
       >
         <path
-          d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"
+          d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"
           fill="none"
           stroke="currentColor"
         />
@@ -87,8 +87,8 @@ export default function ThemeToggle({ locale = "et" }) {
         fill="none"
         viewBox="0 0 24 24"
       >
-        <circle cx="12" cy="12" r="3.6" />
-        <path d="M12 2.6v2.2M12 19.2v2.2M4.6 4.6l1.55 1.55M17.85 17.85l1.55 1.55M2.6 12h2.2M19.2 12h2.2M4.6 19.4l1.55-1.55M17.85 6.15l1.55-1.55" />
+        <circle cx="12" cy="12" r="4.4" />
+        <path d="M12 2.5v2.7M12 18.8v2.7M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M2.5 12h2.7M18.8 12h2.7M5.3 18.7l1.9-1.9M16.8 7.2l1.9-1.9" />
       </svg>
     </button>
   );

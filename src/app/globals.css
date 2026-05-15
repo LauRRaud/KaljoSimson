@@ -651,9 +651,11 @@ html[data-theme="dark"] .site-nav__links a::after {
 }
 
 .site-nav .theme-toggle {
-  width: 26px;
-  min-width: 26px;
-  height: 26px;
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  margin-left: 0;
+  margin-right: -3px;
   padding: 0;
   justify-content: center;
   border-radius: 999px;
@@ -672,17 +674,17 @@ html[data-theme="dark"] .site-nav__links a::after {
 }
 
 .theme-toggle__icon {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   stroke: currentColor;
-  stroke-width: 1.75;
+  stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
 }
 
 .theme-toggle__icon--moon {
   display: block;
+  stroke-width: 1.65;
 }
 
 .theme-toggle__icon--sun {
@@ -5552,15 +5554,16 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-nav .theme-toggle {
-    min-width: 26px;
-    width: 26px;
-    height: 26px;
+    min-width: 30px;
+    width: 30px;
+    height: 30px;
+    margin-right: -2px;
     padding: 0;
   }
 
   .theme-toggle__icon {
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
   }
 
   .pwa-install-button__icon {
@@ -6858,9 +6861,10 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-nav .theme-toggle {
-    min-width: 25px;
-    width: 25px;
-    height: 25px;
+    min-width: 29px;
+    width: 29px;
+    height: 29px;
+    margin-right: -2px;
     padding: 0;
     line-height: 1;
   }
@@ -6876,8 +6880,8 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .theme-toggle__icon {
-    width: 22px;
-    height: 22px;
+    width: 27px;
+    height: 27px;
   }
 
   .admin-topbar__locale-copy,
