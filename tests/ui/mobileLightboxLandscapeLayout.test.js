@@ -24,7 +24,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__image-window\s*{[^}]*padding-left:\s*var\(--magnifier-control-space\);[^}]*padding-bottom:\s*0;/s,
+    /\.lightbox__image-window\s*{[^}]*padding-left:\s*var\(--magnifier-control-space\);[^}]*padding-bottom:\s*0;[^}]*transform:\s*translateY\(clamp\(-16px,\s*-2\.6vh,\s*-8px\)\);/s,
   );
   assert.match(
     landscapeRule,
@@ -36,11 +36,15 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
+    /\.lightbox__artwork-frame \.artwork-frame__image\s*{[^}]*max-height:\s*calc\(var\(--lightbox-panel-height\) \+ 18px\);/s,
+  );
+  assert.match(
+    landscapeRule,
     /\.lightbox__details-row--medium\s*{[^}]*grid-column:\s*1 \/ -1;/s,
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__aside\s*{[^}]*transform:\s*translateY\(clamp\(6px,\s*1\.4vh,\s*12px\)\);/s,
+    /\.lightbox__aside\s*{[^}]*transform:\s*translateY\(clamp\(-12px,\s*-1\.8vh,\s*-5px\)\);/s,
   );
   assert.match(
     landscapeRule,

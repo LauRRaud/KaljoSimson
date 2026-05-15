@@ -6826,6 +6826,7 @@ html[data-theme="dark"] .admin-divider {
     justify-items: end;
     padding-left: var(--magnifier-control-space);
     padding-bottom: 0;
+    transform: translateY(clamp(-16px, -2.6vh, -8px));
   }
 
   .lightbox__magnifier-toggle {
@@ -6842,12 +6843,13 @@ html[data-theme="dark"] .admin-divider {
 
   .lightbox__artwork-frame .artwork-frame__image {
     max-width: 100%;
+    max-height: calc(var(--lightbox-panel-height) + 18px);
   }
 
   .lightbox__aside {
     padding-left: clamp(14px, 1.8vw, 22px);
     padding-right: clamp(14px, 2vw, 24px);
-    transform: translateY(clamp(6px, 1.4vh, 12px));
+    transform: translateY(clamp(-12px, -1.8vh, -5px));
   }
 
   .lightbox__details {
