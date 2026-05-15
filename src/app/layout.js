@@ -40,17 +40,17 @@ export const metadata = {
   icons: {
     icon: [
       {
-        url: "/favicon.svg",
+        url: "/favicon.svg?v=black-v2",
         type: "image/svg+xml",
       },
       {
-        url: "/icon-192.png",
+        url: "/icon-192.png?v=black-v2",
         sizes: "192x192",
         type: "image/png",
       },
     ],
-    shortcut: "/favicon.svg",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.svg?v=black-v2",
+    apple: "/apple-touch-icon.png?v=black-v2",
   },
   appleWebApp: {
     capable: true,

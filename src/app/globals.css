@@ -743,28 +743,11 @@ html[data-theme="dark"] .theme-toggle__icon--sun {
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--text-soft);
+  color: var(--text);
   cursor: pointer;
   font: inherit;
   line-height: 1;
   transition: color 180ms ease, opacity 180ms ease;
-}
-
-.pwa-install__hint {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: -16px;
-  z-index: 20;
-  width: max-content;
-  max-width: min(220px, calc(100vw - 32px));
-  padding: 8px 10px;
-  border-radius: 999px;
-  background: var(--surface-strong);
-  color: var(--text-soft);
-  font-size: 0.78rem;
-  line-height: 1.2;
-  box-shadow: var(--glass-control-shadow);
-  white-space: nowrap;
 }
 
 .pwa-install-button:hover,

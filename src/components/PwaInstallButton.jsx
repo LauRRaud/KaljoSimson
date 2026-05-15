@@ -11,7 +11,6 @@ function isStandalone() {
 
 export default function PwaInstallButton({ locale = "et" }) {
   const [installPrompt, setInstallPrompt] = useState(null);
-  const [installHintVisible, setInstallHintVisible] = useState(false);
   const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
@@ -60,24 +59,16 @@ export default function PwaInstallButton({ locale = "et" }) {
   }
 
   const label = locale === "en" ? "Install app" : "Paigalda rakendus";
-  const hint =
-    locale === "en"
-      ? "Use the browser menu to install the app."
-      : "Paigalda brauseri menüüst.";
 
   return (
     <span className="pwa-install">
       <button
-        aria-describedby={installHintVisible ? "pwa-install-hint" : undefined}
         aria-label={label}
         className="pwa-install-button"
         onClick={() => {
           if (installPrompt) {
             installApp();
-            return;
           }
-
-          setInstallHintVisible((current) => !current);
         }}
         title={label}
         type="button"
@@ -106,11 +97,6 @@ export default function PwaInstallButton({ locale = "et" }) {
           <path d="m9.8 10.8 2.2 2.2 2.2-2.2" />
         </svg>
       </button>
-      {installHintVisible ? (
-        <span className="pwa-install__hint" id="pwa-install-hint" role="status">
-          {hint}
-        </span>
-      ) : null}
     </span>
   );
 }

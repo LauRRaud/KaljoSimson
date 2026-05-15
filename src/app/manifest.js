@@ -1,4 +1,6 @@
 export default function manifest() {
+  const iconVersion = "black-v2";
+
   return {
     name: "BeyondFrames",
     short_name: "BeyondFrames",
@@ -16,25 +18,25 @@ export default function manifest() {
     lang: "et",
     icons: [
       {
-        src: "/icon-192.png",
+        src: `/icon-192.png?v=${iconVersion}`,
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icon-512.png",
+        src: `/icon-512.png?v=${iconVersion}`,
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/maskable-icon-512.png",
+        src: `/maskable-icon-512.png?v=${iconVersion}`,
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
       },
       {
-        src: "/icon.svg",
+        src: `/icon.svg?v=${iconVersion}`,
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",

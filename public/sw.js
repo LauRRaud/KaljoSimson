@@ -1,4 +1,4 @@
-const CACHE_VERSION = "beyondframes-v3";
+const CACHE_VERSION = "beyondframes-v4";
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 const ASSET_CACHE = `${CACHE_VERSION}-assets`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -7,12 +7,12 @@ const PRECACHE_URLS = [
   "/",
   "/gallery",
   "/studio",
-  "/favicon.svg",
-  "/icon.svg",
-  "/icon-192.png",
-  "/icon-512.png",
-  "/maskable-icon-512.png",
-  "/apple-touch-icon.png",
+  "/favicon.svg?v=black-v2",
+  "/icon.svg?v=black-v2",
+  "/icon-192.png?v=black-v2",
+  "/icon-512.png?v=black-v2",
+  "/maskable-icon-512.png?v=black-v2",
+  "/apple-touch-icon.png?v=black-v2",
 ];
 
 self.addEventListener("install", (event) => {
