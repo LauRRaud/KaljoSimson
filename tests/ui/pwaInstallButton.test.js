@@ -7,14 +7,18 @@ function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
 }
 
-test("PWA install button does not render an inline fallback hint", () => {
+test("PWA install button renders an iOS home screen fallback hint", () => {
   const button = read("src/components/PwaInstallButton.jsx");
   const globals = read("src/app/globals.css");
 
-  assert.doesNotMatch(button, /installHintVisible/);
-  assert.doesNotMatch(button, /pwa-install-hint/);
-  assert.doesNotMatch(button, /pwa-install__hint/);
-  assert.doesNotMatch(globals, /\.pwa-install__hint/);
+  assert.match(button, /installHintVisible/);
+  assert.match(button, /Jaga - Lisa avalehele/);
+  assert.match(button, /Share - Add to Home Screen/);
+  assert.match(button, /className="pwa-install__hint"/);
+  assert.match(button, /aria-live="polite"/);
+  assert.match(globals, /\.pwa-install__hint\s*{/);
+  assert.match(globals, /\.site-nav:has\(\.pwa-install__hint\)\s*{[^}]*overflow:\s*visible;/s);
+  assert.match(globals, /html\[data-theme="dark"\] \.pwa-install__hint\s*{/);
 });
 
 test("PWA install icons use the black icon cache version", () => {

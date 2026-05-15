@@ -9,17 +9,32 @@ function isStandalone() {
   );
 }
 
+function isIosSafariInstallFallback() {
+  const navigator = window.navigator;
+  const userAgent = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  const isIosDevice = /iPad|iPhone|iPod/.test(userAgent);
+  const isTouchMac = platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  const isSafari = /^((?!CriOS|FxiOS|EdgiOS|OPiOS).)*Safari/i.test(userAgent);
+
+  return (isIosDevice || isTouchMac) && isSafari;
+}
+
 export default function PwaInstallButton({ locale = "et" }) {
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [installHintVisible, setInstallHintVisible] = useState(false);
+  const [iosInstallFallback, setIosInstallFallback] = useState(false);
   const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
+      setIosInstallFallback(isIosSafariInstallFallback());
       setInstalled(isStandalone());
     });
 
     function handleBeforeInstallPrompt(event) {
       event.preventDefault();
+      setInstallHintVisible(false);
       setInstallPrompt(event);
     }
 
@@ -38,6 +53,18 @@ export default function PwaInstallButton({ locale = "et" }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!installHintVisible) {
+      return undefined;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setInstallHintVisible(false);
+    }, 4200);
+
+    return () => window.clearTimeout(timeout);
+  }, [installHintVisible]);
+
   if (installed) {
     return null;
   }
@@ -46,9 +73,14 @@ export default function PwaInstallButton({ locale = "et" }) {
     const prompt = installPrompt;
 
     if (!prompt) {
+      if (iosInstallFallback) {
+        setInstallHintVisible(true);
+      }
+
       return;
     }
 
+    setInstallHintVisible(false);
     setInstallPrompt(null);
     await prompt.prompt();
     const choice = await prompt.userChoice;
@@ -59,6 +91,7 @@ export default function PwaInstallButton({ locale = "et" }) {
   }
 
   const label = locale === "en" ? "Install app" : "Paigalda rakendus";
+  const hint = locale === "en" ? "Share - Add to Home Screen" : "Jaga - Lisa avalehele";
 
   return (
     <span className="pwa-install">
@@ -66,9 +99,7 @@ export default function PwaInstallButton({ locale = "et" }) {
         aria-label={label}
         className="pwa-install-button"
         onClick={() => {
-          if (installPrompt) {
-            installApp();
-          }
+          installApp();
         }}
         title={label}
         type="button"
@@ -97,6 +128,11 @@ export default function PwaInstallButton({ locale = "et" }) {
           <path d="m9.8 10.8 2.2 2.2 2.2-2.2" />
         </svg>
       </button>
+      {installHintVisible ? (
+        <span aria-live="polite" className="pwa-install__hint" role="status">
+          {hint}
+        </span>
+      ) : null}
     </span>
   );
 }
