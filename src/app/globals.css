@@ -6793,12 +6793,12 @@ html[data-theme="dark"] .admin-divider {
   .lightbox__sheet {
     --lightbox-panel-height: min(100svh, 540px);
     --lightbox-detail-panel-height: calc(var(--lightbox-panel-height) - 62px);
-    transform: translateX(clamp(-56px, -5vw, -28px));
+    transform: translateX(clamp(-24px, -2vw, -10px));
   }
 
   .lightbox__grid {
     grid-template-columns: minmax(0, 1fr) clamp(265px, 28vw, 340px);
-    gap: clamp(10px, 1.4vw, 18px);
+    gap: clamp(8px, 1vw, 14px);
   }
 
   .lightbox__image-window {
@@ -6829,7 +6829,7 @@ html[data-theme="dark"] .admin-divider {
   .lightbox__aside {
     padding: clamp(10px, 1.4vh, 14px) clamp(10px, 1.2vw, 16px) clamp(12px, 1.8vh, 18px) clamp(12px, 1.5vw, 18px);
     transform: translate(
-      clamp(18px, 2.4vw, 30px),
+      clamp(8px, 1.4vw, 18px),
       clamp(-12px, -1.8vh, -5px)
     );
   }
