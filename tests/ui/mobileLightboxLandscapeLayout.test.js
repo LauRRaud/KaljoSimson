@@ -16,7 +16,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
 
   assert.match(
     landscapeRule,
-    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(100svh,\s*540px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 34px\);[^}]*transform:\s*translateX\(clamp\(8px,\s*1\.6vw,\s*22px\)\);/s,
+    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(100svh,\s*540px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 34px\);[^}]*transform:\s*translateX\(clamp\(-6px,\s*-0\.4vw,\s*4px\)\);/s,
   );
   assert.match(
     landscapeRule,

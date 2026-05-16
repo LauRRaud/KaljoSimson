@@ -6793,7 +6793,7 @@ html[data-theme="dark"] .admin-divider {
   .lightbox__sheet {
     --lightbox-panel-height: min(100svh, 540px);
     --lightbox-detail-panel-height: calc(var(--lightbox-panel-height) - 34px);
-    transform: translateX(clamp(8px, 1.6vw, 22px));
+    transform: translateX(clamp(-6px, -0.4vw, 4px));
   }
 
   .lightbox__grid {
