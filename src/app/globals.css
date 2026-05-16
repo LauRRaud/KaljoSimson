@@ -732,9 +732,11 @@ html[data-theme="dark"] .theme-toggle__icon--sun {
 
 .pwa-install {
   position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  isolation: isolate;
 }
 
 .pwa-install-button {
@@ -783,7 +785,7 @@ html[data-theme="dark"] .theme-toggle__icon--sun {
   position: absolute;
   top: calc(100% + 12px);
   right: 50%;
-  z-index: 20;
+  z-index: 100;
   width: max-content;
   max-width: min(260px, calc(100vw - 32px));
   padding: 9px 12px;
@@ -798,7 +800,7 @@ html[data-theme="dark"] .theme-toggle__icon--sun {
   line-height: 1.25;
   text-align: center;
   text-shadow: none;
-  box-shadow: var(--artwork-object-shadow);
+  box-shadow: none;
   backdrop-filter: blur(8px) saturate(1.08);
   pointer-events: none;
   transform: translateX(50%);
@@ -6801,7 +6803,7 @@ html[data-theme="dark"] .admin-divider {
 
   .lightbox__image-window {
     justify-items: end;
-    padding-left: var(--magnifier-control-space);
+    padding-left: 0;
     padding-bottom: 0;
     transform: translateY(clamp(-6px, -0.8vh, 2px));
   }
@@ -6814,7 +6816,7 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__artwork-frame {
-    max-width: calc(100% - clamp(0px, 0.5vw, 8px));
+    max-width: 100%;
     margin-left: var(--magnifier-control-space);
   }
 
@@ -6825,8 +6827,7 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .lightbox__aside {
-    padding-left: clamp(14px, 1.8vw, 22px);
-    padding-right: clamp(10px, 1.2vw, 16px);
+    padding: clamp(10px, 1.4vh, 14px) clamp(10px, 1.2vw, 16px) clamp(12px, 1.8vh, 18px) clamp(12px, 1.5vw, 18px);
     transform: translate(
       clamp(18px, 2.4vw, 30px),
       clamp(-12px, -1.8vh, -5px)

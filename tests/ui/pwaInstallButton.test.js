@@ -18,10 +18,13 @@ test("PWA install button renders an iOS home screen fallback hint", () => {
   assert.doesNotMatch(button, /isIosInstallFallback/);
   assert.match(button, /className="pwa-install__hint"/);
   assert.match(button, /aria-live="polite"/);
+  assert.match(globals, /\.pwa-install\s*{[^}]*z-index:\s*2;[^}]*isolation:\s*isolate;/s);
   assert.match(globals, /\.pwa-install__hint\s*{/);
   assert.match(globals, /\.pwa-install__hint\s*{[^}]*border:\s*none;/s);
   assert.match(globals, /\.pwa-install__hint\s*{[^}]*background:\s*var\(--glass-panel-bg\);/s);
   assert.match(globals, /\.pwa-install__hint\s*{[^}]*backdrop-filter:\s*blur\(8px\) saturate\(1\.08\);/s);
+  assert.match(globals, /\.pwa-install__hint\s*{[^}]*box-shadow:\s*none;/s);
+  assert.match(globals, /\.pwa-install__hint\s*{[^}]*z-index:\s*100;/s);
   assert.doesNotMatch(globals, /\.pwa-install__hint::before\s*{/);
   assert.match(globals, /\.site-nav:has\(\.pwa-install__hint\)\s*{[^}]*overflow:\s*visible;/s);
   assert.doesNotMatch(globals, /html\[data-theme="dark"\] \.pwa-install__hint\s*{[^}]*background:/s);
