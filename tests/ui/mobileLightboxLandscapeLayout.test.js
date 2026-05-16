@@ -20,7 +20,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(265px,\s*28vw,\s*340px\);[^}]*gap:\s*clamp\(8px,\s*1vw,\s*14px\);/s,
+    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(250px,\s*26vw,\s*315px\);[^}]*gap:\s*clamp\(8px,\s*1vw,\s*14px\);/s,
   );
   assert.match(
     landscapeRule,
@@ -48,7 +48,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__aside\s*{[^}]*padding:\s*clamp\(10px,\s*1\.4vh,\s*14px\) clamp\(10px,\s*1\.2vw,\s*16px\) clamp\(12px,\s*1\.8vh,\s*18px\) clamp\(12px,\s*1\.5vw,\s*18px\);[^}]*transform:\s*translate\(\s*clamp\(8px,\s*1\.4vw,\s*18px\),\s*clamp\(-12px,\s*-1\.8vh,\s*-5px\)\s*\);/s,
+    /\.lightbox__aside\s*{[^}]*padding:\s*clamp\(10px,\s*1\.4vh,\s*14px\) clamp\(10px,\s*1\.2vw,\s*16px\) clamp\(12px,\s*1\.8vh,\s*18px\) clamp\(12px,\s*1\.5vw,\s*18px\);[^}]*transform:\s*translate\(\s*clamp\(-8px,\s*-1vw,\s*-2px\),\s*clamp\(-12px,\s*-1\.8vh,\s*-5px\)\s*\);/s,
   );
   assert.match(
     landscapeRule,

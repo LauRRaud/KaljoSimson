@@ -1,6 +1,4 @@
-import Link from "next/link";
-import FramePresetSwitch from "@/components/FramePresetSwitch";
-import GalleryClient from "@/components/GalleryClient";
+import GalleryRoomExperience from "@/components/GalleryRoomExperience";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
@@ -57,18 +55,13 @@ export default async function GalleryPage({ searchParams }) {
       showFooter={false}
     >
       <section className="gallery-room-page">
-        <div className="gallery-room-page__topbar">
-          <Link className="gallery-room-page__back inline-link" href={withLocale("/", locale)}>
-            {locale === "en" ? "Back" : "Tagasi"}
-          </Link>
-          <FramePresetSwitch defaultPreset={content.site.framePreset} locale={locale} />
-        </div>
-
-        <GalleryClient
+        <GalleryRoomExperience
           artist={galleryArtist}
+          backHref={withLocale("/", locale)}
+          backLabel={locale === "en" ? "Back" : "Tagasi"}
+          defaultFramePreset={content.site.framePreset}
+          defaultRoomSpeed={content.site.galleryRoomSpeed}
           locale={locale}
-          roomSpeed={content.site.galleryRoomSpeed}
-          variant="room"
         />
       </section>
     </PageShell>

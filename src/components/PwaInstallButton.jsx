@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 function isStandalone() {
   return (
@@ -10,11 +11,31 @@ function isStandalone() {
 }
 
 export default function PwaInstallButton({ locale = "et" }) {
+  const buttonRef = useRef(null);
   const [installPrompt, setInstallPrompt] = useState(null);
   const [installHintVisible, setInstallHintVisible] = useState(false);
+  const [installHintPosition, setInstallHintPosition] = useState(null);
   const [installed, setInstalled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  const updateInstallHintPosition = useCallback(() => {
+    const button = buttonRef.current;
+
+    if (!button) {
+      return;
+    }
+
+    const rect = button.getBoundingClientRect();
+
+    setInstallHintPosition({
+      left: rect.left + rect.width / 2,
+      top: rect.bottom + 12,
+    });
+  }, []);
 
   useEffect(() => {
+    setMounted(true);
+
     const frame = window.requestAnimationFrame(() => {
       setInstalled(isStandalone());
     });
@@ -45,12 +66,25 @@ export default function PwaInstallButton({ locale = "et" }) {
       return undefined;
     }
 
+    updateInstallHintPosition();
+
+    function handleViewportChange() {
+      updateInstallHintPosition();
+    }
+
+    window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("scroll", handleViewportChange, true);
+
     const timeout = window.setTimeout(() => {
       setInstallHintVisible(false);
     }, 4200);
 
-    return () => window.clearTimeout(timeout);
-  }, [installHintVisible]);
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("scroll", handleViewportChange, true);
+    };
+  }, [installHintVisible, updateInstallHintPosition]);
 
   if (installed) {
     return null;
@@ -60,6 +94,7 @@ export default function PwaInstallButton({ locale = "et" }) {
     const prompt = installPrompt;
 
     if (!prompt) {
+      updateInstallHintPosition();
       setInstallHintVisible(true);
       return;
     }
@@ -76,6 +111,23 @@ export default function PwaInstallButton({ locale = "et" }) {
 
   const label = locale === "en" ? "Install app" : "Paigalda rakendus";
   const hint = locale === "en" ? "Share - Add to Home Screen" : "Jaga - Lisa avalehele";
+  const installHint =
+    mounted && installHintVisible && installHintPosition
+      ? createPortal(
+          <span
+            aria-live="polite"
+            className="pwa-install__hint"
+            role="status"
+            style={{
+              "--pwa-install-hint-left": `${installHintPosition.left}px`,
+              "--pwa-install-hint-top": `${installHintPosition.top}px`,
+            }}
+          >
+            {hint}
+          </span>,
+          document.body,
+        )
+      : null;
 
   return (
     <span className="pwa-install">
@@ -85,6 +137,7 @@ export default function PwaInstallButton({ locale = "et" }) {
         onClick={() => {
           installApp();
         }}
+        ref={buttonRef}
         title={label}
         type="button"
       >
@@ -112,11 +165,7 @@ export default function PwaInstallButton({ locale = "et" }) {
           <path d="m9.8 10.8 2.2 2.2 2.2-2.2" />
         </svg>
       </button>
-      {installHintVisible ? (
-        <span aria-live="polite" className="pwa-install__hint" role="status">
-          {hint}
-        </span>
-      ) : null}
+      {installHint}
     </span>
   );
 }
