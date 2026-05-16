@@ -16,6 +16,7 @@ const VALID_PORTRAIT_PRESETS = new Set(
   portraitPresets.map((preset) => preset.id),
 );
 const VALID_FRAME_PRESETS = new Set(["silver", "gold"]);
+const VALID_GALLERY_ROOM_SPEEDS = new Set(["slow", "normal", "fast"]);
 
 function stringOrFallback(value, fallback = "") {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -32,6 +33,16 @@ function numberOrFallback(value, fallback = 0) {
 
 function normalizeFramePreset(value) {
   return VALID_FRAME_PRESETS.has(value) ? value : "silver";
+}
+
+function normalizeGalleryRoomSpeed(value) {
+  if (VALID_GALLERY_ROOM_SPEEDS.has(value)) {
+    return value;
+  }
+
+  return VALID_GALLERY_ROOM_SPEEDS.has(seedContent.site?.galleryRoomSpeed)
+    ? seedContent.site.galleryRoomSpeed
+    : "normal";
 }
 
 function toLocalizedFallback(value) {
@@ -140,6 +151,7 @@ export function normalizeContent(value) {
       title: stringOrFallback(content.site?.title, seedContent.site.title),
       domain: stringOrFallback(content.site?.domain, seedContent.site.domain),
       framePreset: normalizeFramePreset(content.site?.framePreset),
+      galleryRoomSpeed: normalizeGalleryRoomSpeed(content.site?.galleryRoomSpeed),
       tagline: normalizeText(content.site?.tagline, seedContent.site.tagline),
       heroTitle: normalizeText(
         content.site?.heroTitle,

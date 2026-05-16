@@ -16,11 +16,11 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
 
   assert.match(
     landscapeRule,
-    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(96svh,\s*500px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 54px\);[^}]*transform:\s*translateX\(clamp\(-56px,\s*-5vw,\s*-28px\)\);/s,
+    /\.lightbox__sheet\s*{[^}]*--lightbox-panel-height:\s*min\(100svh,\s*540px\);[^}]*--lightbox-detail-panel-height:\s*calc\(var\(--lightbox-panel-height\) - 62px\);[^}]*transform:\s*translateX\(clamp\(-56px,\s*-5vw,\s*-28px\)\);/s,
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(270px,\s*29vw,\s*355px\);[^}]*gap:\s*clamp\(22px,\s*3vw,\s*40px\);/s,
+    /\.lightbox__grid\s*{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\) clamp\(265px,\s*28vw,\s*340px\);[^}]*gap:\s*clamp\(10px,\s*1\.4vw,\s*18px\);/s,
   );
   assert.match(
     landscapeRule,
@@ -36,7 +36,11 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__artwork-frame \.artwork-frame__image\s*{[^}]*max-height:\s*calc\(var\(--lightbox-panel-height\) \+ 30px\);/s,
+    /\.lightbox__artwork-frame\s*{[^}]*max-width:\s*calc\(100% - clamp\(0px,\s*0\.5vw,\s*8px\)\);/s,
+  );
+  assert.match(
+    landscapeRule,
+    /\.lightbox__artwork-frame \.artwork-frame__image\s*{[^}]*width:\s*calc\(\(var\(--lightbox-panel-height\) - clamp\(18px,\s*3vh,\s*34px\)\) \* 1\.48\);[^}]*max-height:\s*calc\(var\(--lightbox-panel-height\) \+ 52px\);/s,
   );
   assert.match(
     landscapeRule,
@@ -44,7 +48,7 @@ test("mobile landscape lightbox keeps magnifier beside artwork and widens detail
   );
   assert.match(
     landscapeRule,
-    /\.lightbox__aside\s*{[^}]*padding-right:\s*clamp\(10px,\s*1\.2vw,\s*16px\);[^}]*transform:\s*translateY\(clamp\(-12px,\s*-1\.8vh,\s*-5px\)\);/s,
+    /\.lightbox__aside\s*{[^}]*padding-right:\s*clamp\(10px,\s*1\.2vw,\s*16px\);[^}]*transform:\s*translate\(\s*clamp\(18px,\s*2\.4vw,\s*30px\),\s*clamp\(-12px,\s*-1\.8vh,\s*-5px\)\s*\);/s,
   );
   assert.match(
     landscapeRule,

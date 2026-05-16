@@ -18,6 +18,11 @@ const defaultMagnifierPosition = {
   backgroundY: "50%",
 };
 const magnifierZoom = 2.2;
+const roomTravelDurations = {
+  slow: 4600,
+  normal: 3200,
+  fast: 2200,
+};
 
 function compactMetaValue(value) {
   const normalized = String(value ?? "").trim().toLocaleLowerCase("et-EE");
@@ -66,7 +71,12 @@ function waitForImageDecode(src) {
   });
 }
 
-export default function GalleryClient({ artist, locale = "et", variant = "grid" }) {
+export default function GalleryClient({
+  artist,
+  locale = "et",
+  variant = "grid",
+  roomSpeed = "normal",
+}) {
   const [activeIndex, setActiveIndex] = useState(null);
   const [isMagnifierActive, setIsMagnifierActive] = useState(false);
   const [magnifierPosition, setMagnifierPosition] = useState(defaultMagnifierPosition);
@@ -84,7 +94,8 @@ export default function GalleryClient({ artist, locale = "et", variant = "grid" 
   });
   const hasArtworks = artist.artworks.length > 0;
   const isRoom = variant === "room";
-  const roomTravelDuration = 3200;
+  const roomTravelDuration =
+    roomTravelDurations[roomSpeed] ?? roomTravelDurations.normal;
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
   const portalRoot = typeof document === "undefined" ? null : document.body;

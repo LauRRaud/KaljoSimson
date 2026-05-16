@@ -3,6 +3,7 @@
     "title": "BeyondFrames",
     "domain": "beyondframes.net",
     "framePreset": "silver",
+    "galleryRoomSpeed": "normal",
     "tagline": {
       "et": "Kunst, raamidest väljas",
       "en": "Art beyond the frame"

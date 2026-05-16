@@ -705,6 +705,23 @@ export default function AdminStudio({ initialContent }) {
           {selectedGalleryCount} / {galleryCandidates.length} teost valitud.
         </p>
 
+        <div className="form-field form-field--tight">
+          <label htmlFor="gallery-room-speed">Seina ääres liikumise kiirus</label>
+          <select
+            className="select"
+            id="gallery-room-speed"
+            onChange={(event) => updateSite("galleryRoomSpeed", event.target.value)}
+            value={draft.site.galleryRoomSpeed || "normal"}
+          >
+            <option value="slow">Aeglane</option>
+            <option value="normal">Keskmine</option>
+            <option value="fast">Kiire</option>
+          </select>
+          <span className="field-hint">
+            Muudab avaliku galerii seina ääres edasi-tagasi liikumise tempot.
+          </span>
+        </div>
+
         {galleryCandidates.length ? (
           <div className="admin-gallery-select-grid">
             {galleryCandidates.map(({ artist, artistIndex, artwork, artworkIndex }) => {

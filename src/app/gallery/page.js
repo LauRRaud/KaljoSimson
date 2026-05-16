@@ -64,7 +64,12 @@ export default async function GalleryPage({ searchParams }) {
           <FramePresetSwitch defaultPreset={content.site.framePreset} locale={locale} />
         </div>
 
-        <GalleryClient artist={galleryArtist} locale={locale} variant="room" />
+        <GalleryClient
+          artist={galleryArtist}
+          locale={locale}
+          roomSpeed={content.site.galleryRoomSpeed}
+          variant="room"
+        />
       </section>
     </PageShell>
   );
