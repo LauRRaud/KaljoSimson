@@ -6668,7 +6668,7 @@ html[data-theme="dark"] .admin-divider {
 
   .gallery-room__wall::after {
     content: "";
-    flex: 0 0 calc((100vw - var(--gallery-room-slot)) / 2);
+    flex: 0 0 50vw;
   }
 
   .gallery-room__slot {

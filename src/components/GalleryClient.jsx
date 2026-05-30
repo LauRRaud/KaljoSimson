@@ -249,11 +249,19 @@ export default function GalleryClient({
     return closestPairStartIndex;
   }
 
-  function getRoomScrollTarget(viewport, slots, startIndex) {
+  function getRoomScrollTarget(viewport, slots, startIndex, alignment = "start") {
     const firstSlot = slots[startIndex];
     const viewportRect = viewport.getBoundingClientRect();
     const viewportStyles = window.getComputedStyle(viewport);
     const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
+
+    if (alignment === "center") {
+      const frameWindow = firstSlot.querySelector(".artwork-frame__window") ?? firstSlot;
+      const frameRect = frameWindow.getBoundingClientRect();
+      const viewportCenter = viewportRect.left + viewportRect.width / 2;
+
+      return viewport.scrollLeft + frameRect.left + frameRect.width / 2 - viewportCenter;
+    }
 
     return viewport.scrollLeft + firstSlot.getBoundingClientRect().left - focusLeft;
   }
@@ -285,7 +293,14 @@ export default function GalleryClient({
     );
     const endAlignmentIndex =
       direction > 0 && targetIndex === maxStartIndex ? slots.length - 1 : targetIndex;
-    const targetScrollLeft = getRoomScrollTarget(viewport, slots, endAlignmentIndex);
+    const targetAlignment =
+      direction > 0 && targetIndex === maxStartIndex ? "center" : "start";
+    const targetScrollLeft = getRoomScrollTarget(
+      viewport,
+      slots,
+      endAlignmentIndex,
+      targetAlignment,
+    );
 
     await predecodeRoomImages(getRoomImageSources(endAlignmentIndex, scrollStep));
     animateRoomScrollTo(targetScrollLeft);

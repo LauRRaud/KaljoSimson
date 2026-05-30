@@ -17,7 +17,11 @@ test("gallery room end navigation can align the final artwork at the end of the 
   );
   assert.match(
     galleryClient,
-    /const targetScrollLeft = getRoomScrollTarget\(viewport, slots, endAlignmentIndex\);/,
+    /const targetAlignment =\s*direction > 0 && targetIndex === maxStartIndex \? "center" : "start";/,
+  );
+  assert.match(
+    galleryClient,
+    /const targetScrollLeft = getRoomScrollTarget\(\s*viewport,\s*slots,\s*endAlignmentIndex,\s*targetAlignment,\s*\);/s,
   );
   assert.match(
     galleryClient,
@@ -25,6 +29,6 @@ test("gallery room end navigation can align the final artwork at the end of the 
   );
   assert.match(
     globals,
-    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__wall::after\s*{[^}]*content:\s*"";[^}]*flex:\s*0 0 calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/s,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__wall::after\s*{[^}]*content:\s*"";[^}]*flex:\s*0 0 50vw;/s,
   );
 });
