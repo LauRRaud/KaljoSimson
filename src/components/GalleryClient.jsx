@@ -704,6 +704,7 @@ export default function GalleryClient({
                   />
                 </div>
               ))}
+              <div aria-hidden="true" className="gallery-room__end-spacer" />
             </div>
           </div>
 

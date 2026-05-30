@@ -28,11 +28,19 @@ test("gallery room end navigation can align the final artwork at the end of the 
     /await predecodeRoomImages\(getRoomImageSources\(endAlignmentIndex, scrollStep\)\);/,
   );
   assert.match(
-    globals,
-    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__wall::after\s*{[^}]*content:\s*"";[^}]*flex:\s*0 0 50vw;/s,
+    galleryClient,
+    /<div aria-hidden="true" className="gallery-room__end-spacer" \/>/,
   );
   assert.match(
     globals,
-    /@media \(hover:\s*none\) and \(orientation:\s*landscape\),\s*\(pointer:\s*coarse\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__wall::after\s*{[^}]*content:\s*"";[^}]*flex:\s*0 0 50vw;/s,
+    /\.gallery-room__end-spacer\s*{[^}]*flex:\s*0 0 0;[^}]*pointer-events:\s*none;/s,
+  );
+  assert.match(
+    globals,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__end-spacer\s*{[^}]*flex:\s*0 0 50vw;/s,
+  );
+  assert.match(
+    globals,
+    /@media \(hover:\s*none\) and \(orientation:\s*landscape\),\s*\(pointer:\s*coarse\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__end-spacer\s*{[^}]*flex:\s*0 0 50vw;/s,
   );
 });
