@@ -6930,6 +6930,13 @@ html[data-theme="dark"] .admin-divider {
   }
 }
 
+@media (hover: none) and (orientation: landscape), (pointer: coarse) and (orientation: landscape) {
+  .gallery-room__wall::after {
+    content: "";
+    flex: 0 0 50vw;
+  }
+}
+
 @media (max-width: 430px) {
   .site-nav {
     width: calc(100vw - 24px);
