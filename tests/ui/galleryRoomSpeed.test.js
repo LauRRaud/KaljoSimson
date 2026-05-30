@@ -54,7 +54,7 @@ test("admin gallery section controls gallery room wall movement speed", () => {
   assert.match(galleryClient, /easeRoomScroll\(progress\)/);
   assert.match(galleryClient, /window\.requestAnimationFrame\(step\)/);
   assert.match(galleryClient, /window\.cancelAnimationFrame\(roomTravelFrameRef\.current\)/);
-  assert.match(galleryClient, /await predecodeRoomImages\(getRoomImageSources\(targetIndex, scrollStep\)\)/);
+  assert.match(galleryClient, /await predecodeRoomImages\(getRoomImageSources\(endAlignmentIndex, scrollStep\)\)/);
   assert.match(galleryClient, /window\.requestIdleCallback\(decodeNextIdleImage/);
 
   assert.match(globals, /\.gallery-room-page__control-group\s*{/);

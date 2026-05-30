@@ -9,6 +9,7 @@ function read(relativePath) {
 
 test("gallery room end navigation can align the final artwork at the end of the wall", () => {
   const galleryClient = read("src/components/GalleryClient.jsx");
+  const globals = read("src/app/globals.css");
 
   assert.match(
     galleryClient,
@@ -21,5 +22,9 @@ test("gallery room end navigation can align the final artwork at the end of the 
   assert.match(
     galleryClient,
     /await predecodeRoomImages\(getRoomImageSources\(endAlignmentIndex, scrollStep\)\);/,
+  );
+  assert.match(
+    globals,
+    /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{[\s\S]*?\.gallery-room__wall::after\s*{[^}]*content:\s*"";[^}]*flex:\s*0 0 calc\(\(100vw - var\(--gallery-room-slot\)\) \/ 2\);/s,
   );
 });

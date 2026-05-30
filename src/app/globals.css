@@ -6666,6 +6666,11 @@ html[data-theme="dark"] .admin-divider {
     scroll-padding-inline: calc((100vw - var(--gallery-room-slot)) / 2);
   }
 
+  .gallery-room__wall::after {
+    content: "";
+    flex: 0 0 calc((100vw - var(--gallery-room-slot)) / 2);
+  }
+
   .gallery-room__slot {
     flex-basis: var(--gallery-room-slot);
   }
