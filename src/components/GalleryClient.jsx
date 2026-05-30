@@ -283,9 +283,11 @@ export default function GalleryClient({
       maxStartIndex,
       Math.max(0, currentStartIndex + direction * scrollStep),
     );
-    const targetScrollLeft = getRoomScrollTarget(viewport, slots, targetIndex);
+    const endAlignmentIndex =
+      direction > 0 && targetIndex === maxStartIndex ? slots.length - 1 : targetIndex;
+    const targetScrollLeft = getRoomScrollTarget(viewport, slots, endAlignmentIndex);
 
-    await predecodeRoomImages(getRoomImageSources(targetIndex, scrollStep));
+    await predecodeRoomImages(getRoomImageSources(endAlignmentIndex, scrollStep));
     animateRoomScrollTo(targetScrollLeft);
   }
 
