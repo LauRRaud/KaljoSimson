@@ -12,7 +12,7 @@
     "postinstall": "npm run prisma:generate",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "git add . && git commit -m \"Update BeyondFrames site\" && git push && ssh ubuntu@217.146.72.147 \"cd /var/www/beyondframes && git pull\""
+    "deploy": "git push && ssh -o BatchMode=yes ubuntu@217.146.72.147 \"bash /var/www/beyondframes/scripts/server-deploy.sh\""
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
