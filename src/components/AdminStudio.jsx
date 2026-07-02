@@ -231,6 +231,21 @@ export default function AdminStudio({ initialContent }) {
     }));
   }
 
+  function updateNote(index, locale, value) {
+    setDraft((current) => {
+      const notes = [...current.notes];
+      notes[index] = {
+        ...notes[index],
+        [locale]: value,
+      };
+
+      return {
+        ...current,
+        notes,
+      };
+    });
+  }
+
   function updateArtist(index, field, value) {
     setDraft((current) => {
       const artists = [...current.artists];
@@ -682,6 +697,71 @@ export default function AdminStudio({ initialContent }) {
             </div>
           </section>
         </div>
+
+        <section aria-label="Muud tekstid" className="admin-reserve">
+          <div className="section-heading">
+            <p className="eyebrow">Muud tekstid</p>
+            <p className="admin-note">
+              Reservtekstid mõlemas keeles — Instagram, suur tsitaat, tutvustus
+              ja märksõnaread. Osa neist on kasutusel SEO-s ja tulevastes
+              vaadetes.
+            </p>
+          </div>
+
+          <div className="admin-form-grid admin-form-grid--reserve">
+            <div className="form-field">
+              <label htmlFor="contact-instagram">Instagram (kuvatav nimi)</label>
+              <input
+                className="input"
+                id="contact-instagram"
+                onChange={(event) => updateContact("instagram", event.target.value)}
+                value={draft.contact.instagram}
+              />
+            </div>
+            <div className="form-field">
+              <label htmlFor="contact-instagram-url">Instagrami link</label>
+              <input
+                className="input"
+                id="contact-instagram-url"
+                onChange={(event) =>
+                  updateContact("instagramUrl", event.target.value)
+                }
+                value={draft.contact.instagramUrl}
+              />
+            </div>
+          </div>
+
+          <LocalizedField
+            label="Suur tsitaat (heroTitle)"
+            locale={editorLocale}
+            onChange={(locale, value) => updateSiteText("heroTitle", locale, value)}
+            value={draft.site.heroTitle}
+          />
+          <LocalizedField
+            label="Tutvustuse pealkiri"
+            locale={editorLocale}
+            onChange={(locale, value) => updateSiteText("aboutTitle", locale, value)}
+            value={draft.site.aboutTitle}
+          />
+          <LocalizedField
+            label="Tutvustuse tekst"
+            locale={editorLocale}
+            multiline
+            onChange={(locale, value) => updateSiteText("aboutText", locale, value)}
+            value={draft.site.aboutText}
+          />
+
+          {draft.notes.map((note, noteIndex) => (
+            <LocalizedField
+              key={`note-${noteIndex}`}
+              label={`Märksõnarida ${noteIndex + 1}`}
+              locale={editorLocale}
+              onChange={(locale, value) => updateNote(noteIndex, locale, value)}
+              value={note}
+            />
+          ))}
+        </section>
+
         <AdminSectionActions
           editorLocale={editorLocale}
           isPending={isPending}
@@ -893,6 +973,37 @@ export default function AdminStudio({ initialContent }) {
                               value={artist.location}
                             />
                           </div>
+                          <div className="form-field">
+                            <label>Tegevusaastad</label>
+                            <input
+                              className="input"
+                              onChange={(event) =>
+                                updateArtist(
+                                  artistIndex,
+                                  "practiceSince",
+                                  event.target.value,
+                                )
+                              }
+                              value={artist.practiceSince}
+                            />
+                          </div>
+                          <div className="form-field">
+                            <label>Portree fookuspunkt</label>
+                            <input
+                              className="input"
+                              onChange={(event) =>
+                                updateArtist(
+                                  artistIndex,
+                                  "portraitPosition",
+                                  event.target.value,
+                                )
+                              }
+                              value={artist.portraitPosition}
+                            />
+                            <span className="field-hint">
+                              Nt „center center” või „center 24%”.
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -1042,6 +1153,33 @@ export default function AdminStudio({ initialContent }) {
                               updateArtistText(artistIndex, "biography", locale, value)
                             }
                             value={artist.biography}
+                          />
+                        </div>
+                        <div className="admin-artist-editor__control">
+                          <LocalizedField
+                            label="Statement (tsitaat)"
+                            locale={editorLocale}
+                            multiline
+                            onChange={(locale, value) =>
+                              updateArtistText(artistIndex, "statement", locale, value)
+                            }
+                            value={artist.statement}
+                          />
+                        </div>
+                        <div className="admin-artist-editor__control">
+                          <LocalizedField
+                            label="Galerii sissejuhatus"
+                            locale={editorLocale}
+                            multiline
+                            onChange={(locale, value) =>
+                              updateArtistText(
+                                artistIndex,
+                                "galleryIntro",
+                                locale,
+                                value,
+                              )
+                            }
+                            value={artist.galleryIntro}
                           />
                         </div>
                       </div>

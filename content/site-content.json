@@ -79,8 +79,8 @@
         "en": "The profile will continue here with artworks and a more detailed selection."
       },
       "galleryIntro": {
-        "et": "Kalevi Poisi teoste galerii lisandub pärast tööde ja andmete koondamist.",
-        "en": "Kalevi Poiss's gallery will be added once the works and artwork data have been assembled."
+        "et": "Kalevi Poisi profiili avavad ajutised digitaalsed visandid. Need asenduvad kunstniku teostega, kui materjalid on koondatud.",
+        "en": "Kalevi Poiss's profile opens with temporary digital sketches. They will be replaced by the artist's works once the materials are assembled."
       },
       "focus": [
         {
@@ -96,7 +96,60 @@
           "en": "presence"
         }
       ],
-      "artworks": []
+      "artworks": [
+        {
+          "slug": "visand-rand",
+          "title": {
+            "et": "Visand I — Rand",
+            "en": "Sketch I — Shore"
+          },
+          "year": "2026",
+          "medium": {
+            "et": "Digitaalne visand",
+            "en": "Digital sketch"
+          },
+          "size": "Mõõdud täpsustamisel",
+          "status": {
+            "et": "Ajutine visand",
+            "en": "Temporary sketch"
+          },
+          "frame": "ivory",
+          "visualPresetId": "ivory-haze",
+          "image": "/Profiilid/Kalevi%20Poiss/visand-rand.svg",
+          "showInGallery": false,
+          "galleryOrder": 0,
+          "description": {
+            "et": "Ajutine digitaalne visand profiili avamiseks — vaikne rannajoon, meri ja purjekas. Asendub kunstniku teostega.",
+            "en": "A temporary digital sketch to open the profile — a quiet shoreline, sea and a sail. To be replaced by the artist's works."
+          }
+        },
+        {
+          "slug": "visand-videvik",
+          "title": {
+            "et": "Visand II — Videvik",
+            "en": "Sketch II — Dusk"
+          },
+          "year": "2026",
+          "medium": {
+            "et": "Digitaalne visand",
+            "en": "Digital sketch"
+          },
+          "size": "Mõõdud täpsustamisel",
+          "status": {
+            "et": "Ajutine visand",
+            "en": "Temporary sketch"
+          },
+          "frame": "obsidian",
+          "visualPresetId": "rose-smoke",
+          "image": "/Profiilid/Kalevi%20Poiss/visand-videvik.svg",
+          "showInGallery": false,
+          "galleryOrder": 1,
+          "description": {
+            "et": "Ajutine digitaalne visand — kuu tõus videviku metsa kohal. Asendub kunstniku teostega.",
+            "en": "A temporary digital sketch — moonrise over a dusky forest. To be replaced by the artist's works."
+          }
+        }
+      ]
     },
     {
       "slug": "kaljo-simson",
@@ -107,8 +160,8 @@
       "portraitImage": "/Profiilid/Kaljo%20Simson/kaljo_simson_profiilipilt_1960ndad-2016.jpg",
       "portraitPosition": "center center",
       "role": {
-        "et": "Eesti maalikunstnik",
-        "en": "Estonian painter"
+        "et": "Maalikunstnik",
+        "en": "Painter"
       },
       "shortBio": {
         "et": "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus.",
@@ -272,8 +325,8 @@
         "en": "In van Gogh's work, colour, rhythm and brushwork become carriers of inner intensity."
       },
       "galleryIntro": {
-        "et": "Van Goghi teoste galerii lisandub siia eraldi valikuna.",
-        "en": "A dedicated selection of van Gogh's works will be added here."
+        "et": "Valik van Goghi tuntuimaid teoseid, mis näitavad tema pintslikirja ja värvitaju haaret — ööst õitsemiseni.",
+        "en": "A selection of van Gogh's most celebrated works, tracing the range of his brushwork and colour — from night to blossom."
       },
       "focus": [
         {
@@ -289,7 +342,112 @@
           "en": "intensity"
         }
       ],
-      "artworks": []
+      "artworks": [
+        {
+          "slug": "tahine-oo",
+          "title": {
+            "et": "Tähine öö",
+            "en": "The Starry Night"
+          },
+          "year": "1889",
+          "medium": {
+            "et": "Õli lõuendil",
+            "en": "Oil on canvas"
+          },
+          "size": "73,7 × 92,1 cm",
+          "status": {
+            "et": "Muuseumikogus (MoMA, New York)",
+            "en": "In museum collection (MoMA, New York)"
+          },
+          "frame": "obsidian",
+          "visualPresetId": "midnight-linen",
+          "image": "/Profiilid/Van%20Gogh/starry-night.jpg",
+          "showInGallery": false,
+          "galleryOrder": 0,
+          "description": {
+            "et": "Saint-Rémy varjupaiga aknast nähtud öötaevas, kus tähed ja kuu keerlevad elava vooluna küpressi ja magava küla kohal.",
+            "en": "The night sky seen from the asylum at Saint-Rémy, where stars and moon swirl in a living current above a cypress and a sleeping village."
+          }
+        },
+        {
+          "slug": "paevalilled",
+          "title": {
+            "et": "Päevalilled",
+            "en": "Sunflowers"
+          },
+          "year": "1888",
+          "medium": {
+            "et": "Õli lõuendil",
+            "en": "Oil on canvas"
+          },
+          "size": "92,1 × 73 cm",
+          "status": {
+            "et": "Muuseumikogus (National Gallery, London)",
+            "en": "In museum collection (National Gallery, London)"
+          },
+          "frame": "ivory",
+          "visualPresetId": "ashen-gold",
+          "image": "/Profiilid/Van%20Gogh/sunflowers.jpg",
+          "showInGallery": false,
+          "galleryOrder": 1,
+          "description": {
+            "et": "Viisteist päevalille kollasel taustal — sõpruse ja lõunamaise valguse sümbol, maalitud Gauguini saabumise ootuses.",
+            "en": "Fifteen sunflowers against a yellow ground — a symbol of friendship and southern light, painted while awaiting Gauguin's arrival."
+          }
+        },
+        {
+          "slug": "mandlioied",
+          "title": {
+            "et": "Õitsev mandlipuu",
+            "en": "Almond Blossom"
+          },
+          "year": "1890",
+          "medium": {
+            "et": "Õli lõuendil",
+            "en": "Oil on canvas"
+          },
+          "size": "73,3 × 92,4 cm",
+          "status": {
+            "et": "Muuseumikogus (Van Goghi muuseum, Amsterdam)",
+            "en": "In museum collection (Van Gogh Museum, Amsterdam)"
+          },
+          "frame": "ivory",
+          "visualPresetId": "ivory-haze",
+          "image": "/Profiilid/Van%20Gogh/almond-blossom.jpg",
+          "showInGallery": false,
+          "galleryOrder": 2,
+          "description": {
+            "et": "Õitsvad mandlioksad selge taeva taustal — kingitus vastsündinud vennapojale Vincentile, uue elu ja lootuse märk.",
+            "en": "Almond branches in bloom against a clear sky — a gift for his newborn nephew Vincent, a sign of new life and hope."
+          }
+        },
+        {
+          "slug": "kohvikuterrass",
+          "title": {
+            "et": "Kohvikuterrass öösel",
+            "en": "Café Terrace at Night"
+          },
+          "year": "1888",
+          "medium": {
+            "et": "Õli lõuendil",
+            "en": "Oil on canvas"
+          },
+          "size": "80,7 × 65,3 cm",
+          "status": {
+            "et": "Muuseumikogus (Kröller-Müller, Otterlo)",
+            "en": "In museum collection (Kröller-Müller, Otterlo)"
+          },
+          "frame": "obsidian",
+          "visualPresetId": "ember-mist",
+          "image": "/Profiilid/Van%20Gogh/cafe-terrace.jpg",
+          "showInGallery": false,
+          "galleryOrder": 3,
+          "description": {
+            "et": "Arles'i öine väljak, kus kohviku soe kollane valgus kohtub tähistaeva sügava sinisega — öö ilma mustata.",
+            "en": "A night square in Arles where the café's warm yellow light meets the deep blue of a starry sky — night without black."
+          }
+        }
+      ]
     }
   ]
 }

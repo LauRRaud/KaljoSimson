@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <filter id="paint" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="3" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="paintSoft" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="2" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="canvasGrain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="g"/>
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0.55  0 0 0 0 0.5  0 0 0 0 0.42  0 0 0 0.05 0"/>
+      <feComposite in2="SourceGraphic" operator="over"/>
+    </filter>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8d9b8"/>
+      <stop offset="0.55" stop-color="#dcc9a4"/>
+      <stop offset="1" stop-color="#cbb491"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f7d84"/>
+      <stop offset="0.6" stop-color="#48626c"/>
+      <stop offset="1" stop-color="#3a4f5a"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c8a67c"/>
+      <stop offset="1" stop-color="#a9824f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#sky)"/>
+
+  <g filter="url(#paint)">
+    <ellipse cx="590" cy="118" rx="86" ry="60" fill="#f4e6c2" opacity="0.85"/>
+    <ellipse cx="560" cy="140" rx="150" ry="34" fill="#e9d3a4" opacity="0.5"/>
+    <path d="M-30 260 Q 200 236 430 252 T 830 246 L 830 420 L -30 420 Z" fill="url(#sea)"/>
+    <path d="M-30 268 Q 240 252 470 264 T 830 258" fill="none" stroke="#8fa9ab" stroke-width="10" opacity="0.55"/>
+    <path d="M-30 320 Q 260 306 520 318 T 830 312" fill="none" stroke="#2e444f" stroke-width="14" opacity="0.4"/>
+    <path d="M-30 372 Q 300 358 560 372 T 830 366" fill="none" stroke="#d8e2d9" stroke-width="7" opacity="0.6"/>
+    <path d="M-30 408 Q 380 390 830 404 L 830 620 L -30 620 Z" fill="url(#sand)"/>
+    <path d="M-30 430 Q 320 416 830 428" fill="none" stroke="#e4c793" stroke-width="16" opacity="0.5"/>
+    <path d="M120 470 Q 400 452 700 468" fill="none" stroke="#8a6538" stroke-width="9" opacity="0.35"/>
+  </g>
+
+  <g filter="url(#paintSoft)">
+    <path d="M420 246 q 34 -26 66 -2 q -18 10 -30 9 q -20 14 -36 -7 z" fill="#b03c22" opacity="0.88"/>
+    <path d="M452 240 l 4 -34 l 6 2 l -2 34 z" fill="#2c2420" opacity="0.8"/>
+    <path d="M448 208 q 22 4 20 20 l -20 -6 z" fill="#e7e2d2" opacity="0.9"/>
+    <ellipse cx="452" cy="266" rx="44" ry="7" fill="#22333d" opacity="0.3"/>
+  </g>
+
+  <g filter="url(#paintSoft)" opacity="0.85">
+    <path d="M96 402 q 8 -44 4 -78 q 14 30 10 78 z" fill="#5d5340"/>
+    <path d="M100 330 q -20 -18 -24 -40 q 22 8 30 34 z" fill="#6c6047"/>
+    <path d="M102 330 q 18 -22 38 -26 q -10 24 -32 34 z" fill="#7a6c50"/>
+  </g>
+
+  <rect width="800" height="600" fill="none" filter="url(#canvasGrain)" opacity="0.6"/>
+</svg>

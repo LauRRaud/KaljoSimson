@@ -18,10 +18,12 @@ const defaultMagnifierPosition = {
   backgroundY: "50%",
 };
 const magnifierZoom = 2.2;
-const roomTravelDurations = {
-  slow: 4600,
-  normal: 3200,
-  fast: 2200,
+// Sein liigub transformiga (mitte native scrolliga): liuglemise kestus
+// kiirusevaliku järgi, pehme koosinus-kiirendusega nagu varem.
+const roomGlideDurations = {
+  slow: 4400,
+  normal: 3000,
+  fast: 1800,
 };
 
 function compactMetaValue(value) {
@@ -80,10 +82,25 @@ export default function GalleryClient({
   const [activeIndex, setActiveIndex] = useState(null);
   const [isMagnifierActive, setIsMagnifierActive] = useState(false);
   const [magnifierPosition, setMagnifierPosition] = useState(defaultMagnifierPosition);
+  // Sein on esimese paigutuse (tsentreerimise) hetkeni peidus — muidu näeks
+  // kasutaja teoseid korra vasakus servas ja siis hüppamas keskele.
+  const [roomReady, setRoomReady] = useState(false);
+  const [roomView, setRoomView] = useState({
+    page: 0,
+    pageCount: 1,
+    start: 0,
+    end: 0,
+  });
   const decodedRoomImagesRef = useRef(new Set());
   const lightboxImageWindowRef = useRef(null);
   const roomViewportRef = useRef(null);
-  const roomTravelFrameRef = useRef(null);
+  const roomTrackRef = useRef(null);
+  const goToRoomPageRef = useRef(() => {});
+  const roomDragRef = useRef({ suppressClick: false });
+  const roomPageRef = useRef(0);
+  const activeIndexRef = useRef(null);
+
+  activeIndexRef.current = activeIndex;
   const magnifierTouchRef = useRef({
     lastTapAt: 0,
     lastTapX: 0,
@@ -94,8 +111,6 @@ export default function GalleryClient({
   });
   const hasArtworks = artist.artworks.length > 0;
   const isRoom = variant === "room";
-  const roomTravelDuration =
-    roomTravelDurations[roomSpeed] ?? roomTravelDurations.normal;
   const activeArtwork =
     activeIndex === null ? null : artist.artworks[activeIndex] ?? null;
   const portalRoot = typeof document === "undefined" ? null : document.body;
@@ -136,10 +151,6 @@ export default function GalleryClient({
       }
     : undefined;
 
-  function easeRoomScroll(progress) {
-    return 0.5 - Math.cos(progress * Math.PI) / 2;
-  }
-
   function getRoomImageSources(startIndex, visibleCount = 1, radius = 1) {
     const start = Math.max(0, startIndex - radius * visibleCount);
     const end = Math.min(
@@ -164,146 +175,6 @@ export default function GalleryClient({
 
     pendingSources.forEach((source) => decodedRoomImagesRef.current.add(source));
     await Promise.all(pendingSources.map((source) => waitForImageDecode(source)));
-  }
-
-  function animateRoomScrollTo(target) {
-    const viewport = roomViewportRef.current;
-
-    if (!viewport) {
-      return;
-    }
-
-    if (roomTravelFrameRef.current !== null) {
-      window.cancelAnimationFrame(roomTravelFrameRef.current);
-    }
-
-    const maxScrollLeft = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-    const clampedTarget = Math.min(maxScrollLeft, Math.max(0, target));
-    const startScrollLeft = viewport.scrollLeft;
-    const travelDistance = clampedTarget - startScrollLeft;
-
-    if (Math.abs(travelDistance) < 1) {
-      viewport.scrollLeft = clampedTarget;
-      roomTravelFrameRef.current = null;
-      return;
-    }
-
-    const startedAt = window.performance.now();
-
-    const step = (timestamp) => {
-      const progress = Math.min(1, (timestamp - startedAt) / roomTravelDuration);
-      const easedProgress = easeRoomScroll(progress);
-      viewport.scrollLeft = startScrollLeft + travelDistance * easedProgress;
-
-      if (progress < 1) {
-        roomTravelFrameRef.current = window.requestAnimationFrame(step);
-        return;
-      }
-
-      roomTravelFrameRef.current = null;
-    };
-
-    roomTravelFrameRef.current = window.requestAnimationFrame(step);
-  }
-
-  function getRoomSlots(viewport) {
-    return Array.from(viewport?.querySelectorAll(".gallery-room__slot") ?? []);
-  }
-
-  function getRoomScrollStep(viewport, slots) {
-    if (!viewport || slots.length < 2) {
-      return 1;
-    }
-
-    const viewportStyles = window.getComputedStyle(viewport);
-    const paddingLeft = Number.parseFloat(viewportStyles.paddingLeft || "0");
-    const paddingRight = Number.parseFloat(viewportStyles.paddingRight || "0");
-    const visibleWidth = viewport.clientWidth - paddingLeft - paddingRight;
-    const firstSlotRect = slots[0].getBoundingClientRect();
-    const secondSlotRect = slots[1].getBoundingClientRect();
-    const twoSlotSpan = secondSlotRect.right - firstSlotRect.left;
-
-    return visibleWidth + 1 >= twoSlotSpan ? 2 : 1;
-  }
-
-  function getCurrentRoomStartIndex(viewport, slots, step) {
-    if (!viewport || slots.length === 0) {
-      return 0;
-    }
-
-    const viewportRect = viewport.getBoundingClientRect();
-    const viewportStyles = window.getComputedStyle(viewport);
-    const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
-    let closestPairStartIndex = 0;
-    let smallestDistance = Number.POSITIVE_INFINITY;
-
-    for (let index = 0; index < slots.length; index += step) {
-      const distance = Math.abs(slots[index].getBoundingClientRect().left - focusLeft);
-
-      if (distance < smallestDistance) {
-        smallestDistance = distance;
-        closestPairStartIndex = index;
-      }
-    }
-
-    return closestPairStartIndex;
-  }
-
-  function getRoomScrollTarget(viewport, slots, startIndex, alignment = "start") {
-    const firstSlot = slots[startIndex];
-    const viewportRect = viewport.getBoundingClientRect();
-    const viewportStyles = window.getComputedStyle(viewport);
-    const focusLeft = viewportRect.left + Number.parseFloat(viewportStyles.paddingLeft || "0");
-
-    if (alignment === "center") {
-      const frameWindow = firstSlot.querySelector(".artwork-frame__window") ?? firstSlot;
-      const frameRect = frameWindow.getBoundingClientRect();
-      const viewportCenter = viewportRect.left + viewportRect.width / 2;
-
-      return viewport.scrollLeft + frameRect.left + frameRect.width / 2 - viewportCenter;
-    }
-
-    return viewport.scrollLeft + firstSlot.getBoundingClientRect().left - focusLeft;
-  }
-
-  async function scrollRoom(direction) {
-    const viewport = roomViewportRef.current;
-    const wall = viewport?.querySelector(".gallery-room__wall");
-
-    if (!viewport || !wall) {
-      return;
-    }
-
-    const slots = getRoomSlots(viewport);
-
-    if (slots.length === 0) {
-      return;
-    }
-
-    const scrollStep = getRoomScrollStep(viewport, slots);
-    const currentStartIndex = getCurrentRoomStartIndex(viewport, slots, scrollStep);
-    const remainder = slots.length % scrollStep;
-    const maxStartIndex = Math.max(
-      0,
-      slots.length - (remainder === 0 ? scrollStep : remainder),
-    );
-    const targetIndex = Math.min(
-      maxStartIndex,
-      Math.max(0, currentStartIndex + direction * scrollStep),
-    );
-    const endAlignmentIndex =
-      direction > 0 && targetIndex === maxStartIndex ? slots.length - 1 : targetIndex;
-    const targetAlignment =
-      direction > 0 && targetIndex === maxStartIndex ? "center" : "start";
-    const targetScrollLeft = getRoomScrollTarget(
-      viewport,
-      slots,
-      endAlignmentIndex,
-      targetAlignment,
-    );
-
-    await predecodeRoomImages(getRoomImageSources(endAlignmentIndex, scrollStep));
-    animateRoomScrollTo(targetScrollLeft);
   }
 
   function updateMagnifierPosition(event) {
@@ -621,11 +492,358 @@ export default function GalleryClient({
     };
   }, [activeIndex]);
 
-  useEffect(() => () => {
-    if (roomTravelFrameRef.current !== null) {
-      window.cancelAnimationFrame(roomTravelFrameRef.current);
+  // Seinamootor: leheküljepõhine liikumine transformiga. Paar (või mobiilis
+  // üks teos) on alati ühtmoodi keskel — ka viimasel leheküljel. Nooled,
+  // kvantiseeritud ratas, lohistamine inertsiga ja klaviatuur.
+  useEffect(() => {
+    if (!isRoom || !hasArtworks) {
+      return undefined;
     }
-  }, []);
+
+    const viewport = roomViewportRef.current;
+    const track = roomTrackRef.current;
+
+    if (!viewport || !track) {
+      return undefined;
+    }
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    const glideDuration =
+      roomGlideDurations[roomSpeed] ?? roomGlideDurations.normal;
+    const total = artist.artworks.length;
+    const drag = {
+      on: false,
+      moved: false,
+      startX: 0,
+      startCurrent: 0,
+      lastX: 0,
+      lastT: 0,
+      vel: 0,
+    };
+
+    let pageSize = 1;
+    let pageCount = total;
+    // lehekülg elab efekti taaskäivituse üle (nt kiirusevaliku vahetus) —
+    // muidu hüppaks sein alati algusesse tagasi
+    let page = roomPageRef.current;
+    let current = 0;
+    let target = 0;
+    let glideFrom = 0;
+    let glideStartedAt = 0;
+    let raf = null;
+    let running = false;
+    let wheelAcc = 0;
+    let wheelLock = 0;
+    let slotEls = [];
+    let slotCenters = [];
+    let slotWidth = 0;
+    let slotGap = 0;
+    let trackOffset = 0;
+    let viewportCenter = 0;
+    let lastFocus = [];
+
+    function slots() {
+      return Array.from(track.querySelectorAll(".gallery-room__slot"));
+    }
+
+    // Kõik paigutuslugemised (offsetLeft jms) tehakse ÜKS kord siin —
+    // igal kaadril lugemine sundis brauserit reflow'le ja tekitas tõksumist.
+    function cacheMetrics() {
+      slotEls = slots();
+
+      if (!slotEls.length) {
+        slotCenters = [];
+        lastFocus = [];
+        return;
+      }
+
+      slotWidth = slotEls[0].offsetWidth;
+      slotGap = slotEls[1]
+        ? slotEls[1].offsetLeft - (slotEls[0].offsetLeft + slotWidth)
+        : 0;
+      slotCenters = slotEls.map(
+        (slot) => slot.offsetLeft + slot.offsetWidth / 2,
+      );
+      trackOffset = track.offsetLeft;
+      viewportCenter = viewport.clientWidth / 2;
+      lastFocus = slotEls.map(() => -1);
+    }
+
+    function measurePageSize() {
+      // Puuteseadmetel (mobiil ja tahvel, ka landscape) alati üks teos korraga.
+      if (coarsePointer) {
+        return 1;
+      }
+
+      const all = slots();
+
+      if (all.length < 2) {
+        return 1;
+      }
+
+      const styles = window.getComputedStyle(viewport);
+      const usable =
+        viewport.clientWidth -
+        Number.parseFloat(styles.paddingLeft || "0") -
+        Number.parseFloat(styles.paddingRight || "0");
+      const pairSpan =
+        all[1].offsetLeft + all[1].offsetWidth - all[0].offsetLeft;
+
+      return usable + 1 >= pairSpan ? 2 : 1;
+    }
+
+    function pageBounds(p) {
+      const start = p * pageSize;
+      const end = Math.min(total - 1, start + pageSize - 1);
+      return { start, end };
+    }
+
+    function targetFor(p) {
+      const { start, end } = pageBounds(p);
+
+      if (slotCenters[start] === undefined || slotCenters[end] === undefined) {
+        return 0;
+      }
+
+      const left = slotCenters[start] - slotWidth / 2;
+      const right = slotCenters[end] + slotWidth / 2;
+
+      // track algab juba viewporti polsterduse kohalt — lahutame selle,
+      // muidu nihkuks paar polsterduse võrra paremale.
+      return viewportCenter - trackOffset - (left + right) / 2;
+    }
+
+    // Fookus on positsioonipõhine: iga teose heledus/suurus/teravus sõltub
+    // tema kaugusest ekraani keskpunktist — muutub täpselt sama sujuvalt
+    // kui sein ise liigub.
+    function updateFocus() {
+      if (!slotEls.length) {
+        return;
+      }
+
+      const centerInTrack = viewportCenter - trackOffset - current;
+      const fullRadius =
+        pageSize === 2 ? (slotWidth + slotGap) / 2 + 8 : slotWidth * 0.4;
+      const fadeRange = slotWidth * 1.05;
+
+      for (let i = 0; i < slotEls.length; i += 1) {
+        const distance = Math.abs(slotCenters[i] - centerInTrack);
+        const focus = Math.min(
+          1,
+          Math.max(0, 1 - Math.max(0, distance - fullRadius) / fadeRange),
+        );
+
+        // kirjutame stiili ainult siis, kui väärtus päriselt muutus —
+        // muidu maksab iga kaader style-recalc'i kõigil slottidel
+        if (Math.abs(focus - lastFocus[i]) > 0.008) {
+          lastFocus[i] = focus;
+          slotEls[i].style.setProperty("--focus", focus.toFixed(3));
+        }
+      }
+    }
+
+    function paint() {
+      track.style.transform = `translate3d(${current.toFixed(2)}px, 0, 0)`;
+      updateFocus();
+    }
+
+    function tick() {
+      if (!drag.on) {
+        if (reduced) {
+          current = target;
+        } else {
+          const progress = Math.min(
+            1,
+            (window.performance.now() - glideStartedAt) / glideDuration,
+          );
+          const eased = 0.5 - Math.cos(progress * Math.PI) / 2;
+
+          current = glideFrom + (target - glideFrom) * eased;
+
+          if (progress >= 1) {
+            current = target;
+          }
+        }
+      }
+
+      paint();
+
+      if (current === target && !drag.on) {
+        running = false;
+        raf = null;
+        return;
+      }
+
+      raf = window.requestAnimationFrame(tick);
+    }
+
+    function wake() {
+      if (!running) {
+        running = true;
+        raf = window.requestAnimationFrame(tick);
+      }
+    }
+
+    function setPage(next) {
+      page = Math.max(0, Math.min(pageCount - 1, next));
+      roomPageRef.current = page;
+      glideFrom = current;
+      glideStartedAt = window.performance.now();
+      target = targetFor(page);
+
+      const bounds = pageBounds(page);
+      setRoomView({ page, pageCount, start: bounds.start, end: bounds.end });
+      predecodeRoomImages(getRoomImageSources(bounds.start, pageSize));
+      wake();
+    }
+
+    function layout(instant = false) {
+      pageSize = measurePageSize();
+      pageCount = Math.ceil(total / pageSize);
+      cacheMetrics();
+      setPage(Math.min(page, pageCount - 1));
+
+      if (instant) {
+        current = target;
+        glideFrom = target;
+        paint();
+      }
+    }
+
+    goToRoomPageRef.current = (direction) => setPage(page + direction);
+
+    function handleWheel(event) {
+      event.preventDefault();
+
+      const delta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+      const now = window.performance.now();
+
+      if (now < wheelLock) {
+        return;
+      }
+
+      wheelAcc += delta;
+
+      if (Math.abs(wheelAcc) > 90) {
+        const direction = wheelAcc > 0 ? 1 : -1;
+        wheelAcc = 0;
+        wheelLock = now + 420;
+        setPage(page + direction);
+      }
+    }
+
+    function handlePointerDown(event) {
+      if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+      }
+
+      drag.on = true;
+      drag.moved = false;
+      drag.startX = event.clientX;
+      drag.startCurrent = current;
+      drag.lastX = event.clientX;
+      drag.lastT = window.performance.now();
+      drag.vel = 0;
+      roomDragRef.current.suppressClick = false;
+      wake();
+    }
+
+    function handlePointerMove(event) {
+      if (!drag.on) {
+        return;
+      }
+
+      const dx = event.clientX - drag.startX;
+
+      if (Math.abs(dx) > 8) {
+        drag.moved = true;
+        roomDragRef.current.suppressClick = true;
+      }
+
+      const now = window.performance.now();
+      const dt = Math.max(1, now - drag.lastT);
+
+      drag.vel = ((event.clientX - drag.lastX) / dt) * 16;
+      drag.lastX = event.clientX;
+      drag.lastT = now;
+      current = drag.startCurrent + dx;
+      target = current;
+      paint();
+    }
+
+    function handlePointerEnd() {
+      if (!drag.on) {
+        return;
+      }
+
+      drag.on = false;
+
+      const projected = current + drag.vel * 14;
+      let best = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (let p = 0; p < pageCount; p += 1) {
+        const distance = Math.abs(targetFor(p) - projected);
+
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = p;
+        }
+      }
+
+      setPage(best);
+      window.requestAnimationFrame(() => {
+        roomDragRef.current.suppressClick = false;
+      });
+    }
+
+    function handleKeyDown(event) {
+      if (activeIndexRef.current !== null) {
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setPage(page + 1);
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setPage(page - 1);
+      }
+    }
+
+    const resizeObserver = new ResizeObserver(() => layout(true));
+
+    layout(true);
+    setRoomReady(true);
+    resizeObserver.observe(viewport);
+    viewport.addEventListener("wheel", handleWheel, { passive: false });
+    viewport.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerEnd);
+    window.addEventListener("pointercancel", handlePointerEnd);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      resizeObserver.disconnect();
+      viewport.removeEventListener("wheel", handleWheel);
+      viewport.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerEnd);
+      window.removeEventListener("pointercancel", handlePointerEnd);
+      window.removeEventListener("keydown", handleKeyDown);
+
+      if (raf) {
+        window.cancelAnimationFrame(raf);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRoom, hasArtworks, artist.artworks.length, roomSpeed]);
 
   useEffect(() => {
     if (!isRoom || !hasArtworks) {
@@ -691,29 +909,63 @@ export default function GalleryClient({
           className="gallery-room"
         >
           <div className="gallery-room__viewport" ref={roomViewportRef}>
-            <div className="gallery-room__wall">
+            <div
+              className={`gallery-room__wall${
+                roomReady ? " gallery-room__wall--ready" : ""
+              }`}
+              ref={roomTrackRef}
+            >
               {artist.artworks.map((artwork, index) => (
-                <div className="gallery-room__slot" key={artwork.slug}>
+                <div
+                  className={`gallery-room__slot ${
+                    index >= roomView.start && index <= roomView.end
+                      ? "gallery-room__slot--active"
+                      : "gallery-room__slot--dim"
+                  }`}
+                  key={artwork.slug}
+                >
                   <ArtworkFrame
                     artwork={artwork}
                     imageFetchPriority={index < 2 ? "high" : undefined}
                     imageLoading={index < 4 ? "eager" : "lazy"}
                     interactive
                     locale={locale}
-                    onClick={() => openLightbox(index)}
+                    onClick={() => {
+                      if (roomDragRef.current.suppressClick) {
+                        return;
+                      }
+
+                      if (index < roomView.start || index > roomView.end) {
+                        goToRoomPageRef.current(index < roomView.start ? -1 : 1);
+                        return;
+                      }
+
+                      openLightbox(index);
+                    }}
                   />
                 </div>
               ))}
-              <div aria-hidden="true" className="gallery-room__end-spacer" />
             </div>
           </div>
+
+          <p aria-hidden="true" className="gallery-room__marker">
+            <span className="gallery-room__marker-idx">
+              {String(roomView.start + 1).padStart(2, "0")}
+              {roomView.end > roomView.start
+                ? `–${String(roomView.end + 1).padStart(2, "0")}`
+                : ""}
+              {" / "}
+              {String(artist.artworks.length).padStart(2, "0")}
+            </span>
+          </p>
 
           {artist.artworks.length > 1 ? (
             <div className="gallery-room__controls">
               <button
                 aria-label={locale === "en" ? "Move left in gallery" : "Liigu galeriis vasakule"}
                 className="gallery-room__nav gallery-room__nav--prev"
-                onClick={() => scrollRoom(-1)}
+                disabled={roomView.page === 0}
+                onClick={() => goToRoomPageRef.current(-1)}
                 type="button"
               >
                 <span aria-hidden="true">&lt;</span>
@@ -721,7 +973,8 @@ export default function GalleryClient({
               <button
                 aria-label={locale === "en" ? "Move right in gallery" : "Liigu galeriis paremale"}
                 className="gallery-room__nav gallery-room__nav--next"
-                onClick={() => scrollRoom(1)}
+                disabled={roomView.page >= roomView.pageCount - 1}
+                onClick={() => goToRoomPageRef.current(1)}
                 type="button"
               >
                 <span aria-hidden="true">&gt;</span>

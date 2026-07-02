@@ -52,3 +52,6 @@ next-env.d.ts
 
 # local browser automation artifacts
 .playwright-mcp/
+
+# claude code local files
+.claude/

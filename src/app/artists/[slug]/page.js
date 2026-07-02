@@ -48,15 +48,15 @@ export default async function ArtistPage({ params, searchParams }) {
       content={content}
       locale={locale}
       mainClassName="page-main--profile"
-      shellClassName="page-shell--gallery-surface"
+      shellClassName="page-shell--void"
     >
-      <section className="section profile-hero">
-        <div className="profile-nav">
-          <a className="inline-link profile-back-link" href={withLocale("/", locale)}>
-            {locale === "en" ? "Back" : "Tagasi"}
-          </a>
-        </div>
+      <div className="profile-nav">
+        <a className="inline-link profile-back-link" href={withLocale("/", locale)}>
+          {locale === "en" ? "Back" : "Tagasi"}
+        </a>
+      </div>
 
+      <section className="section profile-hero">
         <ArtistPortrait artist={artist} priority />
 
         <div className="profile-copy">

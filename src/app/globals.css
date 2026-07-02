@@ -341,7 +341,8 @@ img {
   will-change: opacity;
 }
 
-.site-ambient--gallery-room {
+.site-ambient--gallery-room,
+.site-ambient--calm {
   opacity: 0;
 }
 
@@ -2933,18 +2934,53 @@ p {
   backdrop-filter: none;
 }
 
+/* tagasi-nupp on alati nähtav üleval vasakus — klaasjas pill, mis püsib
+   loetav ka siis, kui sisu selle alt läbi kerib */
 .profile-nav {
-  position: relative;
-  z-index: 1;
-  grid-column: 1 / -1;
-  margin-top: -14px;
-  margin-bottom: -6px;
+  position: fixed;
+  top: calc(clamp(16px, 2.6vh, 26px) + env(safe-area-inset-top, 0px));
+  left: clamp(18px, 3vw, 40px);
+  z-index: 40;
+  margin: 0;
 }
 
 .profile-back-link {
+  display: inline-flex;
+  align-items: center;
   margin-top: 0;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--glass-panel-bg);
+  color: var(--text-soft);
+  font-family: var(--font-heading);
   font-size: 1.18rem;
-  line-height: 1.45;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  transition: color 240ms ease, background 240ms ease;
+}
+
+.profile-back-link:hover,
+.profile-back-link:focus-visible {
+  color: var(--text);
+  background: var(--glass-panel-bg-strong);
+}
+
+/* profiililehe sisu algab fikseeritud tagasi-nupust allpool */
+.page-main--profile {
+  padding-top: clamp(78px, 10vh, 108px);
+}
+
+/* artistide lehel on üleval ka menüüpaneel — kitsal ekraanil
+   nihutame tagasi-nupu sellest allapoole */
+@media (max-width: 720px) {
+  .page-shell--void .profile-nav {
+    top: calc(clamp(64px, 9vh, 88px) + env(safe-area-inset-top, 0px));
+  }
 }
 
 .profile-hero > .portrait-shell {
@@ -3329,15 +3365,30 @@ body[data-frame-preset="gold"] .artwork-frame__window::before,
 }
 
 .gallery-room-page__back {
-  color: rgba(22, 19, 16, 0.88);
+  display: inline-flex;
+  align-items: center;
   margin-top: 0;
-  font-size: clamp(1.1rem, 1.2vw, 1.24rem);
-  font-weight: 400;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--glass-panel-bg);
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.01em;
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  transition: color 240ms ease, background 240ms ease;
 }
 
-html[data-theme="dark"] .gallery-room-page__back {
-  color: rgba(226, 195, 158, 0.94);
+.gallery-room-page__back:hover,
+.gallery-room-page__back:focus-visible {
+  color: var(--text);
+  background: var(--glass-panel-bg-strong);
 }
 
 .gallery-room-page__control-group {
@@ -3501,21 +3552,13 @@ html[data-theme="dark"] .gallery-room-speed__button--active {
   align-items: center;
   height: 100%;
   min-height: 100svh;
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-x: contain;
+  overflow: hidden;
   padding:
     clamp(88px, 12vh, 132px)
     var(--gallery-room-edge)
     clamp(72px, 9vh, 116px)
     var(--gallery-room-edge);
-  scroll-padding-inline: var(--gallery-room-edge);
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.gallery-room__viewport::-webkit-scrollbar {
-  display: none;
+  touch-action: pan-y;
 }
 
 .gallery-room__wall {
@@ -3523,24 +3566,50 @@ html[data-theme="dark"] .gallery-room-speed__button--active {
   align-items: flex-start;
   min-width: max-content;
   gap: var(--gallery-room-gap);
+  will-change: transform;
+  /* peidus, kuni JS on seina esimest korda keskele paigutanud — väldib
+     teoste hüpet vasakust servast keskele lehe laadimisel */
+  opacity: 0;
 }
 
+.gallery-room__wall--ready {
+  opacity: 1;
+  transition: opacity 420ms ease;
+}
+
+/* fookus (0..1) tuleb mootorist positsioonipõhiselt: heledus, suurus,
+   valgusvihk ja õrn sügavusteravus muutuvad sama sujuvalt kui sein liigub */
 .gallery-room__slot {
+  position: relative;
   flex: 0 0 var(--gallery-room-slot);
   min-width: 0;
+  opacity: calc(0.38 + 0.62 * var(--focus, 1));
+  will-change: opacity;
 }
 
-.gallery-room__end-spacer {
-  flex: 0 0 50vw;
-  width: 50vw;
-  min-width: 50vw;
+.gallery-room__slot::before {
+  content: "";
+  position: absolute;
+  inset: -14% -18%;
+  z-index: -1;
+  background: radial-gradient(
+    60% 52% at 50% 42%,
+    rgba(255, 248, 232, 0.85),
+    transparent 74%
+  );
+  opacity: var(--focus, 1);
+  will-change: opacity;
   pointer-events: none;
 }
 
-.gallery-room__slot:nth-child(3n + 2),
-.gallery-room__slot:nth-child(3n) {
-  transform: none;
+html[data-theme="dark"] .gallery-room__slot::before {
+  background: radial-gradient(
+    60% 52% at 50% 42%,
+    rgba(224, 186, 130, 0.14),
+    transparent 74%
+  );
 }
+
 
 .gallery-room .artwork-frame--button,
 .gallery-room .artwork-frame__assembly {
@@ -3672,6 +3741,32 @@ html[data-theme="dark"] .gallery-room-speed__button--active {
 
 .gallery-room__nav--next span {
   transform: translateX(-3px) rotate(45deg);
+}
+
+.gallery-room__nav[disabled] {
+  opacity: 0.28;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* alanurga marker: mitmes teos / mitu kokku — sama keel mis avalehel */
+.gallery-room__marker {
+  position: absolute;
+  left: clamp(20px, 3.2vw, 46px);
+  bottom: calc(clamp(18px, 3.2vh, 32px) + env(safe-area-inset-bottom, 0px));
+  z-index: 4;
+  margin: 0;
+  pointer-events: none;
+}
+
+.gallery-room__marker-idx {
+  color: var(--bfl-accent);
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  font-style: italic;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
 }
 
 .lightbox {
@@ -4245,6 +4340,45 @@ body.is-magnifying-artwork .brush-cursor {
 }
 
 .admin-login {
+  width: min(100%, 560px);
+  align-self: center;
+  align-items: center;
+  gap: 30px;
+  padding: clamp(40px, 6vh, 60px) clamp(28px, 5vw, 56px);
+  text-align: center;
+}
+
+.admin-login__header {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.admin-login__header h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.5vw, 3.1rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.95;
+}
+
+.admin-reserve {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 10px;
+  padding-top: 26px;
+  border-top: 1px solid var(--bfl-line-soft);
+}
+
+.admin-form-grid--reserve {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 16px;
+}
+
+.admin-login {
   width: 100%;
   margin: 0 auto;
   padding: 56px 52px;
@@ -4288,53 +4422,74 @@ body.is-magnifying-artwork .brush-cursor {
 }
 
 .input--admin {
-  min-height: 64px;
+  min-height: 58px;
   width: 100%;
   padding: 0 22px;
-  border: 1px solid rgba(141, 101, 61, 0.34);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 242, 0.68)),
-    rgba(255, 252, 246, 0.98);
-  box-shadow:
-    0 0 0 1px rgba(141, 101, 61, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86),
-    0 18px 36px rgba(75, 52, 28, 0.12);
+  border: 1.5px solid var(--bfl-line-soft);
+  border-radius: 16px;
+  background: var(--bfl-label-bg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
   text-align: center;
   color: var(--text);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  transition: border-color 240ms ease, box-shadow 240ms ease;
 }
 
 .input--admin::placeholder {
-  color: rgba(24, 21, 18, 0.5);
+  color: var(--text-faint);
+  letter-spacing: 0.08em;
 }
 
 .input--admin:focus {
-  border-color: rgba(141, 101, 61, 0.48);
+  outline: none;
+  border-color: var(--bfl-accent);
   box-shadow:
-    0 0 0 1px rgba(141, 101, 61, 0.16),
-    0 0 0 4px rgba(141, 101, 61, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+    0 0 0 4px color-mix(in srgb, var(--bfl-accent) 15%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .button--admin {
-  min-height: 60px;
+  min-height: 56px;
   width: fit-content;
-  min-width: 148px;
-  padding: 0 24px;
+  min-width: 168px;
+  padding: 0 44px;
   align-self: center;
-  color: var(--text);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 250, 242, 0.62)),
-    rgba(255, 252, 246, 0.98);
-  border: 1px solid rgba(141, 101, 61, 0.24);
+  border: none;
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--glass-panel-bg);
   box-shadow:
-    0 0 0 1px rgba(141, 101, 61, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78),
-    0 18px 36px rgba(75, 52, 28, 0.12);
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  transition:
+    color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease,
+    transform 200ms ease;
 }
 
 .button--admin:hover,
+.button--admin:focus-visible {
+  color: var(--text);
+  background: var(--glass-panel-bg-strong);
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--floating-control-shadow-hover);
+}
+
+.button--admin:active {
+  transform: translateY(1px);
+}
+
 .button--admin-ghost:hover {
-  background: rgba(255, 255, 255, 0.82);
+  background: var(--glass-control-bg-hover);
 }
 
 .button--admin-ghost {
@@ -5340,34 +5495,13 @@ html[data-theme="dark"] .artwork-frame__window::after {
 }
 
 html[data-theme="dark"] .input--admin {
-  border-color: rgba(236, 215, 186, 0.52);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-    rgba(24, 24, 29, 0.98);
-  box-shadow:
-    0 0 0 1px rgba(236, 215, 186, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 18px 36px rgba(0, 0, 0, 0.22);
-}
-
-html[data-theme="dark"] .input--admin::placeholder {
-  color: rgba(245, 239, 229, 0.74);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 html[data-theme="dark"] .input--admin:focus {
-  border-color: rgba(236, 215, 186, 0.72);
   box-shadow:
-    0 0 0 1px rgba(236, 215, 186, 0.2),
-    0 0 0 4px rgba(209, 182, 146, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-html[data-theme="dark"] .button--admin {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-    rgba(18, 18, 22, 0.98);
-  border-color: rgba(236, 215, 186, 0.34);
-  box-shadow: none;
+    0 0 0 4px color-mix(in srgb, var(--bfl-accent) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 html[data-theme="dark"] .button--admin:hover,
@@ -7159,3 +7293,1055 @@ html[data-theme="dark"] .admin-divider {
 }
 
 
+
+
+/* =====================================================================
+   BFL — "Läbi raamide" homepage flight (v2)
+   A camera flight through the gallery: scroll = dolly. Each room shows
+   one framed representative artwork (the site's real frame language)
+   and the artist's framed portrait with a nameplate. The flight ends
+   at a museum wall label with the contact details; the menu returns.
+   ===================================================================== */
+
+:root {
+  --bfl-void-a: #f7edde;
+  --bfl-void-b: #eadbc3;
+  --bfl-void-c: #d5c2a6;
+  --bfl-fog: rgba(251, 245, 233, 0.6);
+  --bfl-line: rgba(45, 37, 29, 0.4);
+  --bfl-line-soft: rgba(45, 37, 29, 0.2);
+  --bfl-accent: #8d5a22;
+  --bfl-glow: rgba(224, 172, 108, 0.42);
+  --bfl-dust: rgba(122, 92, 52, 0.5);
+  --bfl-label-bg: #faf4e8;
+  --bfl-name-shadow:
+    0 2px 4px rgba(94, 66, 35, 0.18),
+    0 10px 24px rgba(94, 66, 35, 0.14);
+  --bfl-art-shadow:
+    0 14px 24px -12px rgba(66, 45, 24, 0.5),
+    0 42px 90px -30px rgba(66, 45, 24, 0.38);
+  --bfl-grain-o: 0.05;
+}
+
+html[data-theme="dark"] {
+  --bfl-void-a: #191410;
+  --bfl-void-b: #100d0a;
+  --bfl-void-c: #090807;
+  --bfl-fog: rgba(10, 8, 6, 0.55);
+  --bfl-line: rgba(246, 235, 217, 0.38);
+  --bfl-line-soft: rgba(246, 235, 217, 0.16);
+  --bfl-accent: #e3b478;
+  --bfl-glow: rgba(226, 168, 96, 0.34);
+  --bfl-dust: rgba(240, 214, 170, 0.55);
+  --bfl-label-bg: #1b1712;
+  --bfl-name-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.55),
+    0 12px 30px rgba(0, 0, 0, 0.4);
+  --bfl-art-shadow:
+    0 14px 24px -12px rgba(0, 0, 0, 0.66),
+    0 46px 100px -30px rgba(0, 0, 0, 0.55);
+  --bfl-grain-o: 0.085;
+}
+
+/* ---- shell -------------------------------------------------------- */
+
+.page-main--bfl {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page-shell--bfl ::selection {
+  background: var(--bfl-accent);
+  color: var(--bfl-void-a);
+  text-shadow: none;
+}
+
+/* menüü naaseb lennu lõpus */
+body.bfl-header-return .site-header {
+  position: fixed;
+  animation: bfl-header-in 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bfl-header-in {
+  from {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- scene chassis ------------------------------------------------- */
+
+.bfl {
+  position: relative;
+}
+
+.bfl-viewport {
+  --cue-o: 1;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  perspective: 1100px;
+  perspective-origin: 50% 46%;
+}
+
+.bfl-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 30%, var(--bfl-void-a) 0%, var(--bfl-void-b) 55%, var(--bfl-void-c) 100%);
+}
+
+.bfl-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 52%, rgba(20, 12, 5, 0.14) 100%);
+}
+
+html[data-theme="dark"] .bfl-veil::after {
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 46%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* elav värv: vedelikusimulatsioon veili ja 3D-sisu vahel */
+.bfl-paint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bfl-paint__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+/* heledas režiimis toonib värv paberit nagu akvarell (multiply),
+   tumedas helendab nagu valgus pimedas ruumis (tavaline liitmine) */
+html[data-theme="light"] .bfl-paint__canvas {
+  mix-blend-mode: multiply;
+}
+
+.bfl-look,
+.bfl-dolly {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.bfl-track {
+  position: relative;
+  pointer-events: none;
+}
+
+.bfl-anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* ---- atmosphere ---------------------------------------------------- */
+
+
+/* ---- brand --------------------------------------------------------- */
+
+.bfl-brand {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) translateZ(var(--z));
+  transform-style: preserve-3d;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.bfl-brand__title {
+  margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-heading);
+  font-size: clamp(5rem, 14.2vw, 13.2rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.9;
+  color: var(--text);
+  text-shadow: none;
+  transform-style: preserve-3d;
+  animation: bfl-brand-breathe 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes bfl-brand-breathe {
+  from {
+    opacity: 0;
+    filter: blur(9px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.bfl-brand__word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.bfl-brand__word--beyond {
+  opacity: calc(var(--o, 1) * (1 - var(--split, 0) * 1.25));
+  transform: translateZ(calc(var(--split, 0) * 560px));
+}
+
+.bfl-brand__word--frames {
+  font-size: 0.94em;
+  opacity: calc(var(--o, 1) * (1 - var(--split, 0) * 0.75));
+  transform: translateY(0.14em) translateZ(calc(var(--split, 0) * -300px));
+}
+
+.bfl-tagline {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  margin: 0;
+  transform: translate(-50%, 0) translateZ(var(--z)) translateY(clamp(120px, 17vw, 250px));
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.8vw, 3.3rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  opacity: calc(var(--o, 1) * (1 - var(--split, 0)));
+  text-shadow: none;
+  pointer-events: none;
+}
+
+/* sõnahaaval "märja värvi" ilmumine: rahulik rütm — pintslitõmme
+   maandub soojas aktsentvärvis ja kuivab aegamisi tindiks */
+.bfl-tagline__word {
+  display: inline-block;
+  animation: bfl-word-dry 2400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(1100ms + var(--wi) * 1250ms);
+}
+
+.bfl-tagline__word + .bfl-tagline__word {
+  margin-left: 0.34em;
+}
+
+@keyframes bfl-word-dry {
+  0% {
+    opacity: 0;
+    transform: translateY(0.55em) rotate(1.6deg);
+    filter: blur(7px);
+    color: var(--bfl-accent);
+  }
+  32% {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+    color: var(--bfl-accent);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+    color: inherit;
+  }
+}
+
+/* ---- rooms ---------------------------------------------------------- */
+
+.bfl-room {
+  --dir: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translateZ(var(--z));
+  transform-style: preserve-3d;
+  visibility: hidden;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bfl-room--odd {
+  --dir: -1;
+}
+
+.bfl-room .bfl-work,
+.bfl-room .bfl-persona {
+  opacity: var(--o, 0);
+}
+
+/* Avalehe sisenemisel: taustaruumide sisu ilmub sujuva üleminekuga (mitte
+   tõksti). Üleminek kehtib ainult intro-akna ajal — lennu ajal juhib
+   läbipaistvust JS iga kaadriga, seega üleminek eemaldatakse. */
+.bfl--intro .bfl-room .bfl-work,
+.bfl--intro .bfl-room .bfl-persona {
+  transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* esindusteos — päris raamis */
+.bfl-work {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: clamp(320px, 39vw, 560px);
+  transform: translate(-50%, -50%) translate3d(calc(var(--dir) * -13vw), 0, 0);
+}
+
+.bfl-work .artwork-frame__window {
+  min-height: 0;
+}
+
+.bfl-work .artwork-frame__assembly {
+  gap: 0;
+}
+
+/* autor + nimi — üks veerg, ei saa kunagi kattuda */
+.bfl-persona {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 2.6vh, 26px);
+  transform: translate(-50%, -50%) translate3d(calc(var(--dir) * 21vw), 1vh, -240px);
+}
+
+.bfl-author {
+  display: block;
+  width: clamp(200px, 19vw, 275px);
+  filter: drop-shadow(0 22px 40px rgba(30, 18, 8, 0.3));
+}
+
+html[data-theme="dark"] .bfl-author {
+  filter: drop-shadow(0 22px 44px rgba(0, 0, 0, 0.5));
+}
+
+.bfl-nameplate {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bfl-nameplate__name {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.6vw, 4.1rem);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 0.98;
+  color: var(--text);
+  text-shadow: none;
+}
+
+.bfl-nameplate__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 16px;
+  color: var(--text-soft);
+  font-size: clamp(0.92rem, 1.35vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+.bfl-nameplate__count {
+  position: relative;
+  padding-left: 16px;
+  font-style: normal;
+  color: var(--bfl-accent);
+}
+
+.bfl-nameplate__count::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--bfl-accent);
+  transform: translateY(-50%);
+}
+
+/* selge klikisihtmärk: klaasjas Profiil-nupp nime all, menüü keeles */
+.bfl-profile-btn {
+  margin-top: clamp(10px, 1.8vh, 18px);
+  padding: clamp(10px, 1.4vh, 14px) clamp(28px, 3.2vw, 44px);
+  border: none;
+  border-radius: 999px;
+  background: var(--glass-panel-bg);
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 1.75vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-shadow: none;
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  transition: color 260ms ease, background 260ms ease;
+}
+
+.bfl-profile-btn:hover,
+.bfl-room:focus-visible .bfl-profile-btn {
+  background: var(--glass-panel-bg-strong);
+  color: var(--text);
+}
+
+
+.bfl-room:focus-visible .bfl-work {
+  outline: 2px solid var(--bfl-accent);
+  outline-offset: 10px;
+}
+
+/* ---- finale: muuseumi seinasilt -------------------------------------- */
+
+.bfl-finale {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translateZ(var(--z));
+  transform-style: preserve-3d;
+  visibility: hidden;
+}
+
+.bfl-finale > * {
+  opacity: var(--o, 0);
+}
+
+.bfl-finale__inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  justify-items: center;
+  gap: clamp(22px, 4vh, 38px);
+  transform: translate(-50%, -50%);
+}
+
+/* kontakt kui raamitud teos — näituse lõpusein */
+.bfl-contactframe {
+  width: min(780px, 90vw);
+  padding: clamp(16px, 1.7vw, 26px);
+  background: var(--frame-active-metal);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.66),
+    inset 0 -1px 2px rgba(47, 58, 67, 0.1),
+    inset 1px 0 0 rgba(255, 255, 255, 0.46),
+    inset -1px 0 0 rgba(42, 52, 60, 0.16),
+    var(--bfl-art-shadow);
+}
+
+.bfl-contactframe__mat {
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 2.8vh, 26px);
+  padding: clamp(40px, 7vh, 72px) clamp(30px, 5vw, 84px);
+  background: var(--bfl-label-bg);
+  box-shadow: inset 0 0 30px rgba(20, 14, 8, 0.12);
+  text-align: center;
+}
+
+.bfl-contactframe__brand {
+  margin: 0 0 4px;
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-heading);
+  font-size: clamp(2.1rem, 3.4vw, 3.1rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.9;
+  color: var(--text);
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+.bfl-contactframe__brand-second {
+  font-size: 0.94em;
+  transform: translateY(0.14em);
+  display: inline-block;
+}
+
+.bfl-contactframe__mail {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.8vw, 3.3rem);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  text-shadow: none;
+  background: linear-gradient(var(--bfl-accent), var(--bfl-accent)) 50% 96% / 0% 2px no-repeat;
+  transition: color 300ms ease, background-size 560ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: auto;
+}
+
+.bfl-contactframe__mail:hover,
+.bfl-contactframe__mail:focus-visible {
+  color: var(--bfl-accent);
+  background-size: 100% 2px;
+}
+
+.bfl-contactframe__line {
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-weight: 600;
+  text-shadow: none;
+  background: linear-gradient(var(--bfl-accent), var(--bfl-accent)) 50% 100% / 0% 1.5px no-repeat;
+  transition: color 300ms ease, background-size 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: auto;
+}
+
+.bfl-contactframe__line:hover,
+.bfl-contactframe__line:focus-visible {
+  color: var(--bfl-accent);
+  background-size: 100% 1.5px;
+}
+
+.bfl-contactframe__mail:focus-visible,
+.bfl-contactframe__line:focus-visible {
+  outline: 2px solid var(--bfl-accent);
+  outline-offset: 4px;
+}
+
+.bfl-contactframe__byline {
+  margin-top: clamp(16px, 3vh, 30px);
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+
+/* ---- screen-space UI ------------------------------------------------ */
+
+.bfl-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(clamp(20px, 3.6vh, 38px) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-shadow: none;
+  opacity: var(--cue-o, 1);
+  transform: translateX(-50%) translateY(calc((1 - var(--cue-o, 1)) * 14px));
+  pointer-events: auto;
+}
+
+.bfl-cue__line {
+  position: relative;
+  width: 2.5px;
+  height: clamp(46px, 6.5vh, 58px);
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--bfl-line-soft);
+}
+
+.bfl-cue__line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bfl-accent);
+  transform: translateY(-100%);
+  animation: bfl-cue-drop 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes bfl-cue-drop {
+  0% { transform: translateY(-100%); }
+  55% { transform: translateY(0); }
+  100% { transform: translateY(102%); }
+}
+
+/* vasaku alanurga marker: kelle juures oleme ja mitmes tuba */
+.bfl-marker {
+  position: absolute;
+  left: clamp(20px, 3.2vw, 46px);
+  bottom: calc(clamp(20px, 3.6vh, 36px) + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.bfl-marker--on {
+  opacity: 1;
+  transform: none;
+}
+
+.bfl-marker__idx {
+  color: var(--bfl-accent);
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  font-style: italic;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+}
+
+.bfl-marker__name {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+.bfl-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--bfl-grain-o);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* ---- artistide leht: galeriisein ------------------------------------- */
+
+/* sama soe udu-taust mis avalehel */
+.page-shell--void::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(120% 90% at 50% 30%, var(--bfl-void-a) 0%, var(--bfl-void-b) 55%, var(--bfl-void-c) 100%);
+}
+
+.page-shell--void::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 52%, rgba(20, 12, 5, 0.14) 100%);
+}
+
+html[data-theme="dark"] .page-shell--void::after {
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 46%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.artists-index__ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.page-main--artists {
+  padding-top: clamp(122px, 16vh, 172px);
+}
+
+.artists-index__head {
+  display: grid;
+  gap: 16px;
+  margin-bottom: clamp(48px, 8vh, 96px);
+  text-align: center;
+}
+
+.artists-index__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.7rem, 5.6vw, 4.6rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.95;
+}
+
+.artists-index__list {
+  display: grid;
+  gap: clamp(56px, 10vh, 130px);
+  max-width: 1020px;
+  margin: 0 auto;
+  padding-bottom: clamp(40px, 7vh, 90px);
+}
+
+.artists-index__row {
+  display: grid;
+  grid-template-columns: minmax(230px, 310px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(30px, 5.5vw, 84px);
+  animation: artists-row-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--ri, 0) * 140ms);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes artists-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* küljevahetus selgesõnaliste veergudega — portree jääb ALATI kitsasse
+   veergu, tekst laia (order looks grid'is paigutuse sassi) */
+.artists-index__row--flip {
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 310px);
+}
+
+.artists-index__row--flip .artists-index__portrait {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.artists-index__row--flip .artists-index__body {
+  grid-column: 1;
+  grid-row: 1;
+  justify-items: end;
+  text-align: right;
+}
+
+.artists-index__portrait {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 24px 44px rgba(66, 45, 24, 0.32));
+}
+
+html[data-theme="dark"] .artists-index__portrait {
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.52));
+}
+
+.artists-index__body {
+  display: grid;
+  justify-items: start;
+  gap: clamp(10px, 1.8vh, 16px);
+}
+
+.artists-index__role {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.artists-index__name {
+  font-family: var(--font-heading);
+  font-size: clamp(2.1rem, 4.2vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 0.98;
+  color: var(--text);
+}
+
+.artists-index__bio {
+  max-width: 52ch;
+  color: var(--text-soft);
+  font-size: 1rem;
+  letter-spacing: var(--tracking-copy);
+  line-height: 1.7;
+  text-shadow: none;
+}
+
+.artists-index__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: var(--text-faint);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.artists-index__count {
+  position: relative;
+  padding-left: 14px;
+  font-style: normal;
+  color: var(--bfl-accent);
+}
+
+.artists-index__count::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--bfl-accent);
+  transform: translateY(-50%);
+}
+
+.artists-index__cta {
+  margin-top: 4px;
+  color: var(--bfl-accent);
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-style: italic;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+.artists-index__cta-arrow {
+  display: inline-block;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.artists-index__row:hover .artists-index__cta-arrow,
+.artists-index__row:focus-visible .artists-index__cta-arrow {
+  transform: translateX(4px);
+}
+
+.artists-index__row:focus-visible {
+  outline: 2px solid var(--bfl-accent);
+  outline-offset: 10px;
+}
+
+@media (max-width: 780px) {
+  .page-main--artists {
+    padding-top: clamp(104px, 15vh, 140px);
+  }
+
+  .artists-index__row,
+  .artists-index__row--flip {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 22px;
+  }
+
+  .artists-index__row--flip .artists-index__portrait,
+  .artists-index__row--flip .artists-index__body {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .artists-index__portrait {
+    max-width: min(64vw, 280px);
+  }
+
+  .artists-index__body,
+  .artists-index__row--flip .artists-index__body {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .artists-index__cta {
+    opacity: 1;
+  }
+
+  .artists-index__cta-arrow {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artists-index__row {
+    animation: none;
+  }
+
+  .artists-index__portrait,
+  .artists-index__cta,
+  .artists-index__cta-arrow {
+    transition: none;
+  }
+
+  .artists-index__cta {
+    opacity: 1;
+  }
+}
+
+/* ---- responsive ----------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .bfl-viewport {
+    perspective: 950px;
+  }
+
+  .bfl-brand {
+    top: 38%;
+  }
+
+  .bfl-brand__title {
+    font-size: clamp(3.3rem, 14.5vw, 5.6rem);
+  }
+
+  .bfl-tagline {
+    top: 38%;
+    font-size: clamp(1.45rem, 6.2vw, 1.9rem);
+    transform: translate(-50%, 0) translateZ(var(--z)) translateY(26vw);
+  }
+
+  .bfl-work {
+    width: min(72vw, 44vh);
+    transform: translate(-50%, -50%) translate3d(0, -16vh, 0);
+  }
+
+  .bfl-persona {
+    gap: 12px;
+    transform: translate(-50%, -50%) translate3d(0, 22vh, -220px);
+  }
+
+  .bfl-author {
+    width: clamp(108px, 27vw, 140px);
+  }
+
+  .bfl-nameplate__name {
+    font-size: clamp(1.7rem, 7vw, 2.3rem);
+  }
+
+  .bfl-finale__inner {
+    gap: 18px;
+  }
+}
+
+@media (max-height: 560px) {
+  .bfl-cue {
+    display: none;
+  }
+}
+
+/* ---- flat fallback (reduced motion) --------------------------------- */
+
+.bfl--flat .bfl-viewport {
+  position: static;
+  overflow: visible;
+  perspective: none;
+  height: auto;
+}
+
+.bfl--flat .bfl-track,
+.bfl--flat .bfl-cue,
+.bfl--flat .bfl-grain {
+  display: none;
+}
+
+.bfl--flat .bfl-veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.bfl--flat .bfl-look,
+.bfl--flat .bfl-dolly {
+  position: static;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-brand,
+.bfl--flat .bfl-tagline,
+.bfl--flat .bfl-room,
+.bfl--flat .bfl-finale {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  transform: none !important;
+  visibility: visible !important;
+  text-align: center;
+}
+
+.bfl--flat .bfl-brand {
+  padding-top: 20vh;
+}
+
+.bfl--flat .bfl-brand__word,
+.bfl--flat .bfl-tagline {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-tagline {
+  display: block;
+  margin-top: 14px;
+}
+
+.bfl--flat .bfl-room {
+  max-width: min(560px, 86vw);
+  margin: 12vh auto;
+  pointer-events: auto !important;
+}
+
+.bfl--flat .bfl-room .bfl-work,
+.bfl--flat .bfl-room .bfl-persona,
+.bfl--flat .bfl-finale > * {
+  opacity: 1 !important;
+}
+
+.bfl--flat .bfl-marker {
+  display: none;
+}
+
+.bfl--flat .bfl-work {
+  position: static;
+  width: 100%;
+  transform: none;
+}
+
+.bfl--flat .bfl-persona {
+  position: static;
+  margin-top: 32px;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-author {
+  width: 170px;
+}
+
+.bfl--flat .bfl-finale {
+  padding: 8vh 0 14vh;
+}
+
+.bfl--flat .bfl-finale__inner {
+  position: static;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfl-cue__line::after,
+  .bfl-brand__title,
+  .bfl-tagline__word {
+    animation: none;
+  }
+}

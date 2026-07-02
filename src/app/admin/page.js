@@ -41,8 +41,8 @@ export default async function AdminPage({ searchParams }) {
                 <p className="eyebrow">Sisuhaldus</p>
                 <h1>BeyondFrames</h1>
                 <p className="admin-login__copy">
-                  Sama galerii taust ja klaaspaneel ka adminis, et töövoog püsiks
-                  ülejäänud saidiga samas visuaalses rütmis.
+                  Halda kunstnikke, teoseid ja lehtede tekste — eesti ja
+                  inglise keeles.
                 </p>
               </div>
 

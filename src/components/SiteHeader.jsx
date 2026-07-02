@@ -13,6 +13,9 @@ export default function SiteHeader({ locale = "et" }) {
           aria-label={locale === "en" ? "Main navigation" : "P\u00f5hinavigeerimine"}
         >
           <div className="site-nav__links">
+            <Link href={withLocale("/artists", locale)}>
+              {locale === "en" ? "Artists" : "Artistid"}
+            </Link>
             <Link href={withLocale("/gallery", locale)}>
               {locale === "en" ? "Gallery" : "Galerii"}
             </Link>

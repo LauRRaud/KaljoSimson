@@ -1,62 +1,18 @@
-import HomeArtistCarousel from "@/components/HomeArtistCarousel";
-import HomeScrollCue from "@/components/HomeScrollCue";
+import FlightScene from "@/components/home/FlightScene";
 import PageShell from "@/components/PageShell";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
-import { getLocaleFromSearchParams } from "@/lib/locale";
+import { getWorksCountLabel, homeCopy } from "@/lib/home-copy";
+import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
+import { getArtworkPalette } from "@/lib/paint-palettes";
 
-function renderContactCopy(copy) {
-  const noBreakTerm = "e-posti";
-
-  if (!copy.includes(noBreakTerm)) {
-    return copy;
-  }
-
-  const [before, ...after] = copy.split(noBreakTerm);
-
-  return (
-    <>
-      {before}
-      <span className="text-nowrap">{noBreakTerm}</span>
-      {after.join(noBreakTerm)}
-    </>
-  );
-}
-
-function renderHomeTitle(title) {
+function getBrandWords(title) {
   if (title === "BeyondFrames") {
-    return (
-      <>
-        <span className="home-title__brand-word">Beyond</span>
-        <span className="home-title__brand-word">Frames</span>
-      </>
-    );
+    return ["Beyond", "Frames"];
   }
 
-  return title;
-}
-
-const desktopWordStep = 4.2;
-const mobileWordStep = desktopWordStep;
-const desktopCycleEndPause = 2.2;
-const mobileCycleEndPause = desktopCycleEndPause;
-
-function renderTaglineWords(words) {
-
-  return words.map((word, index) => (
-    <span
-      aria-hidden="true"
-      className="home-title__tagline-word"
-      key={`${word}-${index}`}
-      style={{
-        "--word-index": index,
-        "--word-delay": `${index * desktopWordStep}s`,
-        "--word-mobile-delay": `${index * mobileWordStep}s`,
-      }}
-    >
-      {word}
-    </span>
-  ));
+  const words = title.split(/\s+/);
+  return words.length > 1 ? [words[0], words.slice(1).join(" ")] : [title];
 }
 
 export async function generateMetadata({ searchParams }) {
@@ -74,74 +30,67 @@ export default async function HomePage({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
   const content = await getSiteContent();
-  const contactText = getCopy(content.site.contactText, locale);
-  const tagline = getCopy(content.site.tagline, locale).trim().replace(",", "");
-  const taglineWords = tagline ? tagline.split(/\s+/) : [];
+  const t = (key) => getCopy(homeCopy[key], locale);
+
+  const orderedArtists = [...content.artists].sort(
+    (a, b) => b.artworks.length - a.artworks.length,
+  );
+
+  const rooms = orderedArtists.map((artist) => {
+    const artworks = [...artist.artworks]
+      .sort((a, b) => a.galleryOrder - b.galleryOrder)
+      .filter((artwork) => artwork.image);
+
+    return {
+      slug: artist.slug,
+      name: artist.name,
+      role: getCopy(artist.role, locale),
+      countLabel: artist.artworks.length
+        ? getWorksCountLabel(artist.artworks.length, locale)
+        : "",
+      artwork: artworks[0] || null,
+      palette: getArtworkPalette(artist.slug, artworks[0]?.slug || ""),
+      artist: {
+        name: artist.name,
+        portraitImage: artist.portraitImage,
+        portraitPosition: artist.portraitPosition,
+        portraitPresetId: artist.portraitPresetId,
+      },
+      href: withLocale(`/artists/${artist.slug}`, locale),
+    };
+  });
 
   return (
     <PageShell
       content={content}
       locale={locale}
-      shellClassName="page-shell--gallery-surface"
-      mainClassName="page-main--home"
+      shellClassName="page-shell--gallery-surface page-shell--bfl"
+      mainClassName="page-main--bfl"
+      showFooter={false}
       showHeader
     >
-      <section className="home-title">
-        <div className="home-title__inner">
-          <h1 className="home-title__brand" aria-label={content.site.title}>
-            {renderHomeTitle(content.site.title)}
-          </h1>
-          {tagline ? (
-            <p
-              className="home-title__tagline"
-              aria-label={tagline}
-              style={{
-                "--tagline-cycle-duration": `${taglineWords.length * desktopWordStep + desktopCycleEndPause}s`,
-                "--tagline-mobile-cycle-duration": `${taglineWords.length * mobileWordStep + mobileCycleEndPause}s`,
-              }}
-            >
-              {renderTaglineWords(taglineWords)}
-            </p>
-          ) : null}
-          <div className="home-title__story">
-            <p className="home-title__copy">
-              {getCopy(content.site.heroText, locale)}
-            </p>
-          </div>
-        </div>
-        <HomeScrollCue locale={locale} />
-      </section>
-
-      <section className="section section--artists" id="artists">
-        <h2 className="section--artists__title">
-          {locale === "en" ? "Artists" : "Kunstnikud"}
-        </h2>
-        <HomeArtistCarousel
-          artists={content.artists}
-          initialArtistSlug="kaljo-simson"
-          locale={locale}
-        />
-      </section>
-
-      <section className="section section--contact" id="contact">
-        <div className="section-heading">
-          <h2>{getCopy(content.site.contactTitle, locale)}</h2>
-          <p className="section-copy">
-            {renderContactCopy(contactText)}
-          </p>
-          <div className="contact-inline">
-            <a className="contact-inline__line" href={`mailto:${content.contact.email}`}>
-              {content.contact.email}
-            </a>
-            <a
-              className="contact-inline__line"
-              href={`tel:${content.contact.phone.replace(/\s+/g, "")}`}
-            >
-              {content.contact.phone}
-            </a>
-          </div>
-        </div>
-      </section>
+      <FlightScene
+        finale={{
+          contactTitle: getCopy(content.site.contactTitle, locale),
+          email: content.contact.email,
+          phone: content.contact.phone,
+          instagram: content.contact.instagram,
+          instagramUrl: content.contact.instagramUrl,
+        }}
+        intro={{
+          title: content.site.title,
+          brandWords: getBrandWords(content.site.title),
+          tagline: getCopy(content.site.tagline, locale),
+        }}
+        labels={{
+          scrollCue: t("scrollCue"),
+          scrollCueAria: t("scrollCueAria"),
+          roomAria: t("roomAria"),
+          profileButton: t("profileButton"),
+        }}
+        locale={locale}
+        rooms={rooms}
+      />
     </PageShell>
   );
 }
