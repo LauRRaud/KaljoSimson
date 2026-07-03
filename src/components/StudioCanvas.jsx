@@ -975,7 +975,9 @@ export default function StudioCanvas({ locale = "et" }) {
   return (
     <section className="studio-workspace" aria-labelledby="studio-title">
       <div className="studio-workspace__intro">
-        <h1 id="studio-title">{copy(locale, "Stuudio", "Studio")}</h1>
+        <h1 className="sr-only" id="studio-title">
+          {copy(locale, "Stuudio", "Studio")}
+        </h1>
         <Link className="studio-close-link" href={withLocale("/", locale)}>
           {copy(locale, "Sulge", "Close")}
         </Link>

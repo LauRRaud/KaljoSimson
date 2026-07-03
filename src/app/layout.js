@@ -12,6 +12,13 @@ const framePresetBootstrap = `
     }
   } catch {
   }
+  try {
+    const theme = window.localStorage.getItem("beyondframes-theme");
+    if (theme === "dark" || theme === "light") {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch {
+  }
 })();
 `;
 

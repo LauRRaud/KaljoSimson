@@ -44,11 +44,7 @@ export default async function ArtistsPage({ searchParams }) {
       </div>
 
       <section className="artists-index">
-        <header className="artists-index__head">
-          <h1 className="artists-index__title">
-            {locale === "en" ? "Artists" : "Artistid"}
-          </h1>
-        </header>
+        <h1 className="sr-only">{locale === "en" ? "Artists" : "Artistid"}</h1>
 
         <div className="artists-index__list">
           {content.artists.map((artist, index) => (

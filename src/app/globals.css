@@ -1342,15 +1342,9 @@ html[data-theme="dark"] .home-title__copy {
   margin-left: calc(278px + clamp(18px, 2.4vw, 30px));
 }
 
-.studio-workspace__intro h1 {
-  margin: 0;
-  color: var(--text);
-  font-family: var(--font-heading);
-  font-size: clamp(3rem, 5.8vw, 5.9rem);
-  font-weight: 500;
-  line-height: 0.88;
-  letter-spacing: var(--tracking-display);
-  text-shadow: var(--display-text-shadow);
+/* pealkiri on sr-only; Sulge püsib paremal serval */
+.studio-workspace__intro .studio-close-link {
+  margin-left: auto;
 }
 
 .studio-close-link {
@@ -3280,6 +3274,62 @@ p {
 
 .profile-hero > .portrait-shell .portrait-shell__image {
   object-fit: cover;
+  object-position: var(--portrait-position, center center);
+}
+
+/* Autoriportreed avalehe lennus ja artistide lehel on SAMAS hõbedases
+   raamis mis profiilil ja kontaktseinal (mitte maaliraamide keeles). */
+.bfl-author .portrait-shell,
+.artists-index__portrait .portrait-shell {
+  --portrait-frame-width: clamp(8px, 0.8vw, 13px);
+  overflow: hidden;
+  padding: 0;
+  border-radius: 0;
+  background: var(--frame-active-metal);
+  box-shadow: var(--artwork-object-shadow);
+}
+
+.bfl-author .portrait-shell::before,
+.artists-index__portrait .portrait-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.54),
+    inset 0 -1px 2px rgba(174, 136, 56, 0.08),
+    inset 1px 0 0 rgba(255, 255, 255, 0.38),
+    inset -1px 0 0 rgba(246, 226, 166, 0.18),
+    inset 10px 0 14px -15px rgba(103, 75, 31, 0.16),
+    inset -10px 0 14px -15px rgba(103, 75, 31, 0.13),
+    inset 0 -12px 16px -15px rgba(103, 75, 31, 0.16);
+}
+
+.bfl-author .portrait-shell .portrait-shell__frame,
+.artists-index__portrait .portrait-shell .portrait-shell__frame {
+  display: grid;
+  padding: var(--portrait-frame-width);
+  background: var(--frame-active-metal);
+}
+
+.bfl-author .portrait-shell .portrait-shell__window,
+.artists-index__portrait .portrait-shell .portrait-shell__window {
+  border-radius: 0;
+  box-shadow:
+    0 0 0 1px rgba(174, 136, 56, 0.1),
+    0 0 0 2px rgba(255, 250, 231, 0.2);
+}
+
+.bfl-author .portrait-shell--image::after,
+.artists-index__portrait .portrait-shell--image::after {
+  display: none;
+}
+
+.bfl-author .portrait-shell .portrait-shell__image,
+.artists-index__portrait .portrait-shell .portrait-shell__image {
   object-position: var(--portrait-position, center center);
 }
 
@@ -7412,10 +7462,6 @@ html[data-theme="dark"] .admin-divider {
     padding-top: 142px;
   }
 
-  .studio-workspace__intro h1 {
-    font-size: clamp(3rem, 18vw, 4.6rem);
-  }
-
   .studio-toolbar {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -7774,6 +7820,26 @@ html[data-theme="light"] .bfl-paint__canvas {
   perspective-origin: 50% 46%;
 }
 
+/* Plaanid on KOMPOSIITKIHID: transform muutub igal kaadril ja ilma
+   kihita joonistaks brauser teksti igal kaadril muutuval projektsiooni-
+   skaalal uuesti (võbelemine). Kihina skaleeritakse valmis tekstuuri.
+   NB! will-change käib LEHT-plaanidel — mitte dolly/ümbriskihtidel, kus
+   see lamendaks WebKitis preserve-3d konteksti. */
+.bfl-brand,
+.bfl-tagline,
+.bfl-room,
+.bfl-finale {
+  will-change: transform;
+}
+
+/* Hajumine käib samuti igal kaadril — kihina on opacity puhtalt
+   kompositori töö, ilma teksti ümbermaalimiseta. */
+.bfl-room .bfl-work,
+.bfl-room .bfl-persona,
+.bfl-finale__inner {
+  will-change: opacity;
+}
+
 .bfl-track {
   position: relative;
   pointer-events: none;
@@ -7960,14 +8026,12 @@ html[data-theme="light"] .bfl-paint__canvas {
   transform: translate(-50%, -50%) translate3d(calc(var(--dir) * 21vw), 1vh, -240px);
 }
 
+/* Vari tuleb nüüd raami box-shadow'st (--artwork-object-shadow), mitte
+   ümbrise drop-shadow filtrist — muidu jääks vana lame vari raami taha
+   ega ühti profiililehe raamiga. */
 .bfl-author {
   display: block;
   width: clamp(200px, 19vw, 275px);
-  filter: drop-shadow(0 22px 40px rgba(30, 18, 8, 0.3));
-}
-
-html[data-theme="dark"] .bfl-author {
-  filter: drop-shadow(0 22px 44px rgba(0, 0, 0, 0.5));
 }
 
 .bfl-nameplate {
@@ -8149,7 +8213,7 @@ html[data-theme="dark"] .bfl-author {
 .bfl-contactframe__line {
   color: var(--text-soft);
   font-family: var(--font-heading);
-  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.15rem);
   font-weight: 600;
   text-shadow: none;
   background: linear-gradient(var(--bfl-accent), var(--bfl-accent)) 50% 100% / 0% 1.5px no-repeat;
@@ -8173,7 +8237,7 @@ html[data-theme="dark"] .bfl-author {
   margin-top: clamp(16px, 3vh, 30px);
   color: var(--text-soft);
   font-family: var(--font-heading);
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
   font-style: italic;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -8312,21 +8376,6 @@ html[data-theme="dark"] .page-shell--void::after {
   padding-top: clamp(122px, 16vh, 172px);
 }
 
-.artists-index__head {
-  display: grid;
-  gap: 16px;
-  margin-bottom: clamp(48px, 8vh, 96px);
-  text-align: center;
-}
-
-.artists-index__title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(2.7rem, 5.6vw, 4.6rem);
-  font-weight: 600;
-  letter-spacing: var(--tracking-display);
-  line-height: 0.95;
-}
 
 .artists-index__list {
   display: grid;
@@ -8378,11 +8427,6 @@ html[data-theme="dark"] .page-shell--void::after {
 .artists-index__portrait {
   display: block;
   width: 100%;
-  filter: drop-shadow(0 24px 44px rgba(66, 45, 24, 0.32));
-}
-
-html[data-theme="dark"] .artists-index__portrait {
-  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.52));
 }
 
 .artists-index__body {

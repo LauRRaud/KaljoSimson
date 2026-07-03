@@ -5,7 +5,7 @@ import { hexToRgb01 } from "@/lib/paint-palettes";
 
 const STORAGE_KEY = "beyondframes-theme";
 const THEME_CHANGE_EVENT = "beyondframes-theme-change";
-const LIGHT_PAINT_SCALE = 0.62;
+const LIGHT_PAINT_SCALE = 0.72;
 const DARK_PAINT_SCALE = 0.44;
 
 function getThemeSnapshot() {
@@ -35,6 +35,7 @@ function subscribeThemeChange(onStoreChange) {
 // immitseb värv raami servadest).
 export default function LivingPaint({
   palette,
+  paletteControlRef = null,
   frameRef = null,
   burstKey = 0,
   intensity = 1,
@@ -55,6 +56,23 @@ export default function LivingPaint({
     paletteRef.current =
       Array.isArray(palette) && palette.length ? palette : ["#b8763a"];
   }, [palette]);
+
+  // Imperatiivne paletisetja: kutsuja (nt lennu tick-silmus) saab värvi
+  // vahetada ilma React state'i / uuesti-renderdamiseta.
+  useEffect(() => {
+    if (!paletteControlRef) {
+      return undefined;
+    }
+
+    paletteControlRef.current = (next) => {
+      paletteRef.current =
+        Array.isArray(next) && next.length ? next : ["#b8763a"];
+    };
+
+    return () => {
+      paletteControlRef.current = null;
+    };
+  }, [paletteControlRef]);
 
   useEffect(() => {
     colorScaleRef.current = colorScale;
@@ -850,9 +868,16 @@ export default function LivingPaint({
       const hex = colors[emitIndex % colors.length];
       emitIndex += 1;
       const rgb = hexToRgb01(hex);
+      // Iga tooni tipp tõstetakse ühele tasemele. Kuvamis-shaderis on
+      // alfa = max(r,g,b), seega heledamad (soojad) toonid domineeriksid
+      // muidu nähtavuses — normaliseerimine annab kõigile hüetele võrdse
+      // kaalu, nii et ükski värv ei jää peale. Lagi hoiab tumedad ohjes.
+      const peak = Math.max(rgb.r, rgb.g, rgb.b, 0.001);
+      const even = Math.min(1.6, 0.85 / peak);
       const scale =
         colorScaleRef.current *
         strength *
+        even *
         (1 - jitter + Math.random() * jitter * 2);
       return { r: rgb.r * scale, g: rgb.g * scale, b: rgb.b * scale };
     }
@@ -1171,7 +1196,9 @@ export default function LivingPaint({
     const onMouseMove = (event) => {
       const pointer = pointers[0];
       strokeColorTimer += 1;
-      if (strokeColorTimer > 14) {
+      // Värv vahetub piki tõmmet tihedamini (iga ~6 sündmuse järel, mitte
+      // 15), et üks toon ei jääks pikalt peale ja hüed varieeruksid.
+      if (strokeColorTimer > 6) {
         strokeColorTimer = 0;
         pointer.color = paletteColor(0.9);
       }

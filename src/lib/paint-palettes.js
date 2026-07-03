@@ -14,7 +14,18 @@ export const ARTWORK_PALETTES = {
   "kalevi-poiss/visand-videvik": ["#6d5170", "#e3a262", "#3b3450", "#f2e4c4"],
 };
 
-export const DEFAULT_PALETTE = ["#b8763a", "#7a5a8a", "#4a7a6a", "#d8b868"];
+// Laiem spekter — kaheksa maalilikku tooni ümber värviringi, et hiirega
+// segades toonid ühtlaselt vahelduksid, mitte ei kalduks sooja.
+export const DEFAULT_PALETTE = [
+  "#c8642a", // põletatud oranž
+  "#c03a3a", // vermiljon
+  "#a83a76", // roosa/magenta
+  "#7a4f9c", // violett
+  "#3f5aa8", // koobalt
+  "#2f8f86", // türkiis
+  "#5a9440", // rohutriip
+  "#d8a838", // ooker-kuld
+];
 
 export function getArtworkPalette(artistSlug, artworkSlug) {
   return ARTWORK_PALETTES[`${artistSlug}/${artworkSlug}`] || DEFAULT_PALETTE;

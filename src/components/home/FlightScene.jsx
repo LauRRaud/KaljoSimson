@@ -72,7 +72,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
   const [flat, setFlat] = useState(false);
   const [introReveal, setIntroReveal] = useState(true);
   const [flightSpeed, setFlightSpeed] = useState(1.2);
-  const [scenePalette, setScenePalette] = useState(DEFAULT_PALETTE);
+  const paletteControlRef = useRef(null);
 
   const roomCount = rooms.length;
   const finaleZ = FIRST_ROOM_Z - roomCount * ROOM_DEPTH;
@@ -128,13 +128,21 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       return undefined;
     }
 
-    const planes = Array.from(dolly.querySelectorAll("[data-z]")).map((el) => ({
-      el,
-      z: Number(el.dataset.z),
-      env: el.dataset.env || "room",
-      interactive: el.tagName === "A" || el.dataset.interactive === "1",
-      zIdx: null,
-    }));
+    const planes = Array.from(dolly.querySelectorAll("[data-z]")).map((el) => {
+      const z = Number(el.dataset.z);
+      // Sügavusjärjekord on KONSTANTNE — kõik plaanid liiguvad sama --cam
+      // võrra, seega suurema z-ga plaan on alati eespool. z-index määratakse
+      // ÜKS kord z järgi. Varem arvutati see igal kaadril rel-ist, mis
+      // sundis teksti pidevalt ümber joonistama (võbelemine).
+      el.style.zIndex = String(Math.round(z / 4) + 4000);
+      return {
+        el,
+        z,
+        env: el.dataset.env || "room",
+        interactive: el.tagName === "A" || el.dataset.interactive === "1",
+        lastO: -1,
+      };
+    });
 
     const marker = markerRef.current;
     const markerIdx = markerIdxRef.current;
@@ -173,9 +181,12 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       for (const plane of planes) {
         const rel = plane.z + cam;
 
-        if (rel < -2900 || rel > 920) {
+        // Aken järgib ümbrikke (fadeIn algab -1500, fadeOut lõpeb 640):
+        // nähtamatut plaani ei komposiitita hiigelskaalas edasi.
+        if (rel < -1600 || rel > 680) {
           if (plane.el.style.visibility !== "hidden") {
             plane.el.style.visibility = "hidden";
+            plane.lastO = -1;
           }
           continue;
         }
@@ -184,17 +195,13 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
           plane.el.style.visibility = "visible";
         }
 
+        // Läbipaistvus kirjutatakse ainult tegeliku muutuse korral — muidu
+        // sunniks iga kaadri stiiliümberarvutus teksti võbelema.
         const opacity = envelopeFor(plane.env, rel);
-        plane.el.style.setProperty("--o", opacity.toFixed(3));
 
-        // Ilma ühise preserve-3d kontekstita maalitakse plaanid
-        // DOM-järjekorras — sügavusjärjekorra taastab z-index:
-        // kaamerale lähemal plaan katab alati kaugema.
-        const zIdx = 4000 + Math.round(rel / 4);
-
-        if (zIdx !== plane.zIdx) {
-          plane.zIdx = zIdx;
-          plane.el.style.zIndex = String(zIdx);
+        if (Math.abs(opacity - plane.lastO) > 0.002) {
+          plane.lastO = opacity;
+          plane.el.style.setProperty("--o", opacity.toFixed(3));
         }
 
         if (plane.interactive) {
@@ -256,9 +263,13 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
 
       if (activeRoom !== lastMarker) {
         lastMarker = activeRoom;
-        setScenePalette(
-          activeRoom >= 0 ? roomPalettes[activeRoom] : DEFAULT_PALETTE,
-        );
+        // Palett läheb OTSE LivingPainti (ref), mitte React state'i kaudu —
+        // nii ei toimu igal ruumipiiril kogu stseeni uuesti-renderdamist.
+        if (paletteControlRef.current) {
+          paletteControlRef.current(
+            activeRoom >= 0 ? roomPalettes[activeRoom] : DEFAULT_PALETTE,
+          );
+        }
 
         if (marker) {
           marker.classList.toggle("bfl-marker--on", activeRoom >= 0);
@@ -414,6 +425,16 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     window.addEventListener("hashchange", jumpToContactHash);
     document.addEventListener("visibilitychange", handleVisibility);
     viewport.addEventListener("focusin", handleFocusIn);
+    // Dekodeeri kõigi ruumide pildid intro ajal ette — esimene läbilend
+    // ei maksa siis dekodeerimis-/üleslaadimispausi (hakkimist).
+    const warmImages = window.setTimeout(() => {
+      dolly.querySelectorAll("img").forEach((img) => {
+        if (typeof img.decode === "function") {
+          img.decode().catch(() => {});
+        }
+      });
+    }, 700);
+
     jumpToContactHash();
     wake();
 
@@ -425,6 +446,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       window.removeEventListener("hashchange", jumpToContactHash);
       document.removeEventListener("visibilitychange", handleVisibility);
       viewport.removeEventListener("focusin", handleFocusIn);
+      window.clearTimeout(warmImages);
       document.body.classList.remove("bfl-header-return");
       document.body.style.removeProperty("--hdr-o");
       document.body.style.removeProperty("--hdr-v");
@@ -442,7 +464,11 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
         <div aria-hidden="true" className="bfl-veil" />
 
         {flat ? null : (
-          <LivingPaint intensity={0.75} palette={scenePalette} />
+          <LivingPaint
+            intensity={0.75}
+            palette={DEFAULT_PALETTE}
+            paletteControlRef={paletteControlRef}
+          />
         )}
 
         <div className="bfl-dolly" ref={dollyRef}>

@@ -108,20 +108,33 @@ aga ei vaja üheski brauseris preserve-3d tuge.
 
 Lisaks:
 
-- **Ära pane `will-change: transform`** 3D-ahela elementidele — teadaolev
-  WebKiti lamendamise käivitaja.
+- **`will-change: transform` käib LEHT-plaanidel, MITTE ümbriskihtidel.**
+  Kaks eri asja: (a) perspektiivikonteineril / preserve-3d ahela
+  vahekihtidel on will-change teadaolev WebKiti lamendamise käivitaja —
+  sinna EI tohi; (b) plaanidel endil on see aga VAJALIK: transform muutub
+  igal kaadril ja ilma komposiitkihita joonistab brauser teksti igal
+  kaadril muutuval projektsiooniskaalal uuesti → tekst võbeleb. Kihina
+  skaleeritakse valmis tekstuuri (liikudes veidi pehmem, aga stabiilne).
+  Hajuvatele lastele (`opacity: var(--o)`) anna `will-change: opacity`
+  samal põhjusel.
 - Plaani SEES võib kasutada ühe astme preserve-3d (nt portree väikese
   z-nihkega) — kui see mõnes brauseris lameneb, on degradatsioon sujuv.
 
 ### Maalimisjärjekord
 
 Ilma ühise preserve-3d konteksita maalitakse plaanid **DOM-järjekorras**,
-mitte sügavuse järgi. Kaugem ruum kataks lähema. JS annab igale plaanile
-z-indexi kauguse järgi:
+mitte sügavuse järgi. Kaugem ruum kataks lähema. z-index parandab selle —
+aga määra see ÜKS kord plaani `z` järgi, MITTE iga kaader `rel`-ist:
 
 ```js
-plane.el.style.zIndex = String(4000 + Math.round(rel / 4));
+el.style.zIndex = String(Math.round(z / 4) + 4000);   // seadistuses, üks kord
 ```
+
+Miks staatiline: kõik plaanid liiguvad sama `--cam` võrra, seega
+`rel_A − rel_B = z_A − z_B` on konstantne — suurema z-ga plaan on ALATI
+eespool. Sügavusjärjekord ei muutu kunagi, seega z-indexit pole vaja
+ümber arvutada. **Kui seda igal kaadril `rel`-ist muuta, churn'ib z-index
+ja sunnib teksti pidevalt ümber joonistama — tekst hakkab võbelema.**
 
 ---
 
@@ -148,13 +161,17 @@ function tick() {
 
   for (const p of planes) {
     const rel = p.z + cam;
-    if (rel < -2900 || rel > 920) {             // kaugel/selja taga → peida
+    // Aken järgib ümbrikke: nähtamatut plaani ei komposiitita edasi —
+    // läbilennul kasvab plaan kuni ~6× ja peidetuna see raster säästub.
+    if (rel < -1600 || rel > 680) {
       p.el.style.visibility = "hidden";
       continue;
     }
     p.el.style.visibility = "visible";
-    p.el.style.setProperty("--o", envelope(rel).toFixed(3));
-    p.el.style.zIndex = String(4000 + Math.round(rel / 4));
+    // z-index on juba seadistuses staatiliselt paigas (vt Maalimisjärjekord).
+    // Kirjuta --o AINULT muutumisel — iga-kaadri stiilikirjutus võbeleb.
+    const o = envelope(rel);
+    if (Math.abs(o - p.lastO) > 0.002) { p.lastO = o; p.el.style.setProperty("--o", o.toFixed(3)); }
   }
 
   if (cam === target) { running = false; return; }  // magama, kui paigal
@@ -206,8 +223,19 @@ Olulised omadused:
    filter-primitiivid) **ei renderdu iOS-is** — kast tuleb õige mõõduga,
    sisu jääb tühjaks. Ära kasuta SVG-filtreid; küpseta efektid joonte sisse.
 
-3. **Pildid laadi `eager`** — lennus jõuab lazy-pilt kohale alles siis, kui
-   raam on juba ekraanil (tühi raam). Plaane on vähe, eager on odav.
+3. **Pildid laadi `eager` JA dekodeeri ette** — lennus jõuab lazy-pilt
+   kohale alles siis, kui raam on juba ekraanil (tühi raam). Ja isegi
+   eager-pildi *dekodeerimine* juhtub alles esimesel komposiitimisel — see
+   maandub täpselt esimese läbilennu hetkele ja hakib (teisel korral on
+   puhvris ja sujuv). Ravi: intro ajal käi kõik lennu pildid läbi:
+
+   ```js
+   setTimeout(() => {
+     dolly.querySelectorAll("img").forEach((img) => {
+       img.decode?.().catch(() => {});
+     });
+   }, 700);
+   ```
 
 4. **`position: fixed; inset: 0` iOS-is** mõõdetakse *väikese* vaateava
    järgi: kui Safari tööriistariba kokku kerib, jääb ekraani alaserv katmata
@@ -230,6 +258,15 @@ Olulised omadused:
 8. **Deps-massiivi pikkus** (React): kui lisad efektile sõltuvuse, tee kohe
    täislaadimine — HMR-plaastriga instants jääb muidu poolelusse seisu.
 
+9. **Teksti võbelemine** — kolm süüdlast, tähtsuse järjekorras:
+   (a) PEAMINE: plaanid pole komposiitkihid → iga kaadri transform maalib
+   teksti muutuval projektsiooniskaalal uuesti. Ravi: `will-change:
+   transform` plaanidele + `will-change: opacity` hajuvatele lastele
+   (vt §3 "Lisaks"). (b) z-index, mida arvutati `rel`-ist igal kaadril —
+   määra staatiliselt (vt Maalimisjärjekord). (c) `--o` kirjutamine ka
+   siis, kui väärtus ei muutunud — valvesta lävendiga. Kirjuta plaanile
+   iga kaader AINULT `--cam` — kõik muu ainult tegeliku muutuse korral.
+
 ---
 
 ## 6. Häälestustabel (meie väärtused)
@@ -243,7 +280,7 @@ Olulised omadused:
 | fadeIn | rel −1500 → −900 | ruum ilmub alles siis, kui eelmine on kohal; intro on tühi |
 | fadeOut | rel 260 → 640 | mööduv ruum kaob kiiresti, ei kata järgmist |
 | brändi fadeOut | rel −80 → 360 | pealkiri hajub esimese kerimisega |
-| nähtavusaken | rel −2900 … 920 | väljaspool → `visibility: hidden` |
+| nähtavusaken | rel −1600 … 680 | väljaspool → `visibility: hidden`; hoia napilt ümbrikest laiem (fadeIn −1500, fadeOut 640), muidu komposiiditakse nähtamatuid plaane hiigelskaalas |
 | lerp | 0.11 | kaamera sujuvus (suurem = napsakam) |
 | `SPEED` | desktop 1.2, mobiil 1.35 | sõrmetee ↔ lennu pikkus |
 | marker-aken | rel −1480 … 520 | millal "01/03 Nimi" indikaator vahetub |
@@ -266,7 +303,11 @@ skaala ~0.55) — kui muudad fadeIn-akent, kontrolli, et ankrupunktis oleks
 - **Menüü "Kontakt"** hüppab hashiga otse lõppu:
   `scrollTo(maxCam / SPEED)` + `cam = maxCam` (ilma kogu lendu mängimata).
 - **Taustal elav värv** (WebGL-vedeliku sim) vahetab paletti aktiivse ruumi
-  esindusteose järgi.
+  esindusteose järgi. NB! palett liigub **imperatiivse ref'i** kaudu otse
+  simulatsiooni, MITTE React state'iga — üldreegel: kõik, mis muutub lennu
+  ajal (kaamera, läbipaistvus, palett), käib ref'i/CSS-muutuja/otsese
+  DOM-kirjutuse kaudu; `setState` keset lendu lepitab kogu stseeni ja
+  viskab kaadreid maha.
 - Klaviatuur: iga ruum on `<a>`, fookusel keritakse tema ankrusse
   (`data-cam` atribuut).
 
