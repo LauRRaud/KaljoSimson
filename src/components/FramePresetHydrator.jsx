@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const STORAGE_KEY = "beyondframes-frame-preset";
-const PRESETS = ["silver", "gold"];
+const PRESETS = ["silver", "gold", "bronze"];
 
 function isFramePreset(value) {
   return PRESETS.includes(value);

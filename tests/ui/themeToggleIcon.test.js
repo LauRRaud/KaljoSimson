@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const { readCss } = require("./readCss");
 
 function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
@@ -9,7 +10,7 @@ function read(relativePath) {
 
 test("theme toggle icon shows the current theme with a smooth moon", () => {
   const toggle = read("src/components/ThemeToggle.jsx");
-  const globals = read("src/app/globals.css");
+  const globals = readCss();
 
   assert.match(toggle, /className="theme-toggle__sun-edge"/);
   assert.match(toggle, /className="theme-toggle__sun-face"/);

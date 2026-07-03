@@ -1,8 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
-
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import ArtworkFrame from "@/components/ArtworkFrame";
 import { getCopy } from "@/lib/content-helpers";
@@ -151,18 +155,21 @@ export default function GalleryClient({
       }
     : undefined;
 
-  function getRoomImageSources(startIndex, visibleCount = 1, radius = 1) {
-    const start = Math.max(0, startIndex - radius * visibleCount);
-    const end = Math.min(
-      artist.artworks.length,
-      startIndex + visibleCount + radius * visibleCount,
-    );
+  const getRoomImageSources = useCallback(
+    (startIndex, visibleCount = 1, radius = 1) => {
+      const start = Math.max(0, startIndex - radius * visibleCount);
+      const end = Math.min(
+        artist.artworks.length,
+        startIndex + visibleCount + radius * visibleCount,
+      );
 
-    return artist.artworks
-      .slice(start, end)
-      .map((artwork) => artwork.image)
-      .filter(Boolean);
-  }
+      return artist.artworks
+        .slice(start, end)
+        .map((artwork) => artwork.image)
+        .filter(Boolean);
+    },
+    [artist.artworks],
+  );
 
   async function predecodeRoomImages(sources) {
     const pendingSources = sources.filter(
@@ -889,7 +896,7 @@ export default function GalleryClient({
     return () => {
       cancelled = true;
     };
-  }, [artist.artworks, hasArtworks, isRoom]);
+  }, [artist.artworks, hasArtworks, isRoom, getRoomImageSources]);
 
   if (!hasArtworks) {
     return (
@@ -950,12 +957,10 @@ export default function GalleryClient({
 
           <p aria-hidden="true" className="gallery-room__marker">
             <span className="gallery-room__marker-idx">
-              {String(roomView.start + 1).padStart(2, "0")}
-              {roomView.end > roomView.start
-                ? `–${String(roomView.end + 1).padStart(2, "0")}`
-                : ""}
+              {roomView.start + 1}
+              {roomView.end > roomView.start ? `–${roomView.end + 1}` : ""}
               {" / "}
-              {String(artist.artworks.length).padStart(2, "0")}
+              {artist.artworks.length}
             </span>
           </p>
 

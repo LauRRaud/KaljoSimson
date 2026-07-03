@@ -98,8 +98,15 @@ export default function GalleryRoomExperience({
               );
             })}
           </div>
-          <FramePresetSwitch defaultPreset={defaultFramePreset} locale={locale} />
         </div>
+      </div>
+
+      {/* raamivärvi valik elab all paremas nurgas, oma sildiga */}
+      <div className="gallery-room-page__frame-picker">
+        <span className="gallery-room-page__frame-picker-label">
+          {locale === "en" ? "Frame colour" : "Raami värv"}
+        </span>
+        <FramePresetSwitch defaultPreset={defaultFramePreset} locale={locale} />
       </div>
 
       <GalleryClient

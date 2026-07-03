@@ -25,9 +25,8 @@ export default async function StudioPage({ searchParams }) {
     <PageShell
       content={content}
       locale={locale}
-      shellClassName="page-shell--void"
+      shellClassName="page-shell--gallery-surface page-shell--studio"
       mainClassName="page-main--studio"
-      showHeader
     >
       <StudioCanvas locale={locale} />
     </PageShell>

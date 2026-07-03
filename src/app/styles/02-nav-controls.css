@@ -1,0 +1,274 @@
+.language-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  height: 32px;
+}
+
+.language-switch__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: auto;
+  height: 32px;
+  border: none;
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: clamp(1.24rem, 1.8vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  opacity: 1;
+  transition:
+    opacity 180ms ease,
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.language-switch__item:hover,
+.language-switch__item:focus-visible {
+  color: var(--text);
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+}
+
+.language-switch__code {
+  display: inline-block;
+}
+
+.language-switch__chevron {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid currentColor;
+  transform: translate(0, 1px);
+}
+
+.language-switch__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  height: 38px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--glass-control-bg);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: var(--tracking-body);
+  line-height: 1;
+  opacity: 0.88;
+  box-shadow: var(--glass-control-shadow);
+  backdrop-filter: var(--glass-blur);
+  transition:
+    opacity 180ms ease,
+    color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.theme-toggle__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  opacity: 1;
+  background: var(--glass-control-bg-hover);
+  box-shadow: var(--glass-control-shadow-hover);
+}
+
+.site-nav .theme-toggle {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  margin-left: 0;
+  margin-right: -3px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-soft);
+  box-shadow: none;
+  backdrop-filter: none;
+  opacity: 1;
+}
+
+.site-nav .theme-toggle:hover,
+.site-nav .theme-toggle:focus-visible {
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+
+.theme-toggle__icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.9;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity 180ms ease;
+}
+
+.theme-toggle:hover .theme-toggle__icon,
+.theme-toggle:focus-visible .theme-toggle__icon {
+  opacity: 1;
+}
+
+.theme-toggle__icon--moon {
+  display: block;
+  stroke-width: 1.65;
+}
+
+.theme-toggle__moon-edge {
+  stroke: rgba(232, 226, 216, 0.72);
+  stroke-width: 2.18;
+}
+
+.theme-toggle__moon-face {
+  stroke: currentColor;
+  stroke-width: 1.65;
+}
+
+.theme-toggle__icon--sun {
+  display: none;
+}
+
+.theme-toggle__sun-edge {
+  stroke: rgba(232, 226, 216, 0.72);
+  stroke-width: 2.18;
+}
+
+.theme-toggle__sun-face {
+  stroke: currentColor;
+  stroke-width: 1.65;
+}
+
+html[data-theme="dark"] .theme-toggle__icon--moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle__icon--sun {
+  display: block;
+}
+
+.pwa-install {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.pwa-install-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  transition: color 180ms ease, opacity 180ms ease;
+}
+
+.pwa-install-button:hover,
+.pwa-install-button:focus-visible {
+  color: var(--text);
+}
+
+.pwa-install-button__icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.9;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: opacity 180ms ease;
+}
+
+.pwa-install-button:hover .pwa-install-button__icon,
+.pwa-install-button:focus-visible .pwa-install-button__icon {
+  opacity: 1;
+}
+
+.pwa-install-button__icon--mobile {
+  display: none;
+}
+
+.pwa-install__hint {
+  position: fixed;
+  top: var(--pwa-install-hint-top, 0);
+  left: var(--pwa-install-hint-left, 50vw);
+  z-index: 1000;
+  width: max-content;
+  max-width: min(260px, calc(100vw - 32px));
+  padding: 9px 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--glass-panel-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.25;
+  text-align: center;
+  text-shadow: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(24px) saturate(1.08);
+  backdrop-filter: blur(24px) saturate(1.08);
+  pointer-events: none;
+  transform: translateX(-50%) translateZ(0);
+  will-change: backdrop-filter;
+}
+
+html[data-theme="dark"] .pwa-install__hint {
+  color: rgba(255, 252, 246, 0.96);
+}
+
+@media (hover: none), (max-width: 760px) {
+  .pwa-install-button__icon--desktop {
+    display: none;
+  }
+
+  .pwa-install-button__icon--mobile {
+    display: block;
+  }
+}
+

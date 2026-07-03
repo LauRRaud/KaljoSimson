@@ -15,7 +15,7 @@ const VALID_ARTWORK_PRESETS = new Set(artworkPresets.map((preset) => preset.id))
 const VALID_PORTRAIT_PRESETS = new Set(
   portraitPresets.map((preset) => preset.id),
 );
-const VALID_FRAME_PRESETS = new Set(["silver", "gold"]);
+const VALID_FRAME_PRESETS = new Set(["silver", "gold", "bronze"]);
 const VALID_GALLERY_ROOM_SPEEDS = new Set(["slow", "normal", "fast"]);
 
 function stringOrFallback(value, fallback = "") {

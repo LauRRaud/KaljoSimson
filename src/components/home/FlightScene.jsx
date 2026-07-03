@@ -12,7 +12,12 @@ const BRAND_Z = -620;
 const TAGLINE_Z = -710;
 const FIRST_ROOM_Z = -2100;
 const ROOM_DEPTH = 1500;
-const REST_OFFSET = 320;
+// Kontaktkaart puhkab TÄPSELT ekraanitasandil (rel = 0 → skaala 1.0).
+// Kui kaamera lõpus seisma jääb, lülitub finale lamedaks (bfl-finale-rest
+// CSS): komposiitkihi tekstuuriskaleering kaob ja tekst joonistub otse
+// pikslivõrgule teravalt. Kuna translateZ(0) ja transform:none on
+// visuaalselt identsed, on üleminek hüppevaba.
+const REST_OFFSET = 0;
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
@@ -141,6 +146,10 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
         env: el.dataset.env || "room",
         interactive: el.tagName === "A" || el.dataset.interactive === "1",
         lastO: -1,
+        // persona elab ruumi sees omaette sügavusel (translateZ -240px) —
+        // puhkelamestus vajab talle eraldi 2D-vastet
+        persona: el.querySelector(".bfl-persona"),
+        flat: false,
       };
     });
 
@@ -162,7 +171,124 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     let lastMarker = -2;
     let running = false;
     let suppressClickUntil = 0;
+    let idle = false;
+    let idleTimer = null;
     const tap = { active: false, x: 0, y: 0 };
+
+    // Puhkes asendame plaani perspektiivnihke SAMAVÄÄRSE 2D-teisendusega
+    // (mõõdetud translate + scale): perspektiivkihti ei rasterda Chrome
+    // projektsiooniskaalal (tekst jääb tekstuurina pehmeks), 2D-teisenduse
+    // aga rasterdab — nimeplaadid ja tagline muutuvad pikselteravaks.
+    // Geomeetria võetakse mõõtmisega, seega üleminek on piksli pealt sama.
+    function flattenPlane(plane) {
+      const el = plane.el;
+      const rel = plane.z + cam;
+      const p = parseFloat(getComputedStyle(dolly).perspective);
+      const s = p / (p - rel);
+
+      if (!Number.isFinite(s) || s <= 0) {
+        return;
+      }
+
+      const persona = plane.persona;
+      const elR3 = el.getBoundingClientRect();
+      const personaR3 = persona ? persona.getBoundingClientRect() : null;
+
+      el.style.transform = "none";
+
+      if (persona) {
+        persona.style.transform = "none";
+      }
+
+      const elR0 = el.getBoundingClientRect();
+      const personaR0 = persona ? persona.getBoundingClientRect() : null;
+
+      el.style.transformOrigin = "0 0";
+      el.style.transform =
+        `translate(${(elR3.left - elR0.left).toFixed(2)}px, ` +
+        `${(elR3.top - elR0.top).toFixed(2)}px) scale(${s.toFixed(5)})`;
+
+      // persona on ruumi sees omaette sügavusel (translateZ -240px) —
+      // talle arvutatakse oma 2D-vaste ruumi lamedas koordinaadistikus
+      if (persona && personaR0 && personaR0.width > 0) {
+        const q = personaR3.width / personaR0.width / s;
+        const a = (personaR3.left - elR3.left) / s - (personaR0.left - elR0.left);
+        const b = (personaR3.top - elR3.top) / s - (personaR0.top - elR0.top);
+
+        persona.style.transformOrigin = "0 0";
+        persona.style.transform =
+          `translate(${a.toFixed(2)}px, ${b.toFixed(2)}px) scale(${q.toFixed(5)})`;
+      }
+
+      plane.flat = true;
+    }
+
+    function flattenVisiblePlanes() {
+      for (const plane of planes) {
+        // finale lamestub omaenda reegliga (bfl-finale-rest, skaala 1.0);
+        // brändil on split-sõnadel oma translateZ — lamestame ainult
+        // stardipuhkes, kus split on 0
+        if (plane.env === "finale") {
+          continue;
+        }
+
+        if (plane.el.style.visibility !== "visible") {
+          continue;
+        }
+
+        if (plane.el === brand && Math.abs(cam) > 1) {
+          continue;
+        }
+
+        flattenPlane(plane);
+      }
+    }
+
+    function unflattenPlanes() {
+      for (const plane of planes) {
+        if (!plane.flat) {
+          continue;
+        }
+
+        plane.flat = false;
+        plane.el.style.transform = "";
+        plane.el.style.transformOrigin = "";
+
+        if (plane.persona) {
+          plane.persona.style.transform = "";
+          plane.persona.style.transformOrigin = "";
+        }
+      }
+    }
+
+    function applyIdle() {
+      idleTimer = null;
+      idle = true;
+      document.body.classList.add("bfl-idle");
+
+      // päris lõpus renderdub kontaktsein täiesti lamedalt (skaala 1.0)
+      if (cam === maxCam) {
+        document.body.classList.add("bfl-finale-rest");
+      }
+
+      flattenVisiblePlanes();
+    }
+
+    function cancelIdle() {
+      if (idleTimer !== null) {
+        window.clearTimeout(idleTimer);
+        idleTimer = null;
+      }
+
+      if (!idle) {
+        return;
+      }
+
+      idle = false;
+      document.body.classList.remove("bfl-idle");
+      document.body.classList.remove("bfl-finale-rest");
+      unflattenPlanes();
+    }
 
     function tick() {
       const target = clamp(window.scrollY * flightSpeed, 0, maxCam);
@@ -276,12 +402,24 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
         }
 
         if (activeRoom >= 0 && markerIdx && markerName) {
-          markerIdx.textContent = `${String(activeRoom + 1).padStart(2, "0")} / ${String(roomNames.length).padStart(2, "0")}`;
+          markerIdx.textContent = `${activeRoom + 1} / ${roomNames.length}`;
           markerName.textContent = roomNames[activeRoom];
         }
       }
 
       const settled = cam === target;
+
+      // Fookuslukk (plaanide 2D-lamestus + terav raster) käivitub alles
+      // pärast lühikest PÜSIVAT seisakut — astmelisel kerimisel settib
+      // kaamera hetkeks ka sammude vahel ja kohene lamestus paneks teksti
+      // terav/pehme vahel võbelema. Liikuma hakates tühistub kohe.
+      if (settled) {
+        if (!idle && idleTimer === null) {
+          idleTimer = window.setTimeout(applyIdle, 500);
+        }
+      } else {
+        cancelIdle();
+      }
 
       if (settled) {
         running = false;
@@ -333,6 +471,17 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
           behavior: "auto",
         });
       }
+    }
+
+    // Akna suurusemuutus muudab plaanide layouti — lamestatud 2D-maatriksid
+    // arvutatakse värske geomeetria pealt uuesti.
+    function handleResize() {
+      if (!idle) {
+        return;
+      }
+
+      unflattenPlanes();
+      flattenVisiblePlanes();
     }
 
     // Menüü "Kontakt" viib OTSE lõppu — ilma kogu lendu läbi mängimata.
@@ -423,6 +572,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     window.addEventListener("pointerup", handlePointerUp, true);
     window.addEventListener("click", handleClickCapture, true);
     window.addEventListener("hashchange", jumpToContactHash);
+    window.addEventListener("resize", handleResize);
     document.addEventListener("visibilitychange", handleVisibility);
     viewport.addEventListener("focusin", handleFocusIn);
     // Dekodeeri kõigi ruumide pildid intro ajal ette — esimene läbilend
@@ -444,10 +594,14 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       window.removeEventListener("pointerup", handlePointerUp, true);
       window.removeEventListener("click", handleClickCapture, true);
       window.removeEventListener("hashchange", jumpToContactHash);
+      window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibility);
       viewport.removeEventListener("focusin", handleFocusIn);
       window.clearTimeout(warmImages);
+      cancelIdle();
       document.body.classList.remove("bfl-header-return");
+      document.body.classList.remove("bfl-finale-rest");
+      document.body.classList.remove("bfl-idle");
       document.body.style.removeProperty("--hdr-o");
       document.body.style.removeProperty("--hdr-v");
       sleep();
@@ -562,9 +716,6 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
                         </em>
                       ) : null}
                     </span>
-                    <span className="bfl-profile-btn">
-                      {labels.profileButton}
-                    </span>
                   </span>
                 </span>
               </Link>
@@ -580,28 +731,19 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
             <div className="bfl-finale__inner" data-cam={maxCam}>
               <div className="bfl-contactframe">
                 <div className="bfl-contactframe__mat">
-                  <p aria-hidden="true" className="bfl-contactframe__brand">
-                    <span>{intro.brandWords[0]}</span>
-                    {intro.brandWords[1] ? (
-                      <span className="bfl-contactframe__brand-second">
-                        {intro.brandWords[1]}
-                      </span>
-                    ) : null}
-                  </p>
                   <a
                     className="bfl-contactframe__mail"
                     href={`mailto:${finale.email}`}
                   >
                     {finale.email}
                   </a>
-                  <a
-                    className="bfl-contactframe__line"
-                    href={`tel:${finale.phone.replace(/\s+/g, "")}`}
-                  >
-                    {finale.phone}
-                  </a>
-                  <span className="bfl-contactframe__byline">
-                    2026 · L. Raudsoo
+                  <span className="bfl-contactframe__sign">
+                    <span className="bfl-contactframe__byline">
+                      by L. Raudsoo
+                    </span>
+                    <span className="bfl-contactframe__copyright">
+                      © 2026 BeyondFrames
+                    </span>
                   </span>
                 </div>
               </div>
@@ -614,7 +756,9 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
           className="bfl-cue"
           href="#artists-stop"
         >
-          <span aria-hidden="true" className="bfl-cue__line" />
+          <span aria-hidden="true" className="bfl-cue__stroke">
+            <span className="bfl-cue__drop" />
+          </span>
           {labels.scrollCue}
         </a>
 

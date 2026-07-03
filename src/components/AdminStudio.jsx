@@ -575,6 +575,18 @@ export default function AdminStudio({ initialContent }) {
             >
               Kuld
             </button>
+            <button
+              aria-pressed={draft.site.framePreset === "bronze"}
+              className={
+                draft.site.framePreset === "bronze"
+                  ? "admin-frame-preset__button admin-frame-preset__button--active"
+                  : "admin-frame-preset__button"
+              }
+              onClick={() => updateFramePreset("bronze")}
+              type="button"
+            >
+              Pronks
+            </button>
           </div>
         </div>
 

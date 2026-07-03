@@ -31,7 +31,6 @@ export default async function ArtistsPage({ searchParams }) {
       locale={locale}
       mainClassName="page-main--artists"
       shellClassName="page-shell--void"
-      showHeader
     >
       <div aria-hidden="true" className="artists-index__ambient">
         <LivingPaint intensity={0.55} palette={DEFAULT_PALETTE} />

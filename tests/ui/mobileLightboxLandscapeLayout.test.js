@@ -2,13 +2,14 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const { readCss } = require("./readCss");
 
 function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
 }
 
 test("mobile landscape lightbox keeps magnifier beside artwork and widens details", () => {
-  const globals = read("src/app/globals.css");
+  const globals = readCss();
   const galleryClient = read("src/components/GalleryClient.jsx");
   const landscapeRuleMatch = globals.match(
     /@media \(max-width:\s*1280px\) and \(max-height:\s*620px\) and \(orientation:\s*landscape\)\s*{(?<body>[\s\S]*?)\n}\n\n@media \(max-width:\s*430px\)/,

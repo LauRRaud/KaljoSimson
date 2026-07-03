@@ -1,0 +1,201 @@
+html[data-theme="dark"] body {
+  background: var(--bg);
+}
+
+html[data-theme="dark"] .page-shell--gallery-surface::before {
+  background: linear-gradient(
+    180deg,
+    rgba(25, 24, 22, 0.99) 0%,
+    rgba(20, 20, 19, 0.99) 48%,
+    rgba(13, 13, 12, 0.99) 100%
+  );
+}
+
+html[data-theme="dark"] .page-shell--gallery-surface::after {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.28), transparent 18% 82%, rgba(0, 0, 0, 0.22)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 46%, rgba(0, 0, 0, 0.42));
+}
+
+html[data-theme="dark"] body::before {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+}
+
+html[data-theme="dark"] .home-title__brand {
+  text-shadow: var(--display-text-shadow);
+}
+
+html[data-theme="dark"] .profile-hero + .section {
+  background: var(--glass-panel-bg);
+}
+
+html[data-theme="dark"] .profile-hero::before,
+html[data-theme="dark"] .profile-hero + .section::before {
+  background: transparent;
+}
+
+html[data-theme="dark"] .admin-panel,
+html[data-theme="dark"] .admin-artist-card,
+html[data-theme="dark"] .admin-artwork-card {
+  background: var(--glass-panel-bg);
+}
+
+html[data-theme="dark"] .gallery-room {
+  background: linear-gradient(
+    180deg,
+    rgba(73, 72, 66, 0.98) 0%,
+    rgba(34, 34, 32, 0.98) 52%,
+    rgba(13, 13, 12, 0.98) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="dark"] .gallery-room::before {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 18% 82%, rgba(0, 0, 0, 0.26)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 48%, rgba(0, 0, 0, 0.4));
+}
+
+html[data-theme="dark"] .pill {
+  background: rgba(8, 8, 11, 0.08);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.018),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="dark"] .contact-inline__line:hover {
+  color: var(--text);
+}
+
+html[data-theme="dark"] .site-footer {
+  background: transparent;
+}
+
+html[data-theme="dark"] .lightbox {
+  background: linear-gradient(
+    180deg,
+    rgba(73, 72, 66, 0.98) 0%,
+    rgba(34, 34, 32, 0.98) 52%,
+    rgba(13, 13, 12, 0.98) 100%
+  );
+}
+
+html[data-theme="dark"] .lightbox::before {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 18% 82%, rgba(0, 0, 0, 0.26)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 48%, rgba(0, 0, 0, 0.4));
+}
+
+html[data-theme="dark"] .lightbox::after {
+  display: none;
+  background: none;
+}
+
+html[data-theme="dark"] .lightbox__image-window {
+  background: transparent;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .lightbox__magnifier-toggle {
+  background: rgba(18, 18, 20, 0.32);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .lightbox__magnifier-toggle:hover,
+html[data-theme="dark"] .lightbox__magnifier-toggle:focus-visible,
+html[data-theme="dark"] .lightbox__magnifier-toggle[aria-pressed="true"] {
+  color: var(--text);
+  background: rgba(18, 18, 20, 0.32);
+}
+
+html[data-theme="dark"] .lightbox__magnifier-lens {
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .lightbox__image,
+html[data-theme="dark"] .lightbox__artwork-frame .artwork-frame__image {
+  background: transparent;
+  box-shadow: none;
+  filter: none;
+}
+
+html[data-theme="dark"] .lightbox__artwork-frame {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .lightbox__artwork-frame .artwork-frame__mount {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* tume teema võidab presetide body/.page-shell tasandi muutujad —
+   sama järjekord mis varem reeglipõhiselt (tume sheen igas presetis) */
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] .page-shell {
+  --frame-edge-shadows:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.28),
+    inset 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset -1px 0 0 rgba(0, 0, 0, 0.24),
+    inset 10px 0 14px -15px rgba(0, 0, 0, 0.52),
+    inset -10px 0 14px -15px rgba(0, 0, 0, 0.46),
+    inset 0 -12px 16px -15px rgba(0, 0, 0, 0.48);
+  --frame-sheen:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 18% 76%, rgba(0, 0, 0, 0.3)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.24), transparent 12% 86%, rgba(0, 0, 0, 0.26));
+  --frame-sheen-opacity: 0.84;
+}
+
+html[data-theme="dark"] .artwork-frame__window::after {
+  box-shadow: inset 0 0 0 1px var(--frame-surface-inner-line);
+}
+
+html[data-theme="dark"] .input--admin {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+html[data-theme="dark"] .input--admin:focus {
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--bfl-accent) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+html[data-theme="dark"] .button--admin:hover,
+html[data-theme="dark"] .button--admin-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .input,
+html[data-theme="dark"] .textarea,
+html[data-theme="dark"] .select {
+  border-color: rgba(255, 255, 255, 0.09);
+  background: rgba(10, 10, 12, 0.84);
+}
+
+html[data-theme="dark"] .locale-switch,
+html[data-theme="dark"] .admin-preview-button {
+  background: var(--glass-control-bg);
+}
+
+html[data-theme="dark"] .locale-switch__button--active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .admin-card-thumb,
+html[data-theme="dark"] .admin-media-card__preview {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html[data-theme="dark"] .admin-divider {
+  background: rgba(255, 255, 255, 0.08);
+}
+

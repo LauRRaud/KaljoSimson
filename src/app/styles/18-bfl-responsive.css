@@ -1,0 +1,172 @@
+/* ---- responsive ----------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .bfl-dolly {
+    perspective: 950px;
+  }
+
+  .bfl-brand {
+    top: 38%;
+  }
+
+  .bfl-brand__title {
+    font-size: clamp(3.3rem, 14.5vw, 5.6rem);
+  }
+
+  .bfl-tagline {
+    top: 38%;
+    font-size: clamp(1.45rem, 6.2vw, 1.9rem);
+    transform: translate(-50%, 0) translateZ(calc(var(--z) + var(--cam, 0px))) translateY(26vw);
+  }
+
+  .bfl-work {
+    width: min(72vw, 44vh);
+    transform: translate(-50%, -50%) translate3d(0, -17vh, 0);
+  }
+
+  /* autor suurem ja maalile lähemal: väiksem sügavusnihe (vähem
+     kahanemist) ja väiksem vertikaalne vahe */
+  .bfl-persona {
+    gap: 14px;
+    transform: translate(-50%, -50%) translate3d(0, 20vh, -160px);
+  }
+
+  .bfl-author {
+    width: clamp(132px, 34vw, 168px);
+  }
+
+  .bfl-nameplate__name {
+    font-size: clamp(2.05rem, 8.4vw, 2.6rem);
+  }
+
+  .bfl-nameplate__meta {
+    font-size: 1.02rem;
+  }
+
+  .bfl-finale__inner {
+    gap: 18px;
+  }
+}
+
+@media (max-height: 560px) {
+  .bfl-cue {
+    display: none;
+  }
+}
+
+/* ---- flat fallback (reduced motion) --------------------------------- */
+
+.bfl--flat .bfl-viewport {
+  position: static;
+  overflow: visible;
+  perspective: none;
+  height: auto;
+}
+
+.bfl--flat .bfl-track,
+.bfl--flat .bfl-cue,
+.bfl--flat .bfl-grain {
+  display: none;
+}
+
+.bfl--flat .bfl-veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.bfl--flat .bfl-dolly {
+  position: static;
+  perspective: none;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-brand,
+.bfl--flat .bfl-tagline,
+.bfl--flat .bfl-room,
+.bfl--flat .bfl-finale {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  transform: none !important;
+  visibility: visible !important;
+  text-align: center;
+}
+
+.bfl--flat .bfl-brand {
+  padding-top: 20vh;
+}
+
+.bfl--flat .bfl-brand__word,
+.bfl--flat .bfl-tagline {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-tagline {
+  display: block;
+  margin-top: 14px;
+}
+
+.bfl--flat .bfl-room {
+  max-width: min(560px, 86vw);
+  margin: 12vh auto;
+  pointer-events: auto !important;
+}
+
+.bfl--flat .bfl-room .bfl-work,
+.bfl--flat .bfl-room .bfl-persona,
+.bfl--flat .bfl-finale > * {
+  opacity: 1 !important;
+}
+
+.bfl--flat .bfl-marker {
+  display: none;
+}
+
+.bfl--flat .bfl-work {
+  position: static;
+  width: 100%;
+  transform: none;
+}
+
+.bfl--flat .bfl-persona {
+  position: static;
+  margin-top: 32px;
+  transform: none !important;
+}
+
+.bfl--flat .bfl-author {
+  width: 170px;
+}
+
+.bfl--flat .bfl-finale {
+  padding: 8vh 0 14vh;
+}
+
+.bfl--flat .bfl-finale__inner {
+  position: static;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bfl-cue__stroke,
+  .bfl-cue__drop,
+  .bfl-brand__title,
+  .bfl-tagline__word {
+    animation: none;
+  }
+
+  /* staatiline piisk raja lõpus; saba jääb jäljena nähtavale */
+  .bfl-cue__drop {
+    opacity: 0.9;
+    transform: translate(-50%, calc(var(--cue-h) - 12px));
+  }
+
+  .bfl-cue__drop::after {
+    animation: none;
+    transform: translateX(-50%) scaleY(1);
+  }
+}

@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const { readCss } = require("./readCss");
 
 function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
@@ -12,7 +13,7 @@ test("admin gallery section controls gallery room wall movement speed", () => {
   const galleryClient = read("src/components/GalleryClient.jsx");
   const galleryPage = read("src/app/gallery/page.js");
   const galleryRoomExperience = read("src/components/GalleryRoomExperience.jsx");
-  const globals = read("src/app/globals.css");
+  const globals = readCss();
   const contentStore = read("src/lib/content-store.js");
   const seedContent = read("content/site-content.json");
 

@@ -7,7 +7,7 @@ const framePresetBootstrap = `
 (() => {
   try {
     const preset = window.localStorage.getItem("beyondframes-frame-preset");
-    if (preset === "gold" || preset === "silver") {
+    if (preset === "gold" || preset === "silver" || preset === "bronze") {
       document.documentElement.dataset.framePreset = preset;
     }
   } catch {

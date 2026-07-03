@@ -1,0 +1,78 @@
+.page-main {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+  padding: 42px 0 96px;
+}
+
+.site-footer {
+  z-index: 2;
+}
+
+.home-title {
+  position: relative;
+  display: grid;
+  place-items: start center;
+  min-height: calc(100svh - 24px);
+  padding: clamp(130px, 15vw, 188px) 0 clamp(72px, 8vw, 92px);
+  isolation: isolate;
+}
+
+.home-title__brand {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  max-width: none;
+  color: var(--text);
+  font-size: clamp(4.22rem, 12vw, 8.65rem);
+  line-height: 0.82;
+  letter-spacing: var(--tracking-display);
+  text-align: center;
+  text-shadow: var(--display-text-shadow);
+  transform: translateY(-10px);
+  isolation: isolate;
+}
+
+.home-title__story {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: clamp(18px, 2.8vw, 32px);
+}
+
+.home-title__tagline {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.18em 0.38em;
+  margin: clamp(20px, 2.4vw, 30px) 0 0;
+  color: var(--home-tagline-text);
+  font-family: var(--font-tagline);
+  font-size: clamp(1.26rem, 1.48vw, 1.68rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.home-title__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 52ch;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: clamp(1.14rem, 1.48vw, 1.3rem);
+  line-height: 1.84;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+html[data-theme="dark"] .home-title__copy {
+  color: rgba(245, 239, 229, 0.84);
+}
+

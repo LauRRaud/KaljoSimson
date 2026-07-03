@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const { readCss } = require("./readCss");
 
 function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
@@ -9,7 +10,7 @@ function read(relativePath) {
 
 test("artist profile uses wider mobile content width", () => {
   const page = read("src/app/artists/[slug]/page.js");
-  const globals = read("src/app/globals.css");
+  const globals = readCss();
 
   assert.match(page, /mainClassName="page-main--profile"/);
   assert.match(

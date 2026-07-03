@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const { readCss } = require("./readCss");
 
 function read(relativePath) {
   return readFileSync(path.join(__dirname, "..", "..", relativePath), "utf8");
@@ -17,7 +18,7 @@ test("site footer ends with centered byline", () => {
     "byline should appear after the footer year",
   );
 
-  const globals = read("src/app/globals.css");
+  const globals = readCss();
 
   assert.match(
     globals,

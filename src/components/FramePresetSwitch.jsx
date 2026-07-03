@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "beyondframes-frame-preset";
-const PRESETS = ["silver", "gold"];
+const PRESETS = ["silver", "gold", "bronze"];
 
 function isFramePreset(value) {
   return PRESETS.includes(value);
@@ -12,6 +12,10 @@ function isFramePreset(value) {
 function getPresetLabel(preset, locale) {
   if (preset === "gold") {
     return locale === "en" ? "Gold frame" : "Kuldne raam";
+  }
+
+  if (preset === "bronze") {
+    return locale === "en" ? "Bronze frame" : "Pronksist raam";
   }
 
   return locale === "en" ? "Silver frame" : "Hõbedane raam";
