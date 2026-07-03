@@ -159,10 +159,10 @@ export default function PwaInstallButton({ locale = "et" }) {
           fill="none"
           viewBox="0 0 24 24"
         >
-          <path d="M8 3.5h8a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5H8A1.5 1.5 0 0 1 6.5 19V5A1.5 1.5 0 0 1 8 3.5Z" />
-          <path d="M10.5 17.5h3" />
+          <path d="M7.5 3.5h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z" />
+          <path d="M10.25 17.5h3.5" />
           <path d="M12 7v6" />
-          <path d="m9.8 10.8 2.2 2.2 2.2-2.2" />
+          <path d="m9.4 10.9 2.6 2.6 2.6-2.6" />
         </svg>
       </button>
       {installHint}

@@ -19,7 +19,10 @@ test("site footer ends with centered byline", () => {
 
   const globals = read("src/app/globals.css");
 
-  assert.match(globals, /\.site-footer__inner\s*{[^}]*padding:\s*54px 0 24px;/s);
+  assert.match(
+    globals,
+    /\.site-footer__inner\s*{[^}]*padding:\s*54px 0 calc\(24px \+ env\(safe-area-inset-bottom, 0px\)\);/s,
+  );
   assert.match(globals, /\.site-footer__byline\s*{[^}]*font-size:\s*0\.95rem;/s);
   assert.match(globals, /\.site-footer__byline\s*{[^}]*margin-top:\s*16px;/s);
   assert.match(globals, /\.site-footer__byline\s*{[^}]*opacity:\s*0\.68;/s);

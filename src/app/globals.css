@@ -225,6 +225,9 @@ html {
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* Lõuendi (canvas) värv: iOS-i kummipaela-ületõmbel paistab lehe servade
+     tagant just SEE, mitte body gradient — soe paberitoon valge asemel. */
+  background: var(--bfl-void-b);
 }
 
 body {
@@ -467,6 +470,223 @@ img {
   line-height: 1;
   white-space: nowrap;
   transition: color 180ms ease, opacity 180ms ease;
+}
+
+/* ---- mobiilimenüü: lingid hamburgeri all, nupud eraldi pillil ------- */
+
+.site-nav-mobile {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.site-nav.site-nav--controls {
+  width: auto;
+  max-width: none;
+  padding: 10px 14px;
+}
+
+.site-nav .site-nav__controls--standalone {
+  padding-left: 0;
+  border-left: none;
+}
+
+/* nupupillis on tekst ja ikoonid ühes visuaalses suuruses */
+.site-nav.site-nav--controls .site-nav__controls {
+  gap: 13px;
+}
+
+.site-nav.site-nav--controls .language-switch,
+.site-nav.site-nav--controls .language-switch__item {
+  height: 30px;
+}
+
+.site-nav.site-nav--controls .language-switch__item {
+  gap: 4px;
+  font-size: 1.28rem;
+}
+
+.site-nav.site-nav--controls .language-switch__chevron {
+  border-left-width: 4px;
+  border-right-width: 4px;
+  border-top-width: 6px;
+}
+
+.site-nav.site-nav--controls .pwa-install-button {
+  width: 28px;
+  height: 28px;
+}
+
+.site-nav.site-nav--controls .pwa-install-button__icon {
+  width: 27px;
+  height: 27px;
+}
+
+.site-nav.site-nav--controls .theme-toggle {
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  margin-right: 0;
+  padding: 0;
+}
+
+.site-nav.site-nav--controls .theme-toggle__icon {
+  width: 26px;
+  height: 26px;
+}
+
+.mobile-menu__toggle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--glass-panel-bg);
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu__bar {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text-soft);
+}
+
+/* üle-ekraani kate: sama soe udu mis lennul, suured serif-lingid */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 90% at 50% 30%, var(--bfl-void-a) 0%, var(--bfl-void-b) 55%, var(--bfl-void-c) 100%);
+  animation: mobile-menu-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.mobile-menu::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 52%, rgba(20, 12, 5, 0.14) 100%);
+}
+
+html[data-theme="dark"] .mobile-menu::after {
+  background:
+    radial-gradient(90% 76% at 50% 46%, transparent 46%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+@keyframes mobile-menu-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mobile-menu__nav {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(22px, 4.6vh, 36px);
+  justify-items: center;
+  text-align: center;
+}
+
+.mobile-menu__link {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 9.5vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+  animation: mobile-menu-link-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(70ms + var(--mi, 0) * 70ms);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes mobile-menu-link-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mobile-menu__close {
+  position: absolute;
+  top: calc(14px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--glass-panel-bg);
+  box-shadow:
+    0 0 0 1px var(--glass-ring),
+    var(--artwork-object-shadow);
+  -webkit-backdrop-filter: blur(5px) saturate(1.08);
+  backdrop-filter: blur(5px) saturate(1.08);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu__close-x {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.mobile-menu__close-x::before,
+.mobile-menu__close-x::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text-soft);
+}
+
+.mobile-menu__close-x::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.mobile-menu__close-x::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu,
+  .mobile-menu__link {
+    animation: none;
+  }
 }
 
 .site-nav__links a::after {
@@ -2875,7 +3095,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding: 54px 0 24px;
+  padding: 54px 0 calc(24px + env(safe-area-inset-bottom, 0px));
 }
 
 .site-footer__inner--centered {
@@ -5762,8 +5982,16 @@ html[data-theme="dark"] .admin-divider {
     transform: none;
   }
 
-  .site-nav {
+  /* Mobiilis: täispikk lingiriba peitu, asemele nupupill + hamburger. */
+  .site-nav:not(.site-nav--controls) {
+    display: none;
+  }
+
+  .site-nav-mobile {
     display: flex;
+  }
+
+  .site-nav {
     --site-nav-item-gap: clamp(12px, 3vw, 18px);
     --site-nav-control-gap: clamp(8px, 2.1vw, 12px);
     --site-nav-divider-gap: clamp(7px, 1.8vw, 10px);
@@ -7067,16 +7295,18 @@ html[data-theme="dark"] .admin-divider {
 }
 
 @media (max-width: 430px) {
+  /* Kõik 4 linki + keel + install + teema PEAVAD mahtuma ühte pilli:
+     kitsamad vahed ja väiksem kiri, et miski ei kattuks. */
   .site-nav {
     width: calc(100vw - 24px);
     max-width: calc(100vw - 24px);
     flex-wrap: nowrap;
     justify-content: center;
-    --site-nav-item-gap: clamp(9px, 2.9vw, 13px);
-    --site-nav-control-gap: clamp(7px, 1.9vw, 9px);
+    --site-nav-item-gap: clamp(7px, 2.4vw, 10px);
+    --site-nav-control-gap: clamp(5px, 1.6vw, 7px);
     --site-nav-divider-gap: clamp(5px, 1.5vw, 7px);
     gap: var(--site-nav-control-gap);
-    padding: 10px 11px 10px 12px;
+    padding: 9px 10px 9px 11px;
     overflow: visible;
     border-radius: 999px;
   }
@@ -7088,7 +7318,7 @@ html[data-theme="dark"] .admin-divider {
 
   .site-nav__controls {
     gap: var(--site-nav-control-gap);
-    padding-left: clamp(8px, 1.9vw, 10px);
+    padding-left: var(--site-nav-divider-gap);
     border-left: 1px solid rgba(100, 75, 50, 0.24);
     pointer-events: auto;
   }
@@ -7101,7 +7331,7 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-nav a {
-    font-size: clamp(1.12rem, 5.5vw, 1.3rem);
+    font-size: clamp(0.8rem, 4.15vw, 1.06rem);
     line-height: 1;
   }
 
@@ -7177,7 +7407,7 @@ html[data-theme="dark"] .admin-divider {
   .language-switch,
   .language-switch__item {
     width: auto;
-    height: 28px;
+    height: 26px;
   }
 
   .language-switch {
@@ -7187,12 +7417,12 @@ html[data-theme="dark"] .admin-divider {
   .site-nav .language-switch,
   .site-nav .language-switch__item {
     width: auto;
-    height: 28px;
+    height: 26px;
   }
 
   .language-switch__item {
-    gap: 3px;
-    font-size: clamp(1.12rem, 5.5vw, 1.3rem);
+    gap: 2px;
+    font-size: clamp(0.8rem, 4.15vw, 1.06rem);
   }
 
   .language-switch__chevron {
@@ -7209,32 +7439,45 @@ html[data-theme="dark"] .admin-divider {
   }
 
   .site-nav .theme-toggle {
-    min-width: 29px;
-    width: 29px;
-    height: 29px;
+    min-width: 27px;
+    width: 27px;
+    height: 27px;
     margin-right: -2px;
     padding: 0;
     line-height: 1;
   }
 
   .pwa-install-button {
-    width: 27px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
   }
 
   .pwa-install-button__icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
 
   .theme-toggle__icon {
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
   }
 
   .admin-topbar__locale-copy,
   .admin-topbar__current {
     font-size: 0.76rem;
+  }
+}
+
+/* päris kitsad ekraanid (vana SE jms): veel veidi tihedam pill */
+@media (max-width: 350px) {
+  .site-nav {
+    --site-nav-item-gap: 5px;
+    padding: 9px 8px;
+  }
+
+  .site-nav a,
+  .language-switch__item {
+    font-size: clamp(0.72rem, 4vw, 0.94rem);
   }
 }
 
@@ -7359,6 +7602,16 @@ html[data-theme="dark"] {
   text-shadow: none;
 }
 
+/* Lennul on menüü FIKSEERITUD ja hajub kerima asudes (JS annab --hdr-o/-v).
+   Varem keris absoluutne paneel fikseeritud stseeni pealt ära ja rebenes
+   iOS-i kummipaelal stseenist lahti. */
+.page-shell--bfl .site-header {
+  position: fixed;
+  opacity: var(--hdr-o, 1);
+  visibility: var(--hdr-v, visible);
+  transition: opacity 240ms ease, visibility 240ms ease;
+}
+
 /* menüü naaseb lennu lõpus */
 body.bfl-header-return .site-header {
   position: fixed;
@@ -7387,8 +7640,6 @@ body.bfl-header-return .site-header {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  perspective: 1100px;
-  perspective-origin: 50% 46%;
 }
 
 .bfl-veil {
@@ -7432,12 +7683,15 @@ html[data-theme="light"] .bfl-paint__canvas {
   mix-blend-mode: multiply;
 }
 
-.bfl-look,
+/* Perspektiiv on plaanide OTSESEL vanemal ja kaamera liigub --cam
+   muutujana igasse plaani — lend ei vaja pesastatud preserve-3d tuge,
+   mille WebKit (iOS Safari) kipub lamendama. */
 .bfl-dolly {
+  --cam: 0px;
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  will-change: transform;
+  perspective: 1100px;
+  perspective-origin: 50% 46%;
 }
 
 .bfl-track {
@@ -7461,7 +7715,7 @@ html[data-theme="light"] .bfl-paint__canvas {
   position: absolute;
   left: 50%;
   top: 42%;
-  transform: translate(-50%, -50%) translateZ(var(--z));
+  transform: translate(-50%, -50%) translateZ(calc(var(--z) + var(--cam, 0px)));
   transform-style: preserve-3d;
   text-align: center;
   white-space: nowrap;
@@ -7515,7 +7769,7 @@ html[data-theme="light"] .bfl-paint__canvas {
   left: 50%;
   top: 42%;
   margin: 0;
-  transform: translate(-50%, 0) translateZ(var(--z)) translateY(clamp(120px, 17vw, 250px));
+  transform: translate(-50%, 0) translateZ(calc(var(--z) + var(--cam, 0px))) translateY(clamp(120px, 17vw, 250px));
   color: var(--text-soft);
   font-family: var(--font-heading);
   font-size: clamp(2rem, 3.8vw, 3.3rem);
@@ -7570,7 +7824,7 @@ html[data-theme="light"] .bfl-paint__canvas {
   top: 50%;
   width: 0;
   height: 0;
-  transform: translateZ(var(--z));
+  transform: translateZ(calc(var(--z) + var(--cam, 0px)));
   transform-style: preserve-3d;
   visibility: hidden;
   pointer-events: none;
@@ -7604,7 +7858,10 @@ html[data-theme="light"] .bfl-paint__canvas {
   transform: translate(-50%, -50%) translate3d(calc(var(--dir) * -13vw), 0, 0);
 }
 
-.bfl-work .artwork-frame__window {
+/* Raam liibub pildi ümber: üldine min-kõrgus jätaks kitsal ekraanil
+   pildi alla tühja mati (raam palju suurem kui pilt ise). */
+.bfl-work .artwork-frame__window,
+.bfl-work .artwork-frame__surface {
   min-height: 0;
 }
 
@@ -7727,7 +7984,7 @@ html[data-theme="dark"] .bfl-author {
   top: 50%;
   width: 0;
   height: 0;
-  transform: translateZ(var(--z));
+  transform: translateZ(calc(var(--z) + var(--cam, 0px)));
   transform-style: preserve-3d;
   visibility: hidden;
 }
@@ -8194,7 +8451,7 @@ html[data-theme="dark"] .artists-index__portrait {
 /* ---- responsive ----------------------------------------------------- */
 
 @media (max-width: 720px) {
-  .bfl-viewport {
+  .bfl-dolly {
     perspective: 950px;
   }
 
@@ -8209,25 +8466,31 @@ html[data-theme="dark"] .artists-index__portrait {
   .bfl-tagline {
     top: 38%;
     font-size: clamp(1.45rem, 6.2vw, 1.9rem);
-    transform: translate(-50%, 0) translateZ(var(--z)) translateY(26vw);
+    transform: translate(-50%, 0) translateZ(calc(var(--z) + var(--cam, 0px))) translateY(26vw);
   }
 
   .bfl-work {
     width: min(72vw, 44vh);
-    transform: translate(-50%, -50%) translate3d(0, -16vh, 0);
+    transform: translate(-50%, -50%) translate3d(0, -17vh, 0);
   }
 
+  /* autor suurem ja maalile lähemal: väiksem sügavusnihe (vähem
+     kahanemist) ja väiksem vertikaalne vahe */
   .bfl-persona {
-    gap: 12px;
-    transform: translate(-50%, -50%) translate3d(0, 22vh, -220px);
+    gap: 14px;
+    transform: translate(-50%, -50%) translate3d(0, 18vh, -160px);
   }
 
   .bfl-author {
-    width: clamp(108px, 27vw, 140px);
+    width: clamp(132px, 34vw, 168px);
   }
 
   .bfl-nameplate__name {
-    font-size: clamp(1.7rem, 7vw, 2.3rem);
+    font-size: clamp(2.05rem, 8.4vw, 2.6rem);
+  }
+
+  .bfl-nameplate__meta {
+    font-size: 1.02rem;
   }
 
   .bfl-finale__inner {
@@ -8262,9 +8525,9 @@ html[data-theme="dark"] .artists-index__portrait {
   z-index: -1;
 }
 
-.bfl--flat .bfl-look,
 .bfl--flat .bfl-dolly {
   position: static;
+  perspective: none;
   transform: none !important;
 }
 

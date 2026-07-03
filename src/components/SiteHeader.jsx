@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LanguageSwitch from "@/components/LanguageSwitch";
+import MobileMenu from "@/components/MobileMenu";
 import PwaInstallButton from "@/components/PwaInstallButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import { withLocale } from "@/lib/locale";
@@ -33,6 +34,22 @@ export default function SiteHeader({ locale = "et" }) {
             <ThemeToggle locale={locale} />
           </div>
         </nav>
+
+        {/* Mobiilis: lingid hamburgeri all, nupud eraldi pillil. */}
+        <div className="site-nav-mobile">
+          <nav
+            className="site-nav site-nav--controls"
+            aria-label={locale === "en" ? "Quick controls" : "Kiirvalikud"}
+          >
+            <div className="site-nav__controls site-nav__controls--standalone">
+              <LanguageSwitch locale={locale} />
+              <PwaInstallButton locale={locale} />
+              <ThemeToggle locale={locale} />
+            </div>
+          </nav>
+
+          <MobileMenu locale={locale} />
+        </div>
       </div>
     </header>
   );

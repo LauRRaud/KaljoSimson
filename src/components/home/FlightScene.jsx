@@ -30,21 +30,39 @@ function fadeOut(rel, from, to) {
   return 1 - clamp01((rel - from) / (to - from));
 }
 
+// Iga ruum elab AINULT omas lõigus: ta hakkab ilmuma alles siis, kui
+// eelmine ruum (1500px eespool) on kaamerani jõudnud, ja hajub kiiresti
+// pärast möödumist. Nii ei paista intro ajal brändi taga midagi ega
+// kattu naaberruumid kunagi täies jõus.
 function envelopeFor(env, rel) {
   if (env === "brand") {
     return fadeOut(rel, -80, 360);
   }
 
   if (env === "finale") {
-    return fadeIn(rel, -2350, -1600);
+    return fadeIn(rel, -1450, -850);
   }
 
-  return fadeIn(rel, -2350, -1620) * fadeOut(rel, 420, 860);
+  return fadeIn(rel, -1500, -900) * fadeOut(rel, 260, 640);
+}
+
+// Osa WebKit-versioone (iOS Safari) lamendab pesastatud preserve-3d sisu:
+// translateZ ei renderdu ja kõik plaanid joonistuvad täissuuruses üksteise
+// peale. Mõõdame proovikehaga, kas perspektiiv päriselt skaleerib — kui ei,
+// kasutame lamedat varupaigutust.
+function perspectiveWorks(dolly) {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:absolute;left:0;top:0;width:100px;height:100px;" +
+    "transform:translateZ(-1100px);visibility:hidden;pointer-events:none;";
+  dolly.appendChild(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  return width < 80;
 }
 
 export default function FlightScene({ intro, rooms, finale, labels, locale }) {
   const viewportRef = useRef(null);
-  const lookRef = useRef(null);
   const dollyRef = useRef(null);
   const brandRef = useRef(null);
   const markerRef = useRef(null);
@@ -61,9 +79,11 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const dolly = dollyRef.current;
+    const broken3d = dolly ? !perspectiveWorks(dolly) : false;
 
     function update() {
-      setFlat(reduced.matches);
+      setFlat(reduced.matches || broken3d);
     }
 
     update();
@@ -85,11 +105,10 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     }
 
     const viewport = viewportRef.current;
-    const look = lookRef.current;
     const dolly = dollyRef.current;
     const brand = brandRef.current;
 
-    if (!viewport || !look || !dolly) {
+    if (!viewport || !dolly) {
       return undefined;
     }
 
@@ -98,6 +117,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       z: Number(el.dataset.z),
       env: el.dataset.env || "room",
       interactive: el.tagName === "A" || el.dataset.interactive === "1",
+      zIdx: null,
     }));
 
     const marker = markerRef.current;
@@ -113,6 +133,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     let frame = null;
     let cam = 0;
     let lastCue = -1;
+    let lastHdr = -1;
     let lastHeaderBack = null;
     let lastMarker = -2;
     let running = false;
@@ -122,13 +143,16 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     function tick() {
       const target = clamp(window.scrollY, 0, maxCam);
 
-      cam += (target - cam) * 0.085;
+      cam += (target - cam) * 0.11;
 
       if (Math.abs(target - cam) < 0.2) {
         cam = target;
       }
 
-      dolly.style.transform = `translateZ(${cam.toFixed(2)}px)`;
+      // Kaamera liigub CSS-muutujana: iga plaan arvutab oma sügavuse ise
+      // (translateZ(calc(--z + --cam))). Nii ei sõltu lend pesastatud
+      // preserve-3d toest, mis WebKitis on habras.
+      dolly.style.setProperty("--cam", `${cam.toFixed(2)}px`);
 
       for (const plane of planes) {
         const rel = plane.z + cam;
@@ -146,6 +170,16 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
 
         const opacity = envelopeFor(plane.env, rel);
         plane.el.style.setProperty("--o", opacity.toFixed(3));
+
+        // Ilma ühise preserve-3d kontekstita maalitakse plaanid
+        // DOM-järjekorras — sügavusjärjekorra taastab z-index:
+        // kaamerale lähemal plaan katab alati kaugema.
+        const zIdx = 4000 + Math.round(rel / 4);
+
+        if (zIdx !== plane.zIdx) {
+          plane.zIdx = zIdx;
+          plane.el.style.zIndex = String(zIdx);
+        }
 
         if (plane.interactive) {
           const clickable = opacity > 0.15 && rel >= -2050 && rel <= 160;
@@ -175,6 +209,19 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
         document.body.classList.toggle("bfl-header-return", headerBack);
       }
 
+      // Menüü on lennu ajal fikseeritud ja hajub kerima asudes — nii ei
+      // saa ta iOS-is stseeni pealt "lahti rebeneda" ega väreleda.
+      const hdr = headerBack ? 1 : cue;
+
+      if (Math.abs(hdr - lastHdr) > 0.01) {
+        lastHdr = hdr;
+        document.body.style.setProperty("--hdr-o", hdr.toFixed(2));
+        document.body.style.setProperty(
+          "--hdr-v",
+          hdr < 0.05 ? "hidden" : "visible",
+        );
+      }
+
       // Marker näitab ruumi, mis on parasjagu KOHAL: nimi ilmub, kui ruum on
       // täielikult nähtavale ilmunud, ja vahetub alles siis, kui selle raam
       // on kaamerast läbi lennanud (rel > 520).
@@ -183,7 +230,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       for (let i = 0; i < roomNames.length; i += 1) {
         const rel = FIRST_ROOM_Z - i * ROOM_DEPTH + cam;
 
-        if (rel >= -1680 && rel <= 520) {
+        if (rel >= -1480 && rel <= 520) {
           activeRoom = i;
           break;
         }
@@ -360,6 +407,8 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       document.removeEventListener("visibilitychange", handleVisibility);
       viewport.removeEventListener("focusin", handleFocusIn);
       document.body.classList.remove("bfl-header-return");
+      document.body.style.removeProperty("--hdr-o");
+      document.body.style.removeProperty("--hdr-v");
       sleep();
     };
   }, [flat, maxCam, rooms, router]);
@@ -377,140 +426,138 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
           <LivingPaint intensity={0.75} palette={scenePalette} />
         )}
 
-        <div className="bfl-look" ref={lookRef}>
-          <div className="bfl-dolly" ref={dollyRef}>
-            <header
-              className="bfl-brand"
-              data-env="brand"
-              data-z={BRAND_Z}
-              ref={brandRef}
-              style={{ "--z": `${BRAND_Z}px` }}
-            >
-              <h1 aria-label={intro.title} className="bfl-brand__title">
+        <div className="bfl-dolly" ref={dollyRef}>
+          <header
+            className="bfl-brand"
+            data-env="brand"
+            data-z={BRAND_Z}
+            ref={brandRef}
+            style={{ "--z": `${BRAND_Z}px` }}
+          >
+            <h1 aria-label={intro.title} className="bfl-brand__title">
+              <span
+                aria-hidden="true"
+                className="bfl-brand__word bfl-brand__word--beyond"
+              >
+                {intro.brandWords[0]}
+              </span>
+              {intro.brandWords[1] ? (
                 <span
                   aria-hidden="true"
-                  className="bfl-brand__word bfl-brand__word--beyond"
+                  className="bfl-brand__word bfl-brand__word--frames"
                 >
-                  {intro.brandWords[0]}
+                  {intro.brandWords[1]}
                 </span>
-                {intro.brandWords[1] ? (
-                  <span
-                    aria-hidden="true"
-                    className="bfl-brand__word bfl-brand__word--frames"
-                  >
-                    {intro.brandWords[1]}
+              ) : null}
+            </h1>
+          </header>
+
+          <p
+            aria-label={intro.tagline}
+            className="bfl-tagline"
+            data-env="brand"
+            data-z={TAGLINE_Z}
+            style={{ "--z": `${TAGLINE_Z}px` }}
+          >
+            {intro.tagline.split(/\s+/).map((word, index) => (
+              <span
+                aria-hidden="true"
+                className="bfl-tagline__word"
+                key={`${word}-${index}`}
+                style={{ "--wi": index }}
+              >
+                {word}
+              </span>
+            ))}
+          </p>
+
+          {rooms.map((room, index) => {
+            const z = FIRST_ROOM_Z - index * ROOM_DEPTH;
+
+            return (
+              <Link
+                aria-label={`${room.name} — ${labels.roomAria}`}
+                className={`bfl-room ${
+                  index % 2 === 0 ? "bfl-room--even" : "bfl-room--odd"
+                }`}
+                data-cam={Math.abs(z) - 850}
+                data-env="room"
+                data-z={z}
+                href={room.href}
+                key={room.slug}
+                style={{ "--z": `${z}px` }}
+              >
+                {room.artwork ? (
+                  <span aria-hidden="true" className="bfl-work">
+                    <ArtworkFrame
+                      artwork={room.artwork}
+                      imageLoading="eager"
+                      locale={locale}
+                      showCaption={false}
+                    />
                   </span>
                 ) : null}
-              </h1>
-            </header>
 
-            <p
-              aria-label={intro.tagline}
-              className="bfl-tagline"
-              data-env="brand"
-              data-z={TAGLINE_Z}
-              style={{ "--z": `${TAGLINE_Z}px` }}
-            >
-              {intro.tagline.split(/\s+/).map((word, index) => (
-                <span
-                  aria-hidden="true"
-                  className="bfl-tagline__word"
-                  key={`${word}-${index}`}
-                  style={{ "--wi": index }}
-                >
-                  {word}
-                </span>
-              ))}
-            </p>
-
-            {rooms.map((room, index) => {
-              const z = FIRST_ROOM_Z - index * ROOM_DEPTH;
-
-              return (
-                <Link
-                  aria-label={`${room.name} — ${labels.roomAria}`}
-                  className={`bfl-room ${
-                    index % 2 === 0 ? "bfl-room--even" : "bfl-room--odd"
-                  }`}
-                  data-cam={Math.abs(z) - 850}
-                  data-env="room"
-                  data-z={z}
-                  href={room.href}
-                  key={room.slug}
-                  style={{ "--z": `${z}px` }}
-                >
-                  {room.artwork ? (
-                    <span aria-hidden="true" className="bfl-work">
-                      <ArtworkFrame
-                        artwork={room.artwork}
-                        imageLoading={index === 0 ? "eager" : "lazy"}
-                        locale={locale}
-                        showCaption={false}
-                      />
+                <span className="bfl-persona">
+                  <span aria-hidden="true" className="bfl-author">
+                    <ArtistPortrait
+                      artist={room.artist}
+                      priority={index === 0}
+                    />
+                  </span>
+                  <span className="bfl-nameplate">
+                    <strong className="bfl-nameplate__name">
+                      {room.name}
+                    </strong>
+                    <span className="bfl-nameplate__meta">
+                      {room.role}
+                      {room.countLabel ? (
+                        <em className="bfl-nameplate__count">
+                          {room.countLabel}
+                        </em>
+                      ) : null}
                     </span>
-                  ) : null}
-
-                  <span className="bfl-persona">
-                    <span aria-hidden="true" className="bfl-author">
-                      <ArtistPortrait
-                        artist={room.artist}
-                        priority={index === 0}
-                      />
-                    </span>
-                    <span className="bfl-nameplate">
-                      <strong className="bfl-nameplate__name">
-                        {room.name}
-                      </strong>
-                      <span className="bfl-nameplate__meta">
-                        {room.role}
-                        {room.countLabel ? (
-                          <em className="bfl-nameplate__count">
-                            {room.countLabel}
-                          </em>
-                        ) : null}
-                      </span>
-                      <span className="bfl-profile-btn">
-                        {labels.profileButton}
-                      </span>
+                    <span className="bfl-profile-btn">
+                      {labels.profileButton}
                     </span>
                   </span>
-                </Link>
-              );
-            })}
+                </span>
+              </Link>
+            );
+          })}
 
-            <div
-              className="bfl-finale"
-              data-env="finale"
-              data-z={finaleZ}
-              style={{ "--z": `${finaleZ}px` }}
-            >
-              <div className="bfl-finale__inner" data-cam={maxCam}>
-                <div className="bfl-contactframe">
-                  <div className="bfl-contactframe__mat">
-                    <p aria-hidden="true" className="bfl-contactframe__brand">
-                      <span>{intro.brandWords[0]}</span>
-                      {intro.brandWords[1] ? (
-                        <span className="bfl-contactframe__brand-second">
-                          {intro.brandWords[1]}
-                        </span>
-                      ) : null}
-                    </p>
-                    <a
-                      className="bfl-contactframe__mail"
-                      href={`mailto:${finale.email}`}
-                    >
-                      {finale.email}
-                    </a>
-                    <a
-                      className="bfl-contactframe__line"
-                      href={`tel:${finale.phone.replace(/\s+/g, "")}`}
-                    >
-                      {finale.phone}
-                    </a>
-                    <span className="bfl-contactframe__byline">
-                      2026 · L. Raudsoo
-                    </span>
-                  </div>
+          <div
+            className="bfl-finale"
+            data-env="finale"
+            data-z={finaleZ}
+            style={{ "--z": `${finaleZ}px` }}
+          >
+            <div className="bfl-finale__inner" data-cam={maxCam}>
+              <div className="bfl-contactframe">
+                <div className="bfl-contactframe__mat">
+                  <p aria-hidden="true" className="bfl-contactframe__brand">
+                    <span>{intro.brandWords[0]}</span>
+                    {intro.brandWords[1] ? (
+                      <span className="bfl-contactframe__brand-second">
+                        {intro.brandWords[1]}
+                      </span>
+                    ) : null}
+                  </p>
+                  <a
+                    className="bfl-contactframe__mail"
+                    href={`mailto:${finale.email}`}
+                  >
+                    {finale.email}
+                  </a>
+                  <a
+                    className="bfl-contactframe__line"
+                    href={`tel:${finale.phone.replace(/\s+/g, "")}`}
+                  >
+                    {finale.phone}
+                  </a>
+                  <span className="bfl-contactframe__byline">
+                    2026 · L. Raudsoo
+                  </span>
                 </div>
               </div>
             </div>
