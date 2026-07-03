@@ -471,18 +471,18 @@ html[data-theme="dark"] .mobile-menu::after {
   transition: color 300ms ease;
 }
 
-/* kriips on ÜKS otsustav peenike keskjoon: kitsas kast + tihedad
-   otsahajumised, et suurel fondil ei veniks pikaks "laiaks" jooneks
-   ega vahetaks nägu eri suurustel; kasvab keskelt välja */
+/* kriips: pikk peenike keskjoon, pehmed otsahajumised — kasvab keskelt
+   välja. Sissenihe on väike (pikk joon), gradiendi otsad pehmed, et see
+   ei mõjuks järsu täislaiuse-alljoonena. */
 .site-nav__links a::after {
   content: "";
   position: absolute;
-  left: 15%;
-  right: 15%;
+  left: 7%;
+  right: 7%;
   bottom: -0.18em;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent 0%, var(--bfl-accent) 12% 88%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--bfl-accent) 8% 92%, transparent 100%);
   filter: blur(0.4px);
   opacity: 0.9;
   transform: scaleX(0);
