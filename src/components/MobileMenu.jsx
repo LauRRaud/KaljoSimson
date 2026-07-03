@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import LanguageSwitch from "@/components/LanguageSwitch";
+import PwaInstallButton from "@/components/PwaInstallButton";
+import ThemeToggle from "@/components/ThemeToggle";
 import { withLocale } from "@/lib/locale";
 
 export default function MobileMenu({ locale = "et" }) {
@@ -112,6 +115,13 @@ export default function MobileMenu({ locale = "et" }) {
                     {link.label}
                   </Link>
                 ))}
+
+                {/* keel, install ja teema on alalehtedel ainult siin */}
+                <div className="mobile-menu__controls" style={{ "--mi": 4 }}>
+                  <LanguageSwitch locale={locale} />
+                  <PwaInstallButton locale={locale} />
+                  <ThemeToggle locale={locale} />
+                </div>
               </nav>
             </div>,
             document.body,

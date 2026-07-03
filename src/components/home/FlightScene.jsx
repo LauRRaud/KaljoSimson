@@ -71,6 +71,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
   const router = useRouter();
   const [flat, setFlat] = useState(false);
   const [introReveal, setIntroReveal] = useState(true);
+  const [flightSpeed, setFlightSpeed] = useState(1.2);
   const [scenePalette, setScenePalette] = useState(DEFAULT_PALETTE);
 
   const roomCount = rooms.length;
@@ -89,6 +90,21 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     update();
     reduced.addEventListener("change", update);
     return () => reduced.removeEventListener("change", update);
+  }, []);
+
+  // Kaamera liigub kerimise kohta kiiremini kui 1:1 — lend on "lühem",
+  // ilma et stseeni geomeetria muutuks. Mobiilis (rohkem sõrmetööd)
+  // veel veidi kiiremini kui desktopis.
+  useEffect(() => {
+    const compact = window.matchMedia("(max-width: 720px)");
+
+    function update() {
+      setFlightSpeed(compact.matches ? 1.35 : 1.2);
+    }
+
+    update();
+    compact.addEventListener("change", update);
+    return () => compact.removeEventListener("change", update);
   }, []);
 
   // Sisenemisel lastakse taustaruumide sisu sujuvalt kohale (üleminek), mitte
@@ -141,7 +157,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
     const tap = { active: false, x: 0, y: 0 };
 
     function tick() {
-      const target = clamp(window.scrollY, 0, maxCam);
+      const target = clamp(window.scrollY * flightSpeed, 0, maxCam);
 
       cam += (target - cam) * 0.11;
 
@@ -301,7 +317,10 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       const anchor = event.target.closest("[data-cam]");
 
       if (anchor) {
-        window.scrollTo({ top: Number(anchor.dataset.cam), behavior: "auto" });
+        window.scrollTo({
+          top: Number(anchor.dataset.cam) / flightSpeed,
+          behavior: "auto",
+        });
       }
     }
 
@@ -311,7 +330,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
         return;
       }
 
-      window.scrollTo({ top: maxCam, behavior: "auto" });
+      window.scrollTo({ top: maxCam / flightSpeed, behavior: "auto" });
       cam = maxCam;
       wake();
     }
@@ -411,7 +430,7 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       document.body.style.removeProperty("--hdr-v");
       sleep();
     };
-  }, [flat, maxCam, rooms, router]);
+  }, [flat, maxCam, flightSpeed, rooms, router]);
 
   return (
     <section
@@ -584,14 +603,20 @@ export default function FlightScene({ intro, rooms, finale, labels, locale }) {
       <div
         aria-hidden="true"
         className="bfl-track"
-        style={{ height: `calc(100vh + ${maxCam}px)` }}
+        style={{ height: `calc(100vh + ${Math.round(maxCam / flightSpeed)}px)` }}
       >
         <span
           className="bfl-anchor"
           id="artists-stop"
-          style={{ top: `${Math.abs(FIRST_ROOM_Z) - 900}px` }}
+          style={{
+            top: `${Math.round((Math.abs(FIRST_ROOM_Z) - 900) / flightSpeed)}px`,
+          }}
         />
-        <span className="bfl-anchor" id="contact" style={{ top: `${maxCam}px` }} />
+        <span
+          className="bfl-anchor"
+          id="contact"
+          style={{ top: `${Math.round(maxCam / flightSpeed)}px` }}
+        />
       </div>
     </section>
   );

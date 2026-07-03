@@ -1,18 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">
+  <!-- Ilma SVG-filtriteta: feTurbulence/feDisplacementMap ei renderdu
+       iOS Safaris <img> sees ja teos jäi tühjaks. Võbin on joonte sees. -->
   <defs>
-    <filter id="vpaint" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.014 0.03" numOctaves="3" seed="19" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="24" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="vpaintSoft" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.06" numOctaves="2" seed="23" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="12" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="vgrain">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="5" result="g"/>
-      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0.4  0 0 0 0 0.32  0 0 0 0 0.3  0 0 0 0.055 0"/>
-      <feComposite in2="SourceGraphic" operator="over"/>
-    </filter>
     <linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#3b3450"/>
       <stop offset="0.42" stop-color="#6d5170"/>
@@ -29,15 +18,17 @@
 
   <rect width="600" height="800" fill="url(#dusk)"/>
 
-  <g filter="url(#vpaint)">
-    <circle cx="428" cy="176" r="74" fill="url(#moon)" opacity="0.95"/>
-    <circle cx="428" cy="176" r="40" fill="#f2e4c4"/>
-    <path d="M-20 470 Q 150 452 320 466 T 620 462 L 620 560 L -20 560 Z" fill="#5a3f4a" opacity="0.65"/>
-    <path d="M-20 520 Q 200 504 420 518 T 620 512 L 620 620 L -20 620 Z" fill="#43303f" opacity="0.85"/>
-    <path d="M-20 596 Q 300 578 620 592 L 620 820 L -20 820 Z" fill="#2b2233"/>
-  </g>
+  <!-- kuu haloga -->
+  <circle cx="428" cy="176" r="74" fill="url(#moon)" opacity="0.95"/>
+  <circle cx="428" cy="176" r="40" fill="#f2e4c4"/>
 
-  <g filter="url(#vpaintSoft)">
+  <!-- künkad vabakäe servaga -->
+  <path d="M-20 472 C 50 462 130 456 210 462 C 290 468 370 456 450 462 C 520 467 570 460 620 464 L 620 566 L -20 566 Z" fill="#5a3f4a" opacity="0.65"/>
+  <path d="M-20 524 C 70 512 170 508 260 514 C 350 520 440 508 520 514 C 560 517 595 512 620 515 L 620 626 L -20 626 Z" fill="#43303f" opacity="0.85"/>
+  <path d="M-20 600 C 100 588 240 582 360 588 C 460 592 550 586 620 592 L 620 820 L -20 820 Z" fill="#2b2233"/>
+
+  <!-- küpressid -->
+  <g>
     <path d="M104 620 l 10 -180 q 4 -10 8 0 l 10 180 z" fill="#1d1824"/>
     <path d="M96 470 q 26 -34 30 -78 q 22 42 26 80 q -28 16 -56 -2 z" fill="#241d2e"/>
     <path d="M410 640 l 8 -132 q 3 -8 6 0 l 8 132 z" fill="#1d1824"/>
@@ -46,11 +37,10 @@
     <path d="M503 568 q 17 -22 20 -50 q 15 27 17 52 q -18 10 -37 -2 z" fill="#201a2a"/>
   </g>
 
-  <g filter="url(#vpaintSoft)" opacity="0.9">
-    <path d="M150 700 Q 300 686 460 698" fill="none" stroke="#e3a262" stroke-width="6" opacity="0.5"/>
-    <path d="M190 730 Q 320 720 430 728" fill="none" stroke="#c67d52" stroke-width="4" opacity="0.4"/>
+  <!-- sooja valguse triibud maapinnal -->
+  <g opacity="0.9">
+    <path d="M150 702 C 220 694 300 690 370 694 C 410 696 440 695 460 698" fill="none" stroke="#e3a262" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+    <path d="M190 730 C 250 724 320 721 380 724 C 400 725 418 726 430 728" fill="none" stroke="#c67d52" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
     <ellipse cx="300" cy="672" rx="120" ry="10" fill="#e8b877" opacity="0.28"/>
   </g>
-
-  <rect width="600" height="800" fill="none" filter="url(#vgrain)" opacity="0.6"/>
 </svg>

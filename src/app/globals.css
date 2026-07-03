@@ -542,6 +542,8 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* püsib paremal ka siis, kui nupupill on alalehel peidetud */
+  margin-left: auto;
   gap: 5px;
   width: 46px;
   height: 46px;
@@ -630,6 +632,73 @@ html[data-theme="dark"] .mobile-menu::after {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* keel + install + teema katte sees: kompaktsed, nagu nupupillis */
+.mobile-menu__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: clamp(18px, 4vh, 34px);
+  animation: mobile-menu-link-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(70ms + var(--mi, 0) * 70ms);
+}
+
+.mobile-menu .language-switch,
+.mobile-menu .language-switch__item {
+  width: auto;
+  height: 32px;
+}
+
+.mobile-menu .language-switch__item {
+  gap: 4px;
+  color: var(--text-soft);
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.mobile-menu .language-switch__chevron {
+  border-left-width: 4px;
+  border-right-width: 4px;
+  border-top-width: 6px;
+}
+
+.mobile-menu .pwa-install-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-soft);
+}
+
+.mobile-menu .pwa-install-button__icon {
+  width: 29px;
+  height: 29px;
+}
+
+.mobile-menu .theme-toggle {
+  min-width: 30px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  color: var(--text-soft);
+}
+
+.mobile-menu .theme-toggle__icon {
+  width: 28px;
+  height: 28px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__controls {
+    animation: none;
   }
 }
 
@@ -3193,14 +3262,6 @@ p {
 /* profiililehe sisu algab fikseeritud tagasi-nupust allpool */
 .page-main--profile {
   padding-top: clamp(78px, 10vh, 108px);
-}
-
-/* artistide lehel on üleval ka menüüpaneel — kitsal ekraanil
-   nihutame tagasi-nupu sellest allapoole */
-@media (max-width: 720px) {
-  .page-shell--void .profile-nav {
-    top: calc(clamp(64px, 9vh, 88px) + env(safe-area-inset-top, 0px));
-  }
 }
 
 .profile-hero > .portrait-shell {
@@ -5991,6 +6052,17 @@ html[data-theme="dark"] .admin-divider {
     display: flex;
   }
 
+  /* Alalehtedel nupupilli ÜLES ei jää — keel/install/teema on hamburgeri
+     katte sees ja üleval vasakul istub selle asemel Tagasi-nupp. */
+  .page-shell:not(.page-shell--bfl) .site-nav--controls {
+    display: none;
+  }
+
+  .profile-nav {
+    top: calc(17px + env(safe-area-inset-top, 0px));
+    left: 16px;
+  }
+
   .site-nav {
     --site-nav-item-gap: clamp(12px, 3vw, 18px);
     --site-nav-control-gap: clamp(8px, 2.1vw, 12px);
@@ -7633,12 +7705,20 @@ body.bfl-header-return .site-header {
 
 .bfl {
   position: relative;
+  /* fikseeritud stseeni taga olev ala samas toonis — kui iOS-i
+     tööriistariba animatsioon viivuks lava serva paljastab, ei vilgu
+     hele dokumenditaust */
+  background: var(--bfl-void-b);
 }
 
 .bfl-viewport {
   --cue-o: 1;
   position: fixed;
   inset: 0;
+  /* iOS: fikseeritud kiht mõõdetakse väikese vaateava järgi; kui
+     tööriistariba kokku keritakse, jääks alaserv katmata ja alt
+     "keriks välja" dokumendi taust. lvh katab suure vaateava. */
+  height: 100lvh;
   overflow: hidden;
 }
 
@@ -8478,7 +8558,7 @@ html[data-theme="dark"] .artists-index__portrait {
      kahanemist) ja väiksem vertikaalne vahe */
   .bfl-persona {
     gap: 14px;
-    transform: translate(-50%, -50%) translate3d(0, 18vh, -160px);
+    transform: translate(-50%, -50%) translate3d(0, 20vh, -160px);
   }
 
   .bfl-author {
