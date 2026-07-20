@@ -233,12 +233,12 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
   transform: translateY(clamp(28px, 5vw, 64px));
 }
 
-/* vari: kitsas ja tume otse teose all */
+/* vari: sama soe ja kihiline žest mis galeriiruumi teostel */
 .works__image-wrap {
   display: block;
   overflow: hidden;
   border-radius: 0;
-  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--artwork-object-shadow);
 }
 
 /* pilt määrab ise oma kõrguse — teoseid ei lõigata */
