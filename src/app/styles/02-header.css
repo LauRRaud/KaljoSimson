@@ -54,8 +54,9 @@
   position: relative;
   padding-block: 6px;
   color: var(--text-soft);
-  font-size: 1.18rem;
+  font-size: 1.28rem;
   font-weight: 500;
+  letter-spacing: 0.05em;
   transition: color 240ms ease;
 }
 
