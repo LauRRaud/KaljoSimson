@@ -14,12 +14,60 @@ const PASSWORD_FILE = path.join(
   "admin-password.local.json",
 );
 
+// Taastevõti elab ainult serveri keskkonnamuutujas (KS_ADMIN_RECOVERY_KEY).
+// Kui seda ei ole, jääb taastamise vorm login-lehel üldse näitamata.
+const RECOVERY_MIN_KEY_LENGTH = 16;
+const RECOVERY_MAX_ATTEMPTS = 5;
+const RECOVERY_LOCKOUT_MS = 15 * 60 * 1000;
+
+let recoveryAttempts = 0;
+let recoveryLockedUntil = 0;
+
 function getSessionSecret() {
   return process.env.KS_SESSION_SECRET || "kaljosimson-session-secret-change-me";
 }
 
 function getEnvPassword() {
   return process.env.KS_ADMIN_PASSWORD || "kaljosimson-admin";
+}
+
+function getRecoveryKey() {
+  const key = process.env.KS_ADMIN_RECOVERY_KEY;
+
+  return typeof key === "string" && key.length >= RECOVERY_MIN_KEY_LENGTH
+    ? key
+    : null;
+}
+
+export function isRecoveryEnabled() {
+  return getRecoveryKey() !== null;
+}
+
+export function getRecoveryLockRemainingMs() {
+  return Math.max(0, recoveryLockedUntil - Date.now());
+}
+
+export function verifyRecoveryKey(key) {
+  const expectedKey = getRecoveryKey();
+
+  if (!expectedKey || getRecoveryLockRemainingMs() > 0) {
+    return false;
+  }
+
+  const candidate = Buffer.from(String(key));
+  const expected = Buffer.from(expectedKey);
+  const matches =
+    candidate.length === expected.length &&
+    crypto.timingSafeEqual(candidate, expected);
+
+  if (matches) {
+    recoveryAttempts = 0;
+  } else if (++recoveryAttempts >= RECOVERY_MAX_ATTEMPTS) {
+    recoveryLockedUntil = Date.now() + RECOVERY_LOCKOUT_MS;
+    recoveryAttempts = 0;
+  }
+
+  return matches;
 }
 
 function hashPassword(password, salt) {

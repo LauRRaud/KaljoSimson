@@ -20,6 +20,47 @@
   background: var(--surface-strong);
 }
 
+.admin-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-recovery {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.admin-recovery__toggle {
+  color: var(--text-soft);
+  cursor: pointer;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+.admin-recovery__toggle::-webkit-details-marker {
+  display: none;
+}
+
+.admin-recovery__toggle::before {
+  content: "＋ ";
+}
+
+.admin-recovery[open] .admin-recovery__toggle::before {
+  content: "− ";
+}
+
+.admin-recovery__toggle:hover {
+  color: var(--text);
+}
+
+.admin-recovery__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 16px;
+}
+
 .admin-error {
   color: #b3261e;
   font-weight: 600;

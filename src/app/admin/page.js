@@ -1,5 +1,6 @@
 import AdminPanel from "@/components/AdminPanel";
-import { isAdminAuthenticated } from "@/lib/admin-auth";
+import AdminRecovery from "@/components/AdminRecovery";
+import { isAdminAuthenticated, isRecoveryEnabled } from "@/lib/admin-auth";
 import { getSiteContent } from "@/lib/content-store";
 import { loginAction, logoutAction } from "./actions";
 
@@ -17,30 +18,34 @@ export default async function AdminPage({ searchParams }) {
   if (!authenticated) {
     return (
       <main className="admin-login-page">
-        <form action={loginAction} className="admin-login">
-          <p className="eyebrow">Kaljo Simson</p>
-          <h1>Admin</h1>
-          <p className="section-copy">
-            Sisu haldamiseks sisesta administraatori parool.
-          </p>
-          {params?.error === "password" ? (
-            <p className="admin-error">Vale parool. Proovi uuesti.</p>
-          ) : null}
-          <label className="admin-field">
-            <span className="admin-field__label">Parool</span>
-            <input
-              autoComplete="current-password"
-              autoFocus
-              className="admin-input"
-              name="password"
-              required
-              type="password"
-            />
-          </label>
-          <button className="cta cta--primary" type="submit">
-            Logi sisse
-          </button>
-        </form>
+        {/* Taastamise vorm on login-vormi kõrval, mitte sees — HTML ei luba pesastatud form'i. */}
+        <div className="admin-login">
+          <form action={loginAction} className="admin-login__form">
+            <p className="eyebrow">Kaljo Simson</p>
+            <h1>Admin</h1>
+            <p className="section-copy">
+              Sisu haldamiseks sisesta administraatori parool.
+            </p>
+            {params?.error === "password" ? (
+              <p className="admin-error">Vale parool. Proovi uuesti.</p>
+            ) : null}
+            <label className="admin-field">
+              <span className="admin-field__label">Parool</span>
+              <input
+                autoComplete="current-password"
+                autoFocus
+                className="admin-input"
+                name="password"
+                required
+                type="password"
+              />
+            </label>
+            <button className="cta cta--primary" type="submit">
+              Logi sisse
+            </button>
+          </form>
+          {isRecoveryEnabled() ? <AdminRecovery /> : null}
+        </div>
       </main>
     );
   }
