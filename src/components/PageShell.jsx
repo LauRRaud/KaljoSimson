@@ -8,18 +8,18 @@ export default function PageShell({
   locale = "et",
   shellClassName = "",
   showFooter = true,
-  showHeader = false,
+  showHeader = true,
   mainClassName = "",
 }) {
   return (
     <div
-      className={`page-shell ${shellClassName}`.trim()}
-      data-frame-preset={content?.site?.framePreset || "silver"}
+      className={`site-shell ${shellClassName}`.trim()}
+      data-frame-preset={content?.site?.framePreset || "gold"}
     >
-      <FramePresetHydrator defaultPreset={content?.site?.framePreset || "silver"} />
+      <FramePresetHydrator defaultPreset={content?.site?.framePreset || "gold"} />
       {showHeader ? <SiteHeader locale={locale} /> : null}
       <main className={`page-main ${mainClassName}`.trim()}>{children}</main>
-      {showFooter ? <SiteFooter content={content} /> : null}
+      {showFooter ? <SiteFooter content={content} locale={locale} /> : null}
     </div>
   );
 }

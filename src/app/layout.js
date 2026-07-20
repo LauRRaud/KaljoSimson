@@ -1,69 +1,51 @@
-import { Cormorant_Garamond, Manrope } from "next/font/google";
-import PwaRegistration from "@/components/PwaRegistration";
-import SiteAmbient from "@/components/SiteAmbient";
+import { Archivo, Fraunces } from "next/font/google";
 import "./globals.css";
 
-const framePresetBootstrap = `
+// Enne esimest värvimist: teema (hele/tume) ja raamipreset
+// localStorage'ist + data-reveal-ready lipp, mille all scroll-reveal
+// elemendid tohivad peidus olla (ilma JS-ita jääb sisu nähtavaks).
+const themeBootstrap = `
 (() => {
   try {
-    const preset = window.localStorage.getItem("beyondframes-frame-preset");
+    const theme = window.localStorage.getItem("ks-theme");
+    if (theme === "hele" || theme === "tume") {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch {
+  }
+  try {
+    const preset = window.localStorage.getItem("ks-frame-preset");
     if (preset === "gold" || preset === "silver" || preset === "bronze") {
       document.documentElement.dataset.framePreset = preset;
     }
   } catch {
   }
-  try {
-    const theme = window.localStorage.getItem("beyondframes-theme");
-    if (theme === "dark" || theme === "light") {
-      document.documentElement.dataset.theme = theme;
-    }
-  } catch {
-  }
+  document.documentElement.dataset.revealReady = "true";
 })();
 `;
 
-const headingFont = Cormorant_Garamond({
+const headingFont = Fraunces({
   variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
-const bodyFont = Manrope({
+const bodyFont = Archivo({
   variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata = {
-  metadataBase: new URL("https://beyondframes.net"),
-  applicationName: "BeyondFrames",
-  manifest: "/manifest.webmanifest",
+  metadataBase: new URL("https://kaljosimson.ee"),
+  applicationName: "Kaljo Simson",
   title: {
-    default: "BeyondFrames",
-    template: "%s | BeyondFrames",
+    default: "Kaljo Simson — maalikunstnik",
+    template: "%s | Kaljo Simson",
   },
   description:
-    "A minimalist and refined web gallery for presenting contemporary painters and their works.",
-  icons: {
-    icon: [
-      {
-        url: "/favicon.svg?v=black-v2",
-        type: "image/svg+xml",
-      },
-      {
-        url: "/icon-192.png?v=black-v2",
-        sizes: "192x192",
-        type: "image/png",
-      },
-    ],
-    shortcut: "/favicon.svg?v=black-v2",
-    apple: "/apple-touch-icon.png?v=black-v2",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "BeyondFrames",
-  },
+    "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus.",
   formatDetection: {
     telephone: false,
   },
@@ -71,8 +53,8 @@ export const metadata = {
 
 export const viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f1e8" },
-    { media: "(prefers-color-scheme: dark)", color: "#16130f" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f3ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#161217" },
   ],
   viewportFit: "cover",
 };
@@ -81,20 +63,16 @@ export default function RootLayout({ children }) {
   return (
     <html
       data-scroll-behavior="smooth"
-      data-frame-preset="silver"
-      data-theme="light"
+      data-theme="hele"
+      data-frame-preset="gold"
       lang="et"
       className={`${headingFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: framePresetBootstrap }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
-      <body>
-        <PwaRegistration />
-        <SiteAmbient />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

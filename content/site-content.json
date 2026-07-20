@@ -1,453 +1,182 @@
 {
   "site": {
-    "title": "BeyondFrames",
-    "domain": "beyondframes.net",
-    "framePreset": "silver",
+    "title": "Kaljo Simson",
+    "domain": "kaljosimson.ee",
+    "framePreset": "gold",
     "galleryRoomSpeed": "normal",
     "tagline": {
-      "et": "Kunst raamidest väljas",
-      "en": "Art beyond frames"
+      "et": "Maalikunstnik",
+      "en": "Painter"
     },
-    "heroTitle": {
-      "et": "Ruum, kus kunst ja kunstnik saavad hingata.",
-      "en": "A space where art and artist can breathe."
+    "heroLead": {
+      "et": "Eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus.",
+      "en": "An Estonian painter whose work reveals a distinctive inner spaciousness and a deeply personal vision."
     },
-    "heroText": {
-      "et": "Ruum, mis avardab piire ja kutsub nägema loomingut uue nurga alt. Siin on esil kunstnikud, kelle teostes kohtuvad isikupära, vabadus ja julgus vaadata tavapärasest kaugemale.",
-      "en": "BeyondFrames is a space for art that reaches beyond its frames. Here, artists and their work come forward through individuality, freedom and a vision broader than the conventional."
-    },
-    "aboutTitle": {
-      "et": "Veebigalerii rahuliku rütmiga",
-      "en": "A gallery website with a calm rhythm"
-    },
-    "aboutText": {
-      "et": "Kogu ülesehitus on loodud selleks, et kunst ja kunstnik oleksid esiplaanil. BeyondFrames pakub rahulikku vaatamisruumi, kus teosed, portreed ja tekstid moodustavad ühtse terviku.",
-      "en": "The entire structure is designed to keep both the art and the artist in the foreground. BeyondFrames offers a calm viewing space where artworks, portraits and texts form a single whole."
+    "worksIntro": {
+      "et": "Valik teoseid, mida kannavad värv, kujundlikkus ja teatraalne pinge.",
+      "en": "A selection of works carried by colour, figuration and theatrical tension."
     },
     "contactTitle": {
       "et": "Kontakt",
       "en": "Contact"
     },
     "contactText": {
-      "et": "Teoste, näituste ja koostööga seotud päringuteks palun võtta ühendust e-posti või telefoni teel.",
-      "en": "For enquiries regarding artworks, exhibitions and collaborations, please get in touch by email or phone."
+      "et": "Teoste ja näitustega seotud päringuteks palun võtta ühendust e-posti või telefoni teel.",
+      "en": "For enquiries regarding artworks and exhibitions, please get in touch by email or phone."
     }
   },
   "contact": {
-    "email": "info@beyondframes.art",
+    "email": "info@kaljosimson.ee",
     "phone": "+372 5550 0000",
-    "instagram": "@beyondframes.art",
-    "instagramUrl": "https://instagram.com/beyondframes.art"
+    "instagram": "",
+    "instagramUrl": ""
   },
-  "notes": [
-    {
-      "et": "Kureeritud valik maalikunstnikke",
-      "en": "A curated selection of painters"
+  "artist": {
+    "name": "Kaljo Simson",
+    "role": {
+      "et": "Maalikunstnik",
+      "en": "Painter"
     },
-    {
-      "et": "Profiilist galeriini ühe liikumisega",
-      "en": "From profile to gallery in one flow"
+    "location": "Eesti",
+    "practiceSince": "1960ndad",
+    "heroImage": "/Profiilid/Kaljo%20Simson/kaljo_simson_profiilipilt_1960ndad-2016.jpg",
+    "portraitImage": "/Profiilid/Kaljo%20Simson/kaljo_simson_profiilipilt_1960ndad-2016.jpg",
+    "portraitPosition": "center center",
+    "shortBio": {
+      "et": "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus.",
+      "en": "Kaljo Simson was an Estonian painter whose work reveals a distinctive inner spaciousness and a deeply personal vision."
     },
-    {
-      "et": "Rahulik ja selge vaatamiskogemus",
-      "en": "A calm and clear viewing experience"
-    }
-  ],
-  "artists": [
-    {
-      "slug": "kalevi-poiss",
-      "name": "Kalevi Poiss",
-      "location": "Eesti",
-      "practiceSince": "Täpsustamisel",
-      "portraitPresetId": "dawn",
-      "portraitImage": "/Profiilid/Kalevi%20Poiss/Kalevi%20Poiss.jpg",
-      "portraitPosition": "center center",
-      "role": {
-        "et": "Maalikunstnik",
-        "en": "Painter"
-      },
-      "shortBio": {
-        "et": "Kalevi Poisi profiil toob esile kunstniku kohalolu ja maalipraktika lähtekoha. Teoste valik lisandub galeriisse koos järgmiste materjalidega.",
-        "en": "Kalevi Poiss's profile introduces the artist's presence and the starting point of his painting practice. A selection of works will be added to the gallery with the next materials."
-      },
-      "biography": {
-        "et": "BeyondFrames koondab siin Kalevi Poisi portree ja esialgse profiili. Leht on üles ehitatud nii, et kunstnikku oleks võimalik lisada galeriisse terviklikult, koos teoste, andmete ja täpsema taustaga.\n\nPraegu on fookuses kunstniku kohalolu ja portree. Teoste valik ning pikem tutvustus lisanduvad siia pärast järgmiste materjalide koondamist.",
-        "en": "BeyondFrames brings together Kalevi Poiss's portrait and initial profile here. The page is structured so the artist can be added to the gallery as a complete whole, together with works, artwork data and fuller context.\n\nFor now, the focus is on presence and portrait. A fuller selection of works and a longer introduction will be added once the next materials are assembled."
-      },
-      "statement": {
-        "et": "Profiil avaneb siit edasi koos teoste ja täpsema valikuga.",
-        "en": "The profile will continue here with artworks and a more detailed selection."
-      },
-      "galleryIntro": {
-        "et": "Kalevi Poisi profiili avavad ajutised digitaalsed visandid. Need asenduvad kunstniku teostega, kui materjalid on koondatud.",
-        "en": "Kalevi Poiss's profile opens with temporary digital sketches. They will be replaced by the artist's works once the materials are assembled."
-      },
-      "focus": [
-        {
-          "et": "portree",
-          "en": "portrait"
-        },
-        {
-          "et": "maal",
-          "en": "painting"
-        },
-        {
-          "et": "kohalolu",
-          "en": "presence"
-        }
-      ],
-      "artworks": [
-        {
-          "slug": "visand-rand",
-          "title": {
-            "et": "Visand I — Rand",
-            "en": "Sketch I — Shore"
-          },
-          "year": "2026",
-          "medium": {
-            "et": "Digitaalne visand",
-            "en": "Digital sketch"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Ajutine visand",
-            "en": "Temporary sketch"
-          },
-          "frame": "ivory",
-          "visualPresetId": "ivory-haze",
-          "image": "/Profiilid/Kalevi%20Poiss/visand-rand.svg",
-          "showInGallery": false,
-          "galleryOrder": 0,
-          "description": {
-            "et": "Ajutine digitaalne visand profiili avamiseks — vaikne rannajoon, meri ja purjekas. Asendub kunstniku teostega.",
-            "en": "A temporary digital sketch to open the profile — a quiet shoreline, sea and a sail. To be replaced by the artist's works."
-          }
-        },
-        {
-          "slug": "visand-videvik",
-          "title": {
-            "et": "Visand II — Videvik",
-            "en": "Sketch II — Dusk"
-          },
-          "year": "2026",
-          "medium": {
-            "et": "Digitaalne visand",
-            "en": "Digital sketch"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Ajutine visand",
-            "en": "Temporary sketch"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "rose-smoke",
-          "image": "/Profiilid/Kalevi%20Poiss/visand-videvik.svg",
-          "showInGallery": false,
-          "galleryOrder": 1,
-          "description": {
-            "et": "Ajutine digitaalne visand — kuu tõus videviku metsa kohal. Asendub kunstniku teostega.",
-            "en": "A temporary digital sketch — moonrise over a dusky forest. To be replaced by the artist's works."
-          }
-        }
-      ]
+    "biography": {
+      "et": "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus. Tema maalides ei ole oluline üksnes kujutatu, vaid ka õhkkond, vaikus ja kohalolu, mis vaatajani jõuab. Nendes teostes on tundlikku värvitaju, mõttelist sügavust ja vaimset mõõdet, mis suunavad pilgu nähtavast kaugemale.\n\nTema pildikeel on äratuntav oma rahuliku jõu, õrnuse ja intensiivsuse poolest. Simsoni looming ei ava end kunagi lõpuni ühe hetkega, vaid kutsub peatuma, süvenema ja kogema midagi, mida ei ole võimalik täielikult sõnadesse panna. Just selles peitubki tema tööde erilisus: need ei mõju üksnes kujutistena, vaid loovad ruumi sisemiseks kohtumiseks ilu, aimduse ja millegagi, mis jääb tavapärasest pilgust avaramaks.",
+      "en": "Kaljo Simson was an Estonian painter whose work reveals a distinctive inner spaciousness and a personal vision. In his paintings, not only the depicted subject matters, but also atmosphere, silence and presence are essential to what reaches the viewer. His works carry a sensitive sense of colour, conceptual depth and a spiritual dimension that guides the eye beyond the merely visible.\n\nHis visual language is recognisable for its calm strength, delicacy and intensity. Simson's work never fully opens in a single glance, but instead invites the viewer to pause, to dwell, and to experience something that cannot be entirely put into words. This is where the uniqueness of his paintings lies: they do not function only as images, but create a space for an inner encounter with beauty, intuition and something wider than ordinary sight."
     },
-    {
-      "slug": "kaljo-simson",
-      "name": "Kaljo Simson",
-      "location": "Eesti",
-      "practiceSince": "1960ndad",
-      "portraitPresetId": "ember",
-      "portraitImage": "/Profiilid/Kaljo%20Simson/kaljo_simson_profiilipilt_1960ndad-2016.jpg",
-      "portraitPosition": "center center",
-      "role": {
-        "et": "Maalikunstnik",
-        "en": "Painter"
-      },
-      "shortBio": {
-        "et": "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus.",
-        "en": "Kaljo Simson was an Estonian painter whose work reveals a distinctive inner spaciousness and a deeply personal vision."
-      },
-      "biography": {
-        "et": "Kaljo Simson oli eesti maalikunstnik, kelle loomingus avaldub eriline sisemine avarus ja isikupärane nägemus. Tema maalides ei ole oluline üksnes kujutatu, vaid ka õhkkond, vaikus ja kohalolu, mis vaatajani jõuab. Nendes teostes on tundlikku värvitaju, mõttelist sügavust ja vaimset mõõdet, mis suunavad pilgu nähtavast kaugemale.\n\nTema pildikeel on äratuntav oma rahuliku jõu, õrnuse ja intensiivsuse poolest. Simsoni looming ei ava end kunagi lõpuni ühe hetkega, vaid kutsub peatuma, süvenema ja kogema midagi, mida ei ole võimalik täielikult sõnadesse panna. Just selles peitubki tema tööde erilisus: need ei mõju üksnes kujutistena, vaid loovad ruumi sisemiseks kohtumiseks ilu, aimduse ja millegagi, mis jääb tavapärasest pilgust avaramaks.",
-        "en": "Kaljo Simson was an Estonian painter whose work reveals a distinctive inner spaciousness and a personal vision. In his paintings, not only the depicted subject matters, but also atmosphere, silence and presence are essential to what reaches the viewer. His works carry a sensitive sense of colour, conceptual depth and a spiritual dimension that guides the eye beyond the merely visible.\n\nHis visual language is recognisable for its calm strength, delicacy and intensity. Simson's work never fully opens in a single glance, but instead invites the viewer to pause, to dwell, and to experience something that cannot be entirely put into words. This is where the uniqueness of his paintings lies: they do not function only as images, but create a space for an inner encounter with beauty, intuition and something wider than ordinary sight."
-      },
-      "statement": {
-        "et": "Simsoni looming ei ava end kunagi lõpuni ühe hetkega, vaid kutsub peatuma, süvenema ja kogema midagi, mida ei ole võimalik täielikult sõnadesse panna.",
-        "en": "Simson's work never fully opens in a single glance, but instead invites the viewer to pause, to dwell, and to experience something that cannot be entirely put into words."
-      },
-      "galleryIntro": {
-        "et": "Kaljo Simsoni galerii koondab olemasolevad teosed kaustast saadud materjalide põhjal. Ühtne raamikeel laseb esile tulla tööde värvilisusel ja kujundlikul pingel.",
-        "en": "Kaljo Simson's gallery brings together the available works from the provided folder. A unified frame language allows the colour and figurative tension of the paintings to come forward."
-      },
-      "focus": [
-        {
-          "et": "värv",
-          "en": "colour"
-        },
-        {
-          "et": "kujundlikkus",
-          "en": "figuration"
-        },
-        {
-          "et": "teatraalsus",
-          "en": "theatricality"
-        }
-      ],
-      "artworks": [
-        {
-          "slug": "hobby",
-          "title": {
-            "et": "Hobby",
-            "en": "Hobby"
-          },
-          "year": "Dateerimata",
-          "medium": {
-            "et": "Meedium täpsustamisel",
-            "en": "Medium to be confirmed"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Küsi saadavust",
-            "en": "Availability on request"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "ember-mist",
-          "image": "/Profiilid/Kaljo%20Simson/hobby.jpg",
-          "showInGallery": true,
-          "galleryOrder": 0,
-          "description": {
-            "et": "Helikopteri, õhupalli ja figuuride kaudu avaneb mänguline, kuid pingestatud stseen, kus liikuvus ja värv kannavad kogu kompositsiooni.",
-            "en": "Through a helicopter, balloon and human figures, the painting opens into a playful yet tense scene where movement and colour carry the entire composition."
-          }
-        },
-        {
-          "slug": "probleem",
-          "title": {
-            "et": "Probleem",
-            "en": "Problem"
-          },
-          "year": "Dateerimata",
-          "medium": {
-            "et": "Meedium täpsustamisel",
-            "en": "Medium to be confirmed"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Küsi saadavust",
-            "en": "Availability on request"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "rose-smoke",
-          "image": "/Profiilid/Kaljo%20Simson/probleem.jpg",
-          "showInGallery": true,
-          "galleryOrder": 1,
-          "description": {
-            "et": "Kahe figuuri vaheline kohtumine on ehitatud kontrastsele violetsele ja kollasele pinnale, mis muudab stseeni peaaegu allegooriliseks.",
-            "en": "The meeting between two figures is built on a strong violet and yellow surface, making the scene feel almost allegorical."
-          }
-        },
-        {
-          "slug": "tehislindude-vabrikus",
-          "title": {
-            "et": "Tehislindude vabrikus",
-            "en": "In the Artificial Birds Factory"
-          },
-          "year": "Dateerimata",
-          "medium": {
-            "et": "Meedium täpsustamisel",
-            "en": "Medium to be confirmed"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Küsi saadavust",
-            "en": "Availability on request"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "forest-veil",
-          "image": "/Profiilid/Kaljo%20Simson/tehislindude-vabrikus.jpg",
-          "showInGallery": true,
-          "galleryOrder": 2,
-          "description": {
-            "et": "Teravad kujundid, särav oranž taust ja mehhaniseeritud olendid loovad sürreaalse, peaaegu lavastusliku atmosfääri.",
-            "en": "Sharp forms, a glowing orange background and mechanised creatures create a surreal, almost staged atmosphere."
-          }
-        },
-        {
-          "slug": "tiivasirutus",
-          "title": {
-            "et": "Tiivasirutus",
-            "en": "Stretching Wings"
-          },
-          "year": "Dateerimata",
-          "medium": {
-            "et": "Meedium täpsustamisel",
-            "en": "Medium to be confirmed"
-          },
-          "size": "Mõõdud täpsustamisel",
-          "status": {
-            "et": "Küsi saadavust",
-            "en": "Availability on request"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "ashen-gold",
-          "image": "/Profiilid/Kaljo%20Simson/tiivasirutus.jpg",
-          "showInGallery": true,
-          "galleryOrder": 3,
-          "description": {
-            "et": "Troopilise rannastseeni ja üle vee liikuva linnu kaudu ühendab teos eksootilise kujutlusruumi ning intensiivse värvigamma.",
-            "en": "With its tropical shoreline and the bird moving above the water, the work combines an exotic imaginary space with an intense palette."
-          }
-        }
-      ]
+    "statement": {
+      "et": "Simsoni looming ei ava end kunagi lõpuni ühe hetkega, vaid kutsub peatuma, süvenema ja kogema midagi, mida ei ole võimalik täielikult sõnadesse panna.",
+      "en": "Simson's work never fully opens in a single glance, but instead invites the viewer to pause, to dwell, and to experience something that cannot be entirely put into words."
     },
-    {
-      "slug": "van-gogh",
-      "name": "Vincent van Gogh",
-      "location": "Madalmaad / Prantsusmaa",
-      "practiceSince": "1880",
-      "portraitPresetId": "ember",
-      "portraitImage": "/Profiilid/Van%20Gogh/van-gogh-portrait.jpg",
-      "portraitPosition": "center 24%",
-      "role": {
-        "et": "Maalikunstnik",
-        "en": "Painter"
+    "galleryIntro": {
+      "et": "Galerii koondab valiku Kaljo Simsoni maale — teoseid, mida kannavad värv, kujundlikkus ja teatraalne pinge.",
+      "en": "The gallery brings together a selection of Kaljo Simson's paintings — works carried by colour, figuration and theatrical tension."
+    },
+    "focus": [
+      {
+        "et": "värv",
+        "en": "colour"
       },
-      "shortBio": {
-        "et": "Vincent van Gogh oli hollandi maalikunstnik, kelle looming on saanud üheks mõjukamaks peatükiks modernse maalikunsti ajaloos.",
-        "en": "Vincent van Gogh was a Dutch painter whose work has become one of the most influential chapters in the history of modern painting."
+      {
+        "et": "kujundlikkus",
+        "en": "figuration"
       },
-      "biography": {
-        "et": "Vincent van Goghi loomingus ühinevad intensiivne värvitaju, jõuline pintslikiri ja erakordselt isiklik vaade maailmale. Tema teosed liiguvad maastiku, portree ja argise motiivi kaudu kujutamisest kaugemale, muutes nähtu emotsionaalseks ja sisemiseks kogemuseks.\n\nBeyondFramesis on van Gogh esindatud portreeprofiiliga. Eraldi teoste valik lisandub siia järgmiste täienduste käigus.",
-        "en": "Vincent van Gogh's work brings together intense colour, forceful brushwork and an exceptionally personal way of seeing. Through landscape, portrait and everyday motif, his paintings move beyond depiction and turn what is seen into an emotional, inward experience.\n\nWithin BeyondFrames, van Gogh is currently represented by a portrait profile. A dedicated selection of works will be added here in a later update."
-      },
-      "statement": {
-        "et": "Van Goghi loomingus muutuvad värv, rütm ja pintslijälg sisemise pinge kandjateks.",
-        "en": "In van Gogh's work, colour, rhythm and brushwork become carriers of inner intensity."
-      },
-      "galleryIntro": {
-        "et": "Valik van Goghi tuntuimaid teoseid, mis näitavad tema pintslikirja ja värvitaju haaret — ööst õitsemiseni.",
-        "en": "A selection of van Gogh's most celebrated works, tracing the range of his brushwork and colour — from night to blossom."
-      },
-      "focus": [
-        {
-          "et": "värv",
-          "en": "colour"
+      {
+        "et": "teatraalsus",
+        "en": "theatricality"
+      }
+    ],
+    "artworks": [
+      {
+        "slug": "hobby",
+        "title": {
+          "et": "Hobby",
+          "en": "Hobby"
         },
-        {
-          "et": "pintslikiri",
-          "en": "brushwork"
+        "year": "Dateerimata",
+        "medium": {
+          "et": "Meedium täpsustamisel",
+          "en": "Medium to be confirmed"
         },
-        {
-          "et": "intensiivsus",
-          "en": "intensity"
+        "size": "Mõõdud täpsustamisel",
+        "status": {
+          "et": "Küsi saadavust",
+          "en": "Availability on request"
+        },
+        "frame": "obsidian",
+        "visualPresetId": "ember-mist",
+        "image": "/Profiilid/Kaljo%20Simson/hobby.jpg",
+        "showInGallery": true,
+        "galleryOrder": 0,
+        "description": {
+          "et": "Helikopteri, õhupalli ja figuuride kaudu avaneb mänguline, kuid pingestatud stseen, kus liikuvus ja värv kannavad kogu kompositsiooni.",
+          "en": "Through a helicopter, balloon and human figures, the painting opens into a playful yet tense scene where movement and colour carry the entire composition."
         }
-      ],
-      "artworks": [
-        {
-          "slug": "tahine-oo",
-          "title": {
-            "et": "Tähine öö",
-            "en": "The Starry Night"
-          },
-          "year": "1889",
-          "medium": {
-            "et": "Õli lõuendil",
-            "en": "Oil on canvas"
-          },
-          "size": "73,7 × 92,1 cm",
-          "status": {
-            "et": "Muuseumikogus (MoMA, New York)",
-            "en": "In museum collection (MoMA, New York)"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "midnight-linen",
-          "image": "/Profiilid/Van%20Gogh/starry-night.jpg",
-          "showInGallery": false,
-          "galleryOrder": 0,
-          "description": {
-            "et": "Saint-Rémy varjupaiga aknast nähtud öötaevas, kus tähed ja kuu keerlevad elava vooluna küpressi ja magava küla kohal.",
-            "en": "The night sky seen from the asylum at Saint-Rémy, where stars and moon swirl in a living current above a cypress and a sleeping village."
-          }
+      },
+      {
+        "slug": "probleem",
+        "title": {
+          "et": "Probleem",
+          "en": "Problem"
         },
-        {
-          "slug": "paevalilled",
-          "title": {
-            "et": "Päevalilled",
-            "en": "Sunflowers"
-          },
-          "year": "1888",
-          "medium": {
-            "et": "Õli lõuendil",
-            "en": "Oil on canvas"
-          },
-          "size": "92,1 × 73 cm",
-          "status": {
-            "et": "Muuseumikogus (National Gallery, London)",
-            "en": "In museum collection (National Gallery, London)"
-          },
-          "frame": "ivory",
-          "visualPresetId": "ashen-gold",
-          "image": "/Profiilid/Van%20Gogh/sunflowers.jpg",
-          "showInGallery": false,
-          "galleryOrder": 1,
-          "description": {
-            "et": "Viisteist päevalille kollasel taustal — sõpruse ja lõunamaise valguse sümbol, maalitud Gauguini saabumise ootuses.",
-            "en": "Fifteen sunflowers against a yellow ground — a symbol of friendship and southern light, painted while awaiting Gauguin's arrival."
-          }
+        "year": "Dateerimata",
+        "medium": {
+          "et": "Meedium täpsustamisel",
+          "en": "Medium to be confirmed"
         },
-        {
-          "slug": "mandlioied",
-          "title": {
-            "et": "Õitsev mandlipuu",
-            "en": "Almond Blossom"
-          },
-          "year": "1890",
-          "medium": {
-            "et": "Õli lõuendil",
-            "en": "Oil on canvas"
-          },
-          "size": "73,3 × 92,4 cm",
-          "status": {
-            "et": "Muuseumikogus (Van Goghi muuseum, Amsterdam)",
-            "en": "In museum collection (Van Gogh Museum, Amsterdam)"
-          },
-          "frame": "ivory",
-          "visualPresetId": "ivory-haze",
-          "image": "/Profiilid/Van%20Gogh/almond-blossom.jpg",
-          "showInGallery": false,
-          "galleryOrder": 2,
-          "description": {
-            "et": "Õitsvad mandlioksad selge taeva taustal — kingitus vastsündinud vennapojale Vincentile, uue elu ja lootuse märk.",
-            "en": "Almond branches in bloom against a clear sky — a gift for his newborn nephew Vincent, a sign of new life and hope."
-          }
+        "size": "Mõõdud täpsustamisel",
+        "status": {
+          "et": "Küsi saadavust",
+          "en": "Availability on request"
         },
-        {
-          "slug": "kohvikuterrass",
-          "title": {
-            "et": "Kohvikuterrass öösel",
-            "en": "Café Terrace at Night"
-          },
-          "year": "1888",
-          "medium": {
-            "et": "Õli lõuendil",
-            "en": "Oil on canvas"
-          },
-          "size": "80,7 × 65,3 cm",
-          "status": {
-            "et": "Muuseumikogus (Kröller-Müller, Otterlo)",
-            "en": "In museum collection (Kröller-Müller, Otterlo)"
-          },
-          "frame": "obsidian",
-          "visualPresetId": "ember-mist",
-          "image": "/Profiilid/Van%20Gogh/cafe-terrace.jpg",
-          "showInGallery": false,
-          "galleryOrder": 3,
-          "description": {
-            "et": "Arles'i öine väljak, kus kohviku soe kollane valgus kohtub tähistaeva sügava sinisega — öö ilma mustata.",
-            "en": "A night square in Arles where the café's warm yellow light meets the deep blue of a starry sky — night without black."
-          }
+        "frame": "obsidian",
+        "visualPresetId": "rose-smoke",
+        "image": "/Profiilid/Kaljo%20Simson/probleem.jpg",
+        "showInGallery": true,
+        "galleryOrder": 1,
+        "description": {
+          "et": "Kahe figuuri vaheline kohtumine on ehitatud kontrastsele violetsele ja kollasele pinnale, mis muudab stseeni peaaegu allegooriliseks.",
+          "en": "The meeting between two figures is built on a strong violet and yellow surface, making the scene feel almost allegorical."
         }
-      ]
-    }
-  ]
+      },
+      {
+        "slug": "tehislindude-vabrikus",
+        "title": {
+          "et": "Tehislindude vabrikus",
+          "en": "In the Artificial Birds Factory"
+        },
+        "year": "Dateerimata",
+        "medium": {
+          "et": "Meedium täpsustamisel",
+          "en": "Medium to be confirmed"
+        },
+        "size": "Mõõdud täpsustamisel",
+        "status": {
+          "et": "Küsi saadavust",
+          "en": "Availability on request"
+        },
+        "frame": "obsidian",
+        "visualPresetId": "forest-veil",
+        "image": "/Profiilid/Kaljo%20Simson/tehislindude-vabrikus.jpg",
+        "showInGallery": true,
+        "galleryOrder": 2,
+        "description": {
+          "et": "Teravad kujundid, särav oranž taust ja mehhaniseeritud olendid loovad sürreaalse, peaaegu lavastusliku atmosfääri.",
+          "en": "Sharp forms, a glowing orange background and mechanised creatures create a surreal, almost staged atmosphere."
+        }
+      },
+      {
+        "slug": "tiivasirutus",
+        "title": {
+          "et": "Tiivasirutus",
+          "en": "Stretching Wings"
+        },
+        "year": "Dateerimata",
+        "medium": {
+          "et": "Meedium täpsustamisel",
+          "en": "Medium to be confirmed"
+        },
+        "size": "Mõõdud täpsustamisel",
+        "status": {
+          "et": "Küsi saadavust",
+          "en": "Availability on request"
+        },
+        "frame": "obsidian",
+        "visualPresetId": "ashen-gold",
+        "image": "/Profiilid/Kaljo%20Simson/tiivasirutus.jpg",
+        "showInGallery": true,
+        "galleryOrder": 3,
+        "description": {
+          "et": "Troopilise rannastseeni ja üle vee liikuva linnu kaudu ühendab teos eksootilise kujutlusruumi ning intensiivse värvigamma.",
+          "en": "With its tropical shoreline and the bird moving above the water, the work combines an exotic imaginary space with an intense palette."
+        }
+      }
+    ]
+  }
 }

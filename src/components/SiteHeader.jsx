@@ -1,55 +1,55 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import LanguageSwitch from "@/components/LanguageSwitch";
 import MobileMenu from "@/components/MobileMenu";
-import PwaInstallButton from "@/components/PwaInstallButton";
-import ThemeToggle from "@/components/ThemeToggle";
-import { withLocale } from "@/lib/locale";
+import ThemeSwitch from "@/components/ThemeSwitch";
+import { getNavLinks } from "@/lib/nav";
 
 export default function SiteHeader({ locale = "et" }) {
-  return (
-    <header className="site-header">
-      <div className="site-header__inner">
-        <nav
-          className="site-nav"
-          aria-label={locale === "en" ? "Main navigation" : "P\u00f5hinavigeerimine"}
-        >
-          <div className="site-nav__links">
-            <Link href={withLocale("/artists", locale)}>
-              {locale === "en" ? "Artists" : "Artistid"}
-            </Link>
-            <Link href={withLocale("/gallery", locale)}>
-              {locale === "en" ? "Gallery" : "Galerii"}
-            </Link>
-            <Link href={withLocale("/studio", locale)}>
-              {locale === "en" ? "Studio" : "Stuudio"}
-            </Link>
-            <Link href={withLocale("/", locale, "#contact")}>
-              {locale === "en" ? "Contact" : "Kontakt"}
-            </Link>
-          </div>
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
 
-          <div className="site-nav__controls">
-            <LanguageSwitch locale={locale} />
-            <PwaInstallButton locale={locale} />
-            <ThemeToggle locale={locale} />
-          </div>
+  // Kerimisel saab läbipaistev riba tausta ja alumise joone.
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 24);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const links = getNavLinks(locale);
+
+  return (
+    <header className={`topbar${scrolled ? " topbar--scrolled" : ""}`}>
+      <div className="topbar__inner">
+        <nav
+          aria-label={locale === "en" ? "Main navigation" : "Põhinavigeerimine"}
+          className="topbar__nav"
+        >
+          {links.map((link) => (
+            <Link
+              aria-current={link.path === pathname ? "page" : undefined}
+              className="topbar__link"
+              href={link.href}
+              key={link.href}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
-        {/* Mobiilis: lingid hamburgeri all, nupud eraldi pillil. */}
-        <div className="site-nav-mobile">
-          <nav
-            className="site-nav site-nav--controls"
-            aria-label={locale === "en" ? "Quick controls" : "Kiirvalikud"}
-          >
-            <div className="site-nav__controls site-nav__controls--standalone">
-              <LanguageSwitch locale={locale} />
-              <PwaInstallButton locale={locale} />
-              <ThemeToggle locale={locale} />
-            </div>
-          </nav>
-
-          <MobileMenu locale={locale} />
+        <div className="topbar__controls">
+          <LanguageSwitch locale={locale} />
+          <ThemeSwitch locale={locale} />
         </div>
+
+        <MobileMenu locale={locale} />
       </div>
     </header>
   );

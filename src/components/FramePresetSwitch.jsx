@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "beyondframes-frame-preset";
+const STORAGE_KEY = "ks-frame-preset";
 const PRESETS = ["silver", "gold", "bronze"];
 
 function isFramePreset(value) {
@@ -23,12 +23,12 @@ function getPresetLabel(preset, locale) {
 
 function applyPreset(preset) {
   document.documentElement?.setAttribute("data-frame-preset", preset);
-  document.querySelector(".page-shell")?.setAttribute("data-frame-preset", preset);
+  document.querySelector(".site-shell")?.setAttribute("data-frame-preset", preset);
   document.body?.setAttribute("data-frame-preset", preset);
 }
 
-export default function FramePresetSwitch({ defaultPreset = "silver", locale = "et" }) {
-  const initialPreset = isFramePreset(defaultPreset) ? defaultPreset : "silver";
+export default function FramePresetSwitch({ defaultPreset = "gold", locale = "et" }) {
+  const initialPreset = isFramePreset(defaultPreset) ? defaultPreset : "gold";
   const [activePreset, setActivePreset] = useState(initialPreset);
 
   useEffect(() => {

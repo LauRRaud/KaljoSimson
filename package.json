@@ -1,24 +1,17 @@
 {
-  "name": "beyondframes-art",
-  "version": "0.1.0",
+  "name": "kaljosimson",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prisma:generate": "prisma generate",
-    "predev": "npm run prisma:generate",
     "dev": "next dev --webpack",
     "dev:turbo": "next dev --turbopack",
-    "prebuild": "npm run prisma:generate",
     "build": "next build",
-    "postinstall": "npm run prisma:generate",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "git push && ssh -o BatchMode=yes ubuntu@217.146.72.147 \"bash /var/www/beyondframes/scripts/server-deploy.sh\""
+    "test": "node --test \"tests/ui/*.test.js\""
   },
   "dependencies": {
-    "@prisma/client": "^6.19.3",
     "next": "16.2.4",
-    "ogl": "^1.0.11",
-    "prisma": "^6.19.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },

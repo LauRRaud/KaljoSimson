@@ -67,7 +67,7 @@ export default function GalleryRoomExperience({
   return (
     <>
       <div className="gallery-room-page__topbar">
-        <Link className="gallery-room-page__back inline-link" href={backHref}>
+        <Link className="gallery-room-page__back" href={backHref}>
           {backLabel}
         </Link>
 

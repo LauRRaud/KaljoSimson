@@ -1,19 +1,11 @@
-import FlightScene from "@/components/home/FlightScene";
+/* eslint-disable @next/next/no-img-element */
+
+import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import ScrollReveal from "@/components/ScrollReveal";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
-import { getWorksCountLabel, homeCopy } from "@/lib/home-copy";
 import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
-import { getArtworkPalette } from "@/lib/paint-palettes";
-
-function getBrandWords(title) {
-  if (title === "BeyondFrames") {
-    return ["Beyond", "Frames"];
-  }
-
-  const words = title.split(/\s+/);
-  return words.length > 1 ? [words[0], words.slice(1).join(" ")] : [title];
-}
 
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
@@ -21,8 +13,7 @@ export async function generateMetadata({ searchParams }) {
   const content = await getSiteContent();
 
   return {
-    title: content.site.title,
-    description: getCopy(content.site.heroText, locale),
+    description: getCopy(content.site.heroLead, locale),
   };
 }
 
@@ -30,67 +21,134 @@ export default async function HomePage({ searchParams }) {
   const params = await searchParams;
   const locale = getLocaleFromSearchParams(params);
   const content = await getSiteContent();
-  const t = (key) => getCopy(homeCopy[key], locale);
+  const artist = content.artist;
+  const t = (et, en) => (locale === "en" ? en : et);
 
-  const orderedArtists = [...content.artists].sort(
-    (a, b) => b.artworks.length - a.artworks.length,
-  );
+  const works = [...artist.artworks]
+    .sort((a, b) => a.galleryOrder - b.galleryOrder)
+    .filter((artwork) => artwork.image);
 
-  const rooms = orderedArtists.map((artist) => {
-    const artworks = [...artist.artworks]
-      .sort((a, b) => a.galleryOrder - b.galleryOrder)
-      .filter((artwork) => artwork.image);
-
-    return {
-      slug: artist.slug,
-      name: artist.name,
-      role: getCopy(artist.role, locale),
-      countLabel: artist.artworks.length
-        ? getWorksCountLabel(artist.artworks.length, locale)
-        : "",
-      artwork: artworks[0] || null,
-      palette: getArtworkPalette(artist.slug, artworks[0]?.slug || ""),
-      artist: {
-        name: artist.name,
-        portraitImage: artist.portraitImage,
-        portraitPosition: artist.portraitPosition,
-        portraitPresetId: artist.portraitPresetId,
-      },
-      href: withLocale(`/artists/${artist.slug}`, locale),
-    };
-  });
+  const phoneHref = content.contact.phone.replace(/\s+/g, "");
+  const [firstName, ...restName] = artist.name.split(" ");
 
   return (
-    <PageShell
-      content={content}
-      locale={locale}
-      shellClassName="page-shell--gallery-surface page-shell--bfl"
-      mainClassName="page-main--bfl"
-      showFooter={false}
-      showHeader
-    >
-      <FlightScene
-        finale={{
-          contactTitle: getCopy(content.site.contactTitle, locale),
-          email: content.contact.email,
-          phone: content.contact.phone,
-          instagram: content.contact.instagram,
-          instagramUrl: content.contact.instagramUrl,
-        }}
-        intro={{
-          title: content.site.title,
-          brandWords: getBrandWords(content.site.title),
-          tagline: getCopy(content.site.tagline, locale),
-        }}
-        labels={{
-          scrollCue: t("scrollCue"),
-          scrollCueAria: t("scrollCueAria"),
-          roomAria: t("roomAria"),
-          profileButton: t("profileButton"),
-        }}
-        locale={locale}
-        rooms={rooms}
-      />
+    <PageShell content={content} locale={locale} mainClassName="page-main--home">
+      <ScrollReveal />
+
+      <section className="hero">
+        <div className="hero__copy">
+          <p className="hero__eyebrow">
+            {getCopy(content.site.tagline, locale)}
+            <span aria-hidden="true" className="hero__eyebrow-dash" />
+            {t("Eesti", "Estonia")}
+          </p>
+          <h1 className="hero__name">
+            <span className="hero__name-word">{firstName}</span>
+            <span className="hero__name-word hero__name-word--last">
+              {restName.join(" ")}
+            </span>
+          </h1>
+          <p className="hero__lead">{getCopy(content.site.heroLead, locale)}</p>
+          <div className="hero__actions">
+            <Link className="cta cta--primary" href={withLocale("/galerii", locale)}>
+              {t("Vaata galeriid", "View the gallery")}
+            </Link>
+            <Link className="cta cta--ghost" href={withLocale("/kunstnik", locale)}>
+              {t("Kunstnikust", "About the artist")}
+            </Link>
+          </div>
+        </div>
+
+        <div aria-hidden="true" className="hero__planes">
+          <span className="hero__plane hero__plane--magenta" />
+          <span className="hero__plane hero__plane--turkiis" />
+          <span className="hero__plane hero__plane--kollane" />
+        </div>
+
+        <figure className="hero__portrait">
+          <img
+            alt={artist.name}
+            className="hero__photo"
+            fetchPriority="high"
+            src={artist.heroImage}
+          />
+        </figure>
+
+        <p aria-hidden="true" className="hero__scroll-cue">
+          {t("Keri", "Scroll")}
+        </p>
+      </section>
+
+      <section className="works" id="looming">
+        <div className="works__heading" data-reveal>
+          <p className="eyebrow">{t("Looming", "Works")}</p>
+          <h2>{t("Valik teoseid", "Selected works")}</h2>
+          <p className="section-copy">{getCopy(content.site.worksIntro, locale)}</p>
+        </div>
+
+        <div className="works__grid">
+          {works.map((artwork, index) => (
+            <Link
+              className="works__item"
+              data-reveal
+              href={withLocale("/galerii", locale)}
+              key={artwork.slug}
+              style={{ "--wi": index }}
+            >
+              <span className="works__image-wrap">
+                <img
+                  alt={getCopy(artwork.title, locale)}
+                  className="works__image"
+                  loading={index < 2 ? "eager" : "lazy"}
+                  src={artwork.image}
+                />
+              </span>
+              <span className="works__caption">
+                <strong>{getCopy(artwork.title, locale)}</strong>
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="works__more" data-reveal>
+          <Link className="inline-link" href={withLocale("/galerii", locale)}>
+            {t("Kõik teosed galeriiruumis", "All works in the gallery room")}
+          </Link>
+        </div>
+      </section>
+
+      <section className="statement" data-reveal>
+        <blockquote className="statement__quote">
+          {getCopy(artist.statement, locale)}
+        </blockquote>
+        <p className="statement__source">— {artist.name}</p>
+      </section>
+
+      <section className="kontakt" id="kontakt" data-reveal>
+        <p className="eyebrow">{getCopy(content.site.contactTitle, locale)}</p>
+        <h2 className="kontakt__title">{t("Võta ühendust", "Get in touch")}</h2>
+        <p className="section-copy kontakt__text">
+          {getCopy(content.site.contactText, locale)}
+        </p>
+        <div className="kontakt__rows">
+          <a className="kontakt__row" href={`mailto:${content.contact.email}`}>
+            {content.contact.email}
+          </a>
+          <a className="kontakt__row" href={`tel:${phoneHref}`}>
+            {content.contact.phone}
+          </a>
+          {content.contact.instagram && content.contact.instagramUrl ? (
+            <a
+              className="kontakt__row"
+              href={content.contact.instagramUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {content.contact.instagram}
+            </a>
+          ) : null}
+        </div>
+      </section>
     </PageShell>
   );
 }

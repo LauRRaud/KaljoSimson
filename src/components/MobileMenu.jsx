@@ -4,9 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import LanguageSwitch from "@/components/LanguageSwitch";
-import PwaInstallButton from "@/components/PwaInstallButton";
-import ThemeToggle from "@/components/ThemeToggle";
-import { withLocale } from "@/lib/locale";
+import ThemeSwitch from "@/components/ThemeSwitch";
+import { getNavLinks } from "@/lib/nav";
 
 export default function MobileMenu({ locale = "et" }) {
   const [open, setOpen] = useState(false);
@@ -40,25 +39,7 @@ export default function MobileMenu({ locale = "et" }) {
     setOpen(false);
   }
 
-  const links = [
-    {
-      href: withLocale("/artists", locale),
-      label: locale === "en" ? "Artists" : "Artistid",
-    },
-    {
-      href: withLocale("/gallery", locale),
-      label: locale === "en" ? "Gallery" : "Galerii",
-    },
-    {
-      href: withLocale("/studio", locale),
-      label: locale === "en" ? "Studio" : "Stuudio",
-    },
-    {
-      href: withLocale("/", locale, "#contact"),
-      label: locale === "en" ? "Contact" : "Kontakt",
-    },
-  ];
-
+  const links = getNavLinks(locale);
   const menuLabel = locale === "en" ? "Menu" : "Menüü";
   const closeLabel = locale === "en" ? "Close menu" : "Sulge menüü";
 
@@ -67,14 +48,13 @@ export default function MobileMenu({ locale = "et" }) {
       <button
         aria-expanded={open}
         aria-label={menuLabel}
-        className="mobile-menu__toggle"
+        className="menu-toggle"
         onClick={() => setOpen(true)}
         ref={toggleRef}
         type="button"
       >
-        <span aria-hidden="true" className="mobile-menu__bar" />
-        <span aria-hidden="true" className="mobile-menu__bar" />
-        <span aria-hidden="true" className="mobile-menu__bar" />
+        <span aria-hidden="true" className="menu-toggle__bar" />
+        <span aria-hidden="true" className="menu-toggle__bar" />
       </button>
 
       {open
@@ -82,45 +62,46 @@ export default function MobileMenu({ locale = "et" }) {
             <div
               aria-label={menuLabel}
               aria-modal="true"
-              className="mobile-menu"
+              className="menu-overlay"
               role="dialog"
             >
               <button
                 aria-label={closeLabel}
                 autoFocus
-                className="mobile-menu__close"
+                className="menu-overlay__close"
                 onClick={() => {
                   close();
                   toggleRef.current?.focus();
                 }}
                 type="button"
               >
-                <span aria-hidden="true" className="mobile-menu__close-x" />
+                <span aria-hidden="true" className="menu-overlay__close-x" />
               </button>
 
               <nav
                 aria-label={
                   locale === "en" ? "Main navigation" : "Põhinavigeerimine"
                 }
-                className="mobile-menu__nav"
+                className="menu-overlay__nav"
               >
                 {links.map((link, index) => (
                   <Link
-                    className="mobile-menu__link"
+                    className="menu-overlay__link"
                     href={link.href}
                     key={link.href}
                     onClick={close}
                     style={{ "--mi": index }}
                   >
+                    <span aria-hidden="true" className="menu-overlay__index">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                     {link.label}
                   </Link>
                 ))}
 
-                {/* keel, install ja teema on alalehtedel ainult siin */}
-                <div className="mobile-menu__controls" style={{ "--mi": 4 }}>
+                <div className="menu-overlay__controls" style={{ "--mi": links.length }}>
                   <LanguageSwitch locale={locale} />
-                  <PwaInstallButton locale={locale} />
-                  <ThemeToggle locale={locale} />
+                  <ThemeSwitch locale={locale} />
                 </div>
               </nav>
             </div>,

@@ -1,0 +1,186 @@
+/* ============================================================
+   Maaliraam: metallraam + pind + allkiri (jagatud galerii-ruumi,
+   profiili võrgustiku ja lightboxiga)
+   ============================================================ */
+
+.artwork-frame,
+.artwork-frame--button {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.artwork-frame--button {
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.artwork-frame__assembly {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.artwork-frame__window {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(16px, 1.45vw, 22px);
+  border-radius: 0;
+  min-height: 340px;
+  border: none;
+  overflow: hidden;
+  background: var(--frame-active-metal);
+  box-shadow: var(--frame-edge-shadows), var(--artwork-object-shadow);
+}
+
+.artwork-frame__window::before,
+.artwork-frame__window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.artwork-frame__window::before {
+  background: var(--frame-sheen);
+  opacity: var(--frame-sheen-opacity);
+}
+
+.artwork-frame__window::after {
+  inset: clamp(10px, 0.88vw, 13px);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px var(--frame-surface-inner-line);
+}
+
+.artwork-frame__mount {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  height: 100%;
+}
+
+.artwork-frame__mount::after {
+  content: "";
+  position: absolute;
+  left: calc(-1 * clamp(7px, 0.7vw, 10px));
+  right: calc(-1 * clamp(7px, 0.7vw, 10px));
+  bottom: calc(-1 * clamp(7px, 0.7vw, 10px));
+  z-index: 3;
+  height: calc(clamp(7px, 0.7vw, 10px) + clamp(8px, 0.725vw, 11px));
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--frame-surface-bottom-fade) 48%,
+    var(--frame-surface-bottom-tone) 100%
+  );
+}
+
+.artwork-frame__surface {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow:
+    0 0 0 clamp(7px, 0.7vw, 10px) var(--frame-surface-ring),
+    0 0 0 calc(clamp(7px, 0.7vw, 10px) + 1px) var(--frame-surface-ring-highlight),
+    0 2px 5px var(--frame-surface-drop-shadow);
+  background-size: cover;
+  background-position: center;
+}
+
+.artwork-frame__surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 0 0, var(--frame-surface-corner-shadow), transparent 18%),
+    radial-gradient(circle at 100% 0, var(--frame-surface-corner-shadow-soft), transparent 18%),
+    radial-gradient(circle at 0 100%, var(--frame-surface-corner-shadow-soft), transparent 18%),
+    radial-gradient(circle at 100% 100%, var(--frame-surface-corner-shadow), transparent 18%),
+    linear-gradient(180deg, var(--frame-surface-edge-highlight), transparent 9% 88%, var(--frame-surface-edge-shadow)),
+    linear-gradient(90deg, var(--frame-surface-edge-shadow), transparent 8% 92%, var(--frame-surface-edge-shadow));
+  box-shadow:
+    inset 0 0 0 1px var(--frame-surface-inner-line),
+    inset 10px 0 12px -13px var(--frame-surface-inner-side-shadow),
+    inset -10px 0 12px -13px var(--frame-surface-inner-side-shadow-soft),
+    inset 0 9px 13px -13px var(--frame-surface-inner-top-shadow),
+    inset 0 -10px 14px -13px var(--frame-surface-inner-bottom-shadow);
+  opacity: 0.72;
+}
+
+.artwork-frame__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+
+.artwork-frame__glaze {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.82;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.artwork-frame__caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.artwork-frame__caption p {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 10px;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.artwork-frame__caption p span + span::before {
+  content: "\00b7";
+  margin-right: 10px;
+  color: var(--text-faint);
+}
+
+.artwork-frame__caption p span:first-child {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gallery-grid .artwork-frame__caption p span:not(:first-child),
+.gallery-room .artwork-frame__caption p span:not(:first-child) {
+  color: var(--text);
+  font-size: 1.08rem;
+}
+
+.gallery-grid .artwork-frame__caption p span.artwork-frame__caption-artist,
+.gallery-room .artwork-frame__caption p span.artwork-frame__caption-artist {
+  color: var(--artwork-caption-artist);
+  font-weight: 500;
+}

@@ -1,27 +1,16 @@
-function renderFooterTitle(title) {
-  if (title === "BeyondFrames") {
-    return (
-      <>
-        <span className="brand-lockup__word">Beyond</span>
-        <span className="brand-lockup__word">Frames</span>
-      </>
-    );
-  }
+export default function SiteFooter({ content, locale = "et" }) {
+  const role = locale === "en" ? "Painter" : "Maalikunstnik";
 
-  return title;
-}
-
-export default function SiteFooter({ content }) {
   return (
     <footer className="site-footer">
-      <div className="site-footer__inner site-footer__inner--centered">
-        <div className="brand-lockup brand-lockup--footer">
-          <span className="brand-lockup__title" aria-label={content.site.title}>
-            {renderFooterTitle(content.site.title)}
-          </span>
-          <span className="site-footer__year">2026</span>
-        </div>
-        <span className="site-footer__byline">by L. Raudsoo</span>
+      <div className="site-footer__inner">
+        <p className="site-footer__name">{content.site.title}</p>
+        <p className="site-footer__meta">
+          <span>{role}</span>
+          <span aria-hidden="true" className="site-footer__dot" />
+          <span>© 2026</span>
+        </p>
+        <p className="site-footer__byline">by L. Raudsoo</p>
       </div>
     </footer>
   );

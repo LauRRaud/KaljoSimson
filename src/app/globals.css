@@ -1,24 +1,14 @@
 /*
   globals.css on tükeldatud teemafailideks kataloogis ./styles/.
   JÄRJEKORD ON OLULINE — kaskaad toetub reeglite järjestusele.
-  Failid liidetakse build'is samas järjekorras (@import).
 */
-@import "./styles/00-tokens-reset.css";
-@import "./styles/01-header-nav.css";
-@import "./styles/02-nav-controls.css";
-@import "./styles/03-home-title.css";
-@import "./styles/04-stuudio.css";
-@import "./styles/05-paneelid-nupud.css";
-@import "./styles/06-portree-raam.css";
-@import "./styles/07-kontakt-jalus.css";
-@import "./styles/08-profiil.css";
-@import "./styles/09-maaliraam-galerii.css";
-@import "./styles/10-galeriiruum.css";
-@import "./styles/11-lightbox.css";
-@import "./styles/12-admin.css";
-@import "./styles/13-tume-teema.css";
-@import "./styles/14-responsive.css";
-@import "./styles/15-kursor.css";
-@import "./styles/16-bfl-lennustseen.css";
-@import "./styles/17-artistide-leht.css";
-@import "./styles/18-bfl-responsive.css";
+@import "./styles/00-tokens.css";
+@import "./styles/01-base.css";
+@import "./styles/02-header.css";
+@import "./styles/03-avaleht.css";
+@import "./styles/04-kunstnik.css";
+@import "./styles/05-maaliraam.css";
+@import "./styles/06-galeriiruum.css";
+@import "./styles/07-lightbox.css";
+@import "./styles/08-jalus.css";
+@import "./styles/09-responsive.css";

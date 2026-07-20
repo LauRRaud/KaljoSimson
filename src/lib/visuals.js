@@ -1,51 +1,5 @@
-export const portraitPresets = [
-  {
-    id: "dawn",
-    name: "Soft Dawn",
-    background:
-      "linear-gradient(180deg, rgba(196, 164, 126, 0.9), rgba(24, 18, 18, 0.95))",
-    halo: "#f0d8bf",
-    aura: "#e8c9a3",
-    hair: "#2f1d17",
-    hairShade: "#4b2f25",
-    garment: "#1b1a1d",
-    garmentShade: "#38343c",
-    skin: "#d9ba9f",
-    skinShade: "#c79f83",
-    ink: "#1f1817",
-  },
-  {
-    id: "ember",
-    name: "Copper Ember",
-    background:
-      "linear-gradient(180deg, rgba(136, 89, 60, 0.9), rgba(14, 11, 12, 0.95))",
-    halo: "#e0b690",
-    aura: "#c88159",
-    hair: "#241515",
-    hairShade: "#4a2a2a",
-    garment: "#231f23",
-    garmentShade: "#463336",
-    skin: "#c49b81",
-    skinShade: "#a97d64",
-    ink: "#170f0e",
-  },
-  {
-    id: "tide",
-    name: "Sea Fog",
-    background:
-      "linear-gradient(180deg, rgba(126, 136, 138, 0.88), rgba(12, 13, 17, 0.96))",
-    halo: "#dbe3e8",
-    aura: "#8da4aa",
-    hair: "#23303b",
-    hairShade: "#405663",
-    garment: "#1b2229",
-    garmentShade: "#33424a",
-    skin: "#d8c4b7",
-    skinShade: "#bba59a",
-    ink: "#172128",
-  },
-];
-
+// Maalipinna varupresetid: kasutusel ainult siis, kui teosel pilti ei ole —
+// raam saab siis maalitud gradiendi ja klaasja läike.
 export const artworkPresets = [
   {
     id: "ember-mist",
@@ -96,12 +50,6 @@ export const artworkPresets = [
       "linear-gradient(180deg, rgba(255,255,255,0.18), transparent 34%, rgba(255,255,255,0.06) 100%)",
   },
 ];
-
-export function getPortraitPreset(id) {
-  return (
-    portraitPresets.find((preset) => preset.id === id) || portraitPresets[0]
-  );
-}
 
 export function getArtworkPreset(id) {
   return artworkPresets.find((preset) => preset.id === id) || artworkPresets[0];

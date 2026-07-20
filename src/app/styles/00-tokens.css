@@ -1,0 +1,280 @@
+/* ============================================================
+   Kaljo Simson — värviteemad ja jagatud tokenid
+   Kaks teemat data-theme kaudu; aktsentvärvid tulevad kunstniku
+   maalitud profiiliportreest: türkiissinine taevas, magenta nägu,
+   oranž krae, kollane valgus.
+   - "hele" — hele taust, maali värvid aktsentidena (vaikimisi)
+   - "tume" — öine, sügav süsi
+   ============================================================ */
+
+:root {
+  /* — hele (vaikimisi) — */
+  --bg-solid: #f7f3ec;
+  --bg:
+    radial-gradient(circle at 84% -8%, rgba(46, 147, 184, 0.09), transparent 42%),
+    radial-gradient(circle at -8% 30%, rgba(178, 58, 136, 0.06), transparent 36%),
+    radial-gradient(circle at 68% 112%, rgba(242, 194, 48, 0.08), transparent 40%),
+    linear-gradient(180deg, #f9f6f0 0%, #f4f0e7 100%);
+  --surface-strong: rgba(255, 253, 248, 0.92);
+  --border: rgba(43, 34, 24, 0.16);
+  --text: #201a14;
+  --text-soft: rgba(32, 26, 20, 0.74);
+  --text-faint: rgba(32, 26, 20, 0.5);
+  --artwork-caption-artist: rgba(32, 26, 20, 0.82);
+
+  --accent: #d1730f;
+  --accent-2: #b23a88;
+  --accent-3: #2e93b8;
+  --accent-4: #f2c230;
+  --gold: #a85d0e;
+  --gold-strong: #7f450a;
+
+  --copy-text-shadow: none;
+  --heading-text-shadow: none;
+  --display-text-shadow: none;
+
+  /* galeriiruumi sein ja valgus */
+  --room-bg: linear-gradient(
+    180deg,
+    rgba(248, 241, 228, 0.99) 0%,
+    rgba(233, 224, 208, 0.97) 46%,
+    rgba(211, 201, 183, 0.99) 100%
+  );
+  --room-shade:
+    linear-gradient(90deg, rgba(98, 70, 42, 0.1), transparent 16% 86%, rgba(98, 70, 42, 0.14)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 54%, rgba(60, 43, 30, 0.2));
+  --room-spot: radial-gradient(
+    60% 52% at 50% 42%,
+    rgba(255, 248, 232, 0.85),
+    transparent 74%
+  );
+  --speed-active-bg: var(--surface-strong);
+
+  /* klaasjad paneelid (galerii, lightbox, pillid) */
+  --glass-panel-bg: rgba(255, 252, 246, 0.3);
+  --glass-panel-bg-strong: rgba(255, 252, 246, 0.42);
+  --glass-control-bg: rgba(255, 252, 246, 0.22);
+  --glass-control-bg-hover: rgba(255, 252, 246, 0.34);
+  --glass-ring: rgba(255, 255, 255, 0.24);
+  --glass-control-ring: rgba(255, 255, 255, 0.18);
+  --glass-panel-shadow:
+    0 0 0 1px var(--glass-ring),
+    0 18px 44px rgba(75, 52, 28, 0.14);
+  --lightbox-card-shadow:
+    0 0 0 1px var(--glass-ring),
+    0 10px 14px -7px rgba(75, 52, 28, 0.34),
+    0 22px 26px -15px rgba(75, 52, 28, 0.28);
+  --glass-control-shadow:
+    0 0 0 1px var(--glass-control-ring),
+    0 1px 2px rgba(75, 52, 28, 0.12),
+    0 6px 12px rgba(75, 52, 28, 0.14);
+  --glass-control-shadow-hover:
+    0 0 0 1px rgba(255, 255, 255, 0.44),
+    0 2px 4px rgba(75, 52, 28, 0.12),
+    0 8px 16px rgba(75, 52, 28, 0.18);
+  --floating-control-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.34),
+    0 7px 10px -6px rgba(75, 52, 28, 0.34),
+    0 14px 18px -11px rgba(42, 31, 22, 0.28),
+    0 24px 30px -22px rgba(75, 52, 28, 0.24);
+  --floating-control-shadow-hover:
+    0 0 0 1px rgba(255, 255, 255, 0.48),
+    0 9px 12px -7px rgba(75, 52, 28, 0.38),
+    0 18px 22px -13px rgba(42, 31, 22, 0.3),
+    0 28px 34px -24px rgba(75, 52, 28, 0.26);
+  --glass-blur: blur(10px);
+
+  --artwork-object-shadow:
+    0 10px 14px -9px rgba(75, 52, 28, 0.3),
+    0 16px 16px -14px rgba(42, 31, 22, 0.26),
+    0 22px 26px -20px rgba(75, 52, 28, 0.24);
+  --frame-preset-sphere-shadow:
+    0 4px 5px -3px rgba(75, 52, 28, 0.34),
+    0 9px 10px -6px rgba(42, 31, 22, 0.28),
+    0 16px 18px -12px rgba(75, 52, 28, 0.26);
+  --magnifier-lens-ring: #c8d1d7;
+
+  /* — maaliraami metallid (teemadeülesed) — */
+  --frame-silver-metal:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.12) 10%, rgba(58, 68, 78, 0.2) 54%, rgba(255, 255, 255, 0.26) 100%),
+    linear-gradient(90deg, rgba(48, 58, 68, 0.2), rgba(255, 255, 255, 0.34) 8%, transparent 25% 75%, rgba(42, 52, 62, 0.2)),
+    linear-gradient(180deg, #f8fbfc 0%, #ccd5dc 46%, #a2adb6 100%);
+  --frame-gold-metal:
+    linear-gradient(180deg, rgba(255, 250, 231, 0.6) 0%, rgba(255, 242, 207, 0.2) 12%, rgba(160, 114, 44, 0.19) 56%, rgba(255, 246, 220, 0.26) 100%),
+    linear-gradient(90deg, rgba(130, 94, 36, 0.2), rgba(255, 245, 218, 0.4) 10%, transparent 26% 74%, rgba(118, 84, 30, 0.18)),
+    linear-gradient(180deg, #fff3d1 0%, #dfba6a 47%, #ad8236 100%);
+  --frame-bronze-metal:
+    linear-gradient(180deg, rgba(255, 233, 214, 0.5) 0%, rgba(255, 220, 196, 0.16) 12%, rgba(122, 74, 42, 0.17) 56%, rgba(255, 227, 204, 0.24) 100%),
+    linear-gradient(90deg, rgba(94, 54, 30, 0.18), rgba(255, 224, 200, 0.34) 10%, transparent 26% 74%, rgba(84, 48, 26, 0.16)),
+    linear-gradient(180deg, #efc6a8 0%, #c1834f 47%, #a1683f 100%);
+  --frame-active-metal: var(--frame-gold-metal);
+  --frame-edge-shadows:
+    inset 0 1px 0 rgba(255, 255, 255, 0.66),
+    inset 0 -1px 2px rgba(47, 58, 67, 0.1),
+    inset 1px 0 0 rgba(255, 255, 255, 0.46),
+    inset -1px 0 0 rgba(42, 52, 60, 0.16),
+    inset 10px 0 14px -15px rgba(18, 24, 29, 0.42),
+    inset -10px 0 14px -15px rgba(18, 24, 29, 0.38),
+    inset 0 -12px 16px -15px rgba(18, 24, 29, 0.42);
+  --frame-sheen:
+    linear-gradient(180deg, rgba(126, 91, 30, 0.08), transparent 18% 52%, rgba(131, 92, 28, 0.12) 76%, rgba(92, 61, 17, 0.3) 100%),
+    linear-gradient(90deg, rgba(255, 244, 204, 0.24), transparent 12% 86%, rgba(125, 88, 27, 0.1));
+  --frame-sheen-opacity: 0.56;
+  --frame-window-inner-line: rgba(162, 123, 48, 0.3);
+  --frame-window-inner-highlight: rgba(248, 228, 168, 0.42);
+  --frame-surface-ring: rgba(174, 136, 56, 0.28);
+  --frame-surface-ring-highlight: rgba(174, 136, 56, 0);
+  --frame-surface-drop-shadow: rgba(103, 75, 31, 0.13);
+  --frame-surface-corner-shadow: rgba(132, 99, 38, 0.1);
+  --frame-surface-corner-shadow-soft: rgba(132, 99, 38, 0.085);
+  --frame-surface-edge-shadow: rgba(112, 82, 30, 0.1);
+  --frame-surface-edge-highlight: rgba(246, 226, 166, 0.2);
+  --frame-surface-inner-line: rgba(145, 110, 44, 0.17);
+  --frame-surface-inner-side-shadow: rgba(111, 80, 27, 0.25);
+  --frame-surface-inner-side-shadow-soft: rgba(111, 80, 27, 0.2);
+  --frame-surface-inner-top-shadow: rgba(111, 80, 27, 0.17);
+  --frame-surface-inner-bottom-shadow: rgba(111, 80, 27, 0.34);
+  --frame-surface-bottom-fade: rgba(118, 79, 20, 0.04);
+  --frame-surface-bottom-tone: rgba(91, 60, 17, 0.26);
+
+  /* mõõdud ja tüpograafia */
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 14px;
+  --content-width: min(1180px, calc(100vw - 48px));
+  /* --font-heading ja --font-body defineerib next/font layout.js-is */
+  --font-display: var(--font-heading);
+  --tracking-body: 0.008em;
+  --tracking-copy: 0.012em;
+  --tracking-heading: 0;
+  --tracking-label: 0.16em;
+}
+
+/* ------------------------------------------------------------
+   Raamipresetid: hõbe ja pronks (kuld on vaikimisi :root'is)
+   ------------------------------------------------------------ */
+html[data-frame-preset="silver"],
+body[data-frame-preset="silver"],
+.site-shell[data-frame-preset="silver"] {
+  --frame-active-metal: var(--frame-silver-metal);
+  --frame-sheen:
+    linear-gradient(180deg, rgba(42, 52, 60, 0.08), transparent 18% 76%, rgba(39, 49, 58, 0.18)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent 12% 86%, rgba(36, 46, 55, 0.14));
+  --frame-sheen-opacity: 0.68;
+  --frame-window-inner-line: rgba(45, 56, 64, 0.34);
+  --frame-window-inner-highlight: rgba(255, 255, 255, 0.34);
+  --frame-surface-ring: rgba(55, 65, 73, 0.34);
+  --frame-surface-ring-highlight: rgba(255, 255, 255, 0.38);
+  --frame-surface-drop-shadow: rgba(37, 28, 20, 0.14);
+  --frame-surface-corner-shadow: rgba(24, 30, 36, 0.16);
+  --frame-surface-corner-shadow-soft: rgba(24, 30, 36, 0.13);
+  --frame-surface-edge-shadow: rgba(18, 24, 29, 0.12);
+  --frame-surface-edge-highlight: rgba(255, 255, 255, 0.18);
+  --frame-surface-inner-line: rgba(36, 46, 55, 0.2);
+  --frame-surface-inner-side-shadow: rgba(18, 24, 29, 0.46);
+  --frame-surface-inner-side-shadow-soft: rgba(18, 24, 29, 0.4);
+  --frame-surface-inner-top-shadow: rgba(18, 24, 29, 0.34);
+  --frame-surface-inner-bottom-shadow: rgba(18, 24, 29, 0.42);
+  --frame-surface-bottom-fade: rgba(18, 24, 29, 0);
+  --frame-surface-bottom-tone: rgba(18, 24, 29, 0);
+  --magnifier-lens-ring: #c8d1d7;
+}
+
+html[data-frame-preset="gold"],
+body[data-frame-preset="gold"],
+.site-shell[data-frame-preset="gold"] {
+  --frame-active-metal: var(--frame-gold-metal);
+  --magnifier-lens-ring: #dfbd73;
+}
+
+html[data-frame-preset="bronze"],
+body[data-frame-preset="bronze"],
+.site-shell[data-frame-preset="bronze"] {
+  --frame-active-metal: var(--frame-bronze-metal);
+  --frame-sheen:
+    linear-gradient(180deg, rgba(96, 56, 28, 0.09), transparent 18% 52%, rgba(104, 60, 30, 0.13) 76%, rgba(70, 40, 18, 0.3) 100%),
+    linear-gradient(90deg, rgba(255, 226, 198, 0.22), transparent 12% 86%, rgba(96, 56, 26, 0.11));
+  --frame-sheen-opacity: 0.56;
+  --frame-window-inner-line: rgba(138, 83, 48, 0.32);
+  --frame-window-inner-highlight: rgba(255, 226, 200, 0.4);
+  --frame-surface-ring: rgba(150, 92, 52, 0.3);
+  --frame-surface-ring-highlight: rgba(150, 92, 52, 0);
+  --frame-surface-drop-shadow: rgba(86, 50, 26, 0.14);
+  --frame-surface-corner-shadow: rgba(110, 64, 34, 0.11);
+  --frame-surface-corner-shadow-soft: rgba(110, 64, 34, 0.09);
+  --frame-surface-edge-shadow: rgba(95, 55, 28, 0.11);
+  --frame-surface-edge-highlight: rgba(255, 222, 194, 0.2);
+  --frame-surface-inner-line: rgba(126, 74, 40, 0.18);
+  --frame-surface-inner-side-shadow: rgba(92, 52, 26, 0.26);
+  --frame-surface-inner-side-shadow-soft: rgba(92, 52, 26, 0.21);
+  --frame-surface-inner-top-shadow: rgba(92, 52, 26, 0.18);
+  --frame-surface-inner-bottom-shadow: rgba(92, 52, 26, 0.35);
+  --frame-surface-bottom-fade: rgba(100, 58, 22, 0.04);
+  --frame-surface-bottom-tone: rgba(74, 42, 18, 0.26);
+  --magnifier-lens-ring: #c98d5f;
+}
+
+/* ------------------------------------------------------------
+   Teema: öö
+   ------------------------------------------------------------ */
+html[data-theme="tume"] {
+  --bg-solid: #15110f;
+  --bg:
+    radial-gradient(circle at 80% -12%, rgba(240, 118, 43, 0.1), transparent 42%),
+    radial-gradient(circle at -8% 36%, rgba(60, 189, 184, 0.07), transparent 38%),
+    linear-gradient(180deg, #191410 0%, #131010 100%);
+  --surface-strong: rgba(255, 250, 242, 0.1);
+  --border: rgba(243, 237, 226, 0.14);
+  --text: #f3ede2;
+  --text-soft: rgba(243, 237, 226, 0.74);
+  --text-faint: rgba(243, 237, 226, 0.52);
+  --artwork-caption-artist: rgba(243, 237, 226, 0.84);
+
+  --accent: #f0921e;
+  --accent-2: #cf5fa6;
+  --accent-3: #4fb3d6;
+  --accent-4: #f4cb43;
+  --gold: #e79a55;
+  --gold-strong: #f0b277;
+
+  --room-bg: linear-gradient(180deg, #221c17 0%, #191512 52%, #120f0d 100%);
+  --room-shade:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.3), transparent 16% 86%, rgba(0, 0, 0, 0.34)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 50%, rgba(0, 0, 0, 0.4));
+  --room-spot: radial-gradient(
+    60% 52% at 50% 42%,
+    rgba(224, 186, 130, 0.14),
+    transparent 74%
+  );
+  --speed-active-bg: rgba(255, 250, 242, 0.18);
+
+  --glass-panel-bg: rgba(58, 57, 60, 0.4);
+  --glass-panel-bg-strong: rgba(72, 71, 74, 0.5);
+  --glass-control-bg: rgba(50, 49, 52, 0.26);
+  --glass-control-bg-hover: rgba(66, 65, 68, 0.38);
+  --glass-ring: rgba(255, 255, 255, 0.14);
+  --glass-control-ring: rgba(255, 255, 255, 0.1);
+  --glass-panel-shadow:
+    0 0 0 1px var(--glass-ring),
+    0 16px 40px rgba(0, 0, 0, 0.24);
+  --lightbox-card-shadow:
+    0 0 0 1px var(--glass-ring),
+    0 10px 14px -7px rgba(0, 0, 0, 0.38),
+    0 22px 26px -15px rgba(0, 0, 0, 0.36);
+  --glass-control-shadow:
+    0 0 0 1px var(--glass-control-ring);
+  --glass-control-shadow-hover:
+    0 0 0 1px rgba(255, 255, 255, 0.14);
+  --floating-control-shadow: var(--glass-panel-shadow);
+  --floating-control-shadow-hover: var(--glass-panel-shadow);
+
+  --artwork-object-shadow:
+    0 10px 14px -9px rgba(0, 0, 0, 0.34),
+    0 16px 16px -14px rgba(0, 0, 0, 0.3),
+    0 22px 26px -20px rgba(0, 0, 0, 0.28);
+  --frame-preset-sphere-shadow:
+    0 4px 5px -3px rgba(0, 0, 0, 0.34),
+    0 9px 10px -6px rgba(0, 0, 0, 0.32),
+    0 16px 18px -12px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,177 @@
+/* ============================================================
+   Kunstniku leht: portree, biograafia, teoste võrgustik
+   ============================================================ */
+
+.page-main--profile {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 8vh, 96px);
+  width: var(--content-width);
+  margin: 0 auto;
+  padding-top: clamp(120px, 16vh, 160px);
+  padding-bottom: clamp(80px, 11vh, 130px);
+}
+
+.profile-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+  column-gap: clamp(32px, 4vw, 56px);
+  row-gap: clamp(28px, 4vh, 44px);
+  align-items: start;
+}
+
+.profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.profile-copy .section-copy {
+  font-size: clamp(1.14rem, 1.46vw, 1.34rem);
+  line-height: 1.68;
+}
+
+.profile-copy .pill-row {
+  margin-top: 8px;
+}
+
+.profile-biography {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: clamp(8px, 1.4vw, 16px);
+  padding-top: clamp(22px, 3vw, 32px);
+  border-top: 1px solid var(--border);
+}
+
+.profile-biography .eyebrow {
+  margin-bottom: 4px;
+}
+
+.profile-biography .section-copy {
+  max-width: none;
+  font-size: clamp(1.04rem, 1.26vw, 1.18rem);
+  line-height: 1.74;
+  hyphens: auto;
+  overflow-wrap: normal;
+  text-wrap: pretty;
+  word-break: normal;
+}
+
+@media (min-width: 1101px) {
+  .profile-biography .section-copy {
+    columns: 2;
+    column-gap: clamp(40px, 5vw, 64px);
+  }
+}
+
+/* ---------- portree maaliraamis ---------- */
+
+.portrait-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.portrait-shell__frame,
+.portrait-shell__window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.portrait-shell__window {
+  overflow: hidden;
+}
+
+/* Portreeraam = maaliteose VÄLIMINE metallraam: serva insetid ja sheen
+   tulevad samadest muutujatest mis .artwork-frame__window'il. */
+.profile-hero > .portrait-shell {
+  --portrait-frame-width: clamp(12px, 1vw, 17px);
+  align-self: start;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border-radius: 0;
+  background: var(--frame-active-metal);
+  box-shadow: var(--frame-edge-shadows), var(--artwork-object-shadow);
+}
+
+.profile-hero > .portrait-shell .portrait-shell__frame {
+  display: grid;
+  padding: var(--portrait-frame-width);
+}
+
+.profile-hero > .portrait-shell .portrait-shell__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--frame-sheen);
+  opacity: var(--frame-sheen-opacity);
+}
+
+.profile-hero > .portrait-shell .portrait-shell__window {
+  z-index: 1;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px var(--frame-surface-inner-line);
+}
+
+.portrait-shell__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--portrait-position, center center);
+}
+
+/* ---------- teoste plokk ---------- */
+
+.profile-works {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vh, 40px);
+}
+
+.profile-works__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 62ch;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  column-gap: clamp(28px, 3vw, 42px);
+  row-gap: clamp(42px, 5vw, 64px);
+}
+
+.gallery-grid .artwork-frame--button,
+.gallery-grid .artwork-frame__assembly {
+  width: 100%;
+  min-width: 0;
+}
+
+.gallery-grid .artwork-frame__caption,
+.gallery-grid .artwork-frame__caption p {
+  min-width: 0;
+}
+
+.gallery-grid .artwork-frame__window {
+  height: clamp(300px, 25vw, 430px);
+  aspect-ratio: auto;
+  min-height: unset;
+}
+
+.gallery-grid .artwork-frame__mount,
+.gallery-grid .artwork-frame__surface {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
