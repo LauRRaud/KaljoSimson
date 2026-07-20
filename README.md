@@ -37,7 +37,7 @@ Kõik tekstid (ET/EN), kontaktandmed ja teoste nimekiri on failis
 ## Deploy
 
 Leht ei vaja andmebaasi ega keskkonnamuutujaid. Server: `/var/www/kaljosimson`,
-pm2 protsess `kaljosimson` (localhost:3030), nginx kuulab avalikul pordil 8081.
+pm2 protsess `kaljosimson` (localhost:3040), nginx kuulab avalikul pordil 8081.
 Kuni domeeni ostuni on leht aadressil `http://217.146.72.147:8081`.
 
 ```bash
@@ -45,7 +45,7 @@ npm run deploy   # git push + serveripoolne build ja pm2 restart
 ```
 
 Kui domeen on olemas: lisa nginx'i server block (port 80/443, proxy_pass
-127.0.0.1:3030), certbot sertifikaadi jaoks, ja uuenda `metadataBase`
+127.0.0.1:3040), certbot sertifikaadi jaoks, ja uuenda `metadataBase`
 failis src/app/layout.js ning `site.domain` sisufailis.
 
 Vana lehe (BeyondFrames) kuvatõmmised on viiteks kaustas `docs/vana-leht/`.
