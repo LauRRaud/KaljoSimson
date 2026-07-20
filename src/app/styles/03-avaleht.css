@@ -261,10 +261,9 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 .works__caption {
   display: flex;
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 16px;
   margin-top: 14px;
-  text-align: center;
 }
 
 .works__caption strong {
