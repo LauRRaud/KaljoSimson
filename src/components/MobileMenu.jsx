@@ -65,18 +65,25 @@ export default function MobileMenu({ locale = "et" }) {
               className="menu-overlay"
               role="dialog"
             >
-              <button
-                aria-label={closeLabel}
-                autoFocus
-                className="menu-overlay__close"
-                onClick={() => {
-                  close();
-                  toggleRef.current?.focus();
-                }}
-                type="button"
-              >
-                <span aria-hidden="true" className="menu-overlay__close-x" />
-              </button>
+              <div className="menu-overlay__top">
+                <div className="menu-overlay__controls">
+                  <LanguageSwitch locale={locale} />
+                  <ThemeSwitch locale={locale} />
+                </div>
+
+                <button
+                  aria-label={closeLabel}
+                  autoFocus
+                  className="menu-overlay__close"
+                  onClick={() => {
+                    close();
+                    toggleRef.current?.focus();
+                  }}
+                  type="button"
+                >
+                  <span aria-hidden="true" className="menu-overlay__close-x" />
+                </button>
+              </div>
 
               <nav
                 aria-label={
@@ -95,11 +102,6 @@ export default function MobileMenu({ locale = "et" }) {
                     {link.label}
                   </Link>
                 ))}
-
-                <div className="menu-overlay__controls" style={{ "--mi": links.length }}>
-                  <LanguageSwitch locale={locale} />
-                  <ThemeSwitch locale={locale} />
-                </div>
               </nav>
             </div>,
             document.body,
