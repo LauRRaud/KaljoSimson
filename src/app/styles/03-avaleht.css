@@ -233,24 +233,18 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
   transform: translateY(clamp(28px, 5vw, 64px));
 }
 
-/* vari: pehme ja ühtlane kogu teose ümber */
+/* vari: kitsas ja tume otse teose all */
 .works__image-wrap {
   display: block;
   overflow: hidden;
   border-radius: 0;
-  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.34);
-  transition: box-shadow 420ms ease;
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
 }
 
 /* pilt määrab ise oma kõrguse — teoseid ei lõigata */
 .works__image {
   width: 100%;
   height: auto;
-}
-
-.works__item:hover .works__image-wrap,
-.works__item:focus-visible .works__image-wrap {
-  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.42);
 }
 
 .works__caption {
