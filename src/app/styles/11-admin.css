@@ -349,6 +349,13 @@ textarea.admin-input {
   color: #b3261e;
 }
 
+/* vormil endal puudus paigutus, mistõttu nupurida kleepus väljade külge */
+.admin-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .admin-footer {
   display: flex;
   align-items: center;
