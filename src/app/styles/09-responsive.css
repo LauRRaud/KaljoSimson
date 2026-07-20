@@ -73,6 +73,19 @@
     transform: translateY(-1.4vh);
   }
 
+  /* üheveerulises vaates on raam keskel — nupp raami vasaku serva kõrvale */
+  .lightbox__magnifier-toggle {
+    right: calc(
+      50% +
+        min(
+            var(--lightbox-frame-width),
+            var(--lightbox-panel-height) * 1.28,
+            100%
+          ) /
+          2 + var(--magnifier-control-gap) + 14px
+    );
+  }
+
   .lightbox__artwork-frame .artwork-frame__window {
     height: auto;
     min-height: 0;
@@ -107,25 +120,54 @@
     display: none;
   }
 
-  .menu-toggle {
-    display: flex;
+  /* mobiilis pole ribavälja üldse — ainult hõljuv hamburger-nupp.
+     Kerimisel saadav taust/joon/blur käib maha, peitumine jääb alles. */
+  .topbar,
+  .topbar--scrolled {
+    left: auto;
+    right: 0;
+    padding-block: 10px;
+    background: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
+  /* klaasipill nagu galerii nuppudel: servata, poolläbipaistev, blur */
+  .menu-toggle {
+    display: flex;
+    border: 0;
+    background: var(--glass-panel-bg);
+    box-shadow:
+      0 0 0 1px var(--glass-ring),
+      0 8px 20px -12px rgba(0, 0, 0, 0.35);
+    -webkit-backdrop-filter: blur(8px) saturate(1.08);
+    backdrop-filter: blur(8px) saturate(1.08);
+  }
+
+  /* päiseriba mobiilis enam pole — sisu võib alata kõrgemalt */
   .hero {
     grid-template-columns: 1fr;
     gap: 40px;
     min-height: auto;
-    padding-top: clamp(120px, 18vh, 150px);
+    padding-top: clamp(72px, 11vh, 100px);
   }
 
-  .hero__planes,
-  .hero__portrait {
+  .hero__visual {
     grid-column: 1;
     grid-row: 2;
+    width: min(100%, 420px);
   }
 
-  .hero__portrait {
-    width: min(100%, 420px);
+  /* nupud jäävad kõrvuti — kitsamad padding'ud, et kitsale reale ära mahtuda */
+  .hero__actions {
+    gap: 12px;
+  }
+
+  .hero__actions .cta {
+    min-height: 48px;
+    padding: 0 20px;
   }
 
   .works__grid {
@@ -211,15 +253,33 @@
     white-space: nowrap;
   }
 
+  /* kõik nupud ühte ritta: nool maha ja mõõdud kitsamaks */
   .gallery-room-page__topbar {
     top: 8px;
     left: 12px;
     right: 12px;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: nowrap;
   }
 
   .gallery-room-page__back {
-    font-size: 1.04rem;
+    padding: 8px 14px;
+    font-size: 1rem;
+  }
+
+  .gallery-room-page__back::before {
+    content: none;
+  }
+
+  .gallery-room-speed {
+    gap: 2px;
+    padding: 5px 6px;
+  }
+
+  .gallery-room-speed__button {
+    height: 28px;
+    padding: 0 8px;
+    font-size: 0.88rem;
   }
 
   .gallery-room {
@@ -373,13 +433,15 @@
     margin-bottom: 0;
   }
 
+  /* akna alumises varuribas, püsivalt paigal sõltumata teose kõrgusest */
   .lightbox__magnifier-toggle {
     left: 50%;
-    top: 100%;
+    top: auto;
     right: auto;
+    bottom: 4px;
     width: 42px;
     height: 42px;
-    transform: translate(-50%, 10px);
+    transform: translateX(-50%);
   }
 
   .lightbox__magnifier-lens {

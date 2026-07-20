@@ -181,14 +181,15 @@ p {
 .cta--primary {
   background: var(--accent);
   color: #fff8ef;
-  box-shadow: 0 12px 26px -14px color-mix(in srgb, var(--accent) 70%, black);
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent) 72%, transparent);
 }
 
+/* hover võtab paleti lilla (sama toon, millega "Simson" lõpeb) */
 .cta--primary:hover,
 .cta--primary:focus-visible {
-  background: color-mix(in srgb, var(--accent) 86%, black);
+  background: var(--accent-2);
   transform: translateY(-2px);
-  box-shadow: 0 18px 30px -14px color-mix(in srgb, var(--accent) 74%, black);
+  box-shadow: 0 8px 16px -6px color-mix(in srgb, var(--accent-2) 80%, transparent);
 }
 
 .cta--ghost {

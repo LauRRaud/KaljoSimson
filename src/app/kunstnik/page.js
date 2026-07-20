@@ -1,11 +1,10 @@
-import Link from "next/link";
 import ArtistPortrait from "@/components/ArtistPortrait";
 import GalleryClient from "@/components/GalleryClient";
 import PageShell from "@/components/PageShell";
 import ScrollReveal from "@/components/ScrollReveal";
 import { getCopy } from "@/lib/content-helpers";
 import { getSiteContent } from "@/lib/content-store";
-import { getLocaleFromSearchParams, withLocale } from "@/lib/locale";
+import { getLocaleFromSearchParams } from "@/lib/locale";
 
 export async function generateMetadata({ searchParams }) {
   const params = await searchParams;
@@ -68,9 +67,6 @@ export default async function ArtistPage({ searchParams }) {
         <div className="profile-works__heading">
           <h2>{locale === "en" ? "Works" : "Teosed"}</h2>
           <p className="section-copy">{getCopy(artist.galleryIntro, locale)}</p>
-          <Link className="inline-link" href={withLocale("/galerii", locale)}>
-            {locale === "en" ? "Open the gallery room" : "Ava galeriiruum"}
-          </Link>
         </div>
 
         <GalleryClient artist={artist} locale={locale} />

@@ -59,18 +59,17 @@ export default async function HomePage({ searchParams }) {
           </div>
         </div>
 
-        <div aria-hidden="true" className="hero__planes">
-          <span className="hero__glow" />
+        <div className="hero__visual">
+          <span aria-hidden="true" className="hero__glow" />
+          <figure className="hero__portrait">
+            <img
+              alt={artist.name}
+              className="hero__photo"
+              fetchPriority="high"
+              src={artist.heroImage}
+            />
+          </figure>
         </div>
-
-        <figure className="hero__portrait">
-          <img
-            alt={artist.name}
-            className="hero__photo"
-            fetchPriority="high"
-            src={artist.heroImage}
-          />
-        </figure>
 
       </section>
 

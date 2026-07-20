@@ -69,6 +69,12 @@
   --magnifier-control-space: calc(
     var(--magnifier-control-size) + var(--magnifier-control-gap)
   );
+  /* raami arvutuslik laius: pilt (07: artwork-frame__image width-valem)
+     + raami polster mõlemal küljel (05: artwork-frame__window padding) */
+  --lightbox-frame-width: calc(
+    (var(--lightbox-panel-height) - clamp(42px, 6vh, 78px)) * 1.34 +
+      2 * clamp(16px, 1.45vw, 22px)
+  );
   position: relative;
   isolation: isolate;
   display: grid;
@@ -101,11 +107,22 @@ body.is-magnifying-artwork * {
   cursor: none !important;
 }
 
+/* luubi sees ei tohi pintslikursorit näha olla */
+body.is-magnifying-artwork .brush-cursor {
+  display: none;
+}
+
+/* nupp ankurdub püsiva kõrgusega image-window'i külge, mitte teose raami
+   külge — nii ei hüpa ta teoste sirvimisel kaasa. Kaugus paremast servast
+   = raami arvutuslik laius + vahe, ehk nupp istub raami vasaku serva kõrval. */
 .lightbox__magnifier-toggle {
   position: absolute;
-  left: 0;
+  left: auto;
   top: 50%;
-  right: auto;
+  right: calc(
+    min(var(--lightbox-frame-width), 100%) + var(--magnifier-control-gap) +
+      14px
+  );
   z-index: 7;
   display: inline-flex;
   align-items: center;
@@ -120,7 +137,7 @@ body.is-magnifying-artwork * {
   cursor: pointer;
   box-shadow: var(--glass-control-shadow);
   backdrop-filter: var(--glass-blur);
-  transform: translate(calc(-100% - var(--magnifier-control-gap)), -50%);
+  transform: translateY(-50%);
   transition:
     background 220ms ease,
     box-shadow 220ms ease,

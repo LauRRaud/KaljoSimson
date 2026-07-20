@@ -1032,19 +1032,19 @@ export default function GalleryClient({
                       locale={locale}
                       showCaption={false}
                     />
-                    {activeArtwork.image ? (
-                      <button
-                        aria-label={magnifierLabel}
-                        aria-pressed={isMagnifierActive}
-                        className="lightbox__magnifier-toggle"
-                        onClick={toggleMagnifier}
-                        onPointerDown={(event) => event.stopPropagation()}
-                        type="button"
-                      >
-                        <span>{magnifierLabel}</span>
-                      </button>
-                    ) : null}
                   </div>
+                  {activeArtwork.image ? (
+                    <button
+                      aria-label={magnifierLabel}
+                      aria-pressed={isMagnifierActive}
+                      className="lightbox__magnifier-toggle"
+                      onClick={toggleMagnifier}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      type="button"
+                    >
+                      <span>{magnifierLabel}</span>
+                    </button>
+                  ) : null}
                   {isMagnifierActive && activeArtwork.image ? (
                     <div
                       aria-hidden="true"
