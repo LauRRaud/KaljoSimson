@@ -311,7 +311,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
   margin: 0;
   max-width: 46ch;
   font-family: var(--font-heading);
-  font-size: clamp(1.42rem, 2.6vw, 2.05rem);
+  font-size: clamp(1.28rem, 2.2vw, 1.75rem);
   font-style: italic;
   font-weight: 500;
   line-height: 1.42;
