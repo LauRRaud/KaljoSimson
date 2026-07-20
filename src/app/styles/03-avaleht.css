@@ -370,7 +370,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 
 .kontakt__value {
   font-family: var(--font-heading);
-  font-size: clamp(1.45rem, 2.1vw, 1.85rem);
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
   font-weight: 500;
   color: var(--text);
   transition: color 240ms ease;
