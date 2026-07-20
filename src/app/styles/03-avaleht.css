@@ -363,7 +363,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 
 .kontakt__label {
   color: var(--text-faint);
-  font-size: 0.78rem;
+  font-size: 0.94rem;
   font-weight: 600;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
@@ -371,7 +371,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 
 .kontakt__value {
   font-family: var(--font-heading);
-  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  font-size: clamp(1.45rem, 2.1vw, 1.85rem);
   font-weight: 500;
   color: var(--text);
   transition: color 240ms ease;
