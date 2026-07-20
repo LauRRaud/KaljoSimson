@@ -182,13 +182,14 @@ p {
 
 .cta--primary {
   background: var(--accent);
-  color: #1c1206;
+  color: #fff8ef;
   box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--accent) 72%, transparent);
 }
 
-/* tumeteemal on aktsentoranž eredam — nupp veidi rahulikumaks */
+/* tumeteemal on aktsentoranž eredam — nupp veidi rahulikumaks, tekst tume */
 html[data-theme="tume"] .cta--primary {
   background: #d67d18;
+  color: #1c1206;
   box-shadow: 0 6px 14px -6px color-mix(in srgb, #d67d18 72%, transparent);
 }
 
