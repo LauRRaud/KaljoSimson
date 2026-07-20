@@ -20,11 +20,13 @@ test("tume teema defineerib põhitokenid", () => {
   }
 });
 
+// NB: hexid peavad käima 00-tokens.css-iga kaasa — kui aktsenttooni muudad,
+// uuenda ka siin (oranž heledamaks: #d1730f -> #e07f1c, commit 353375f).
 test("hele teema aktsendid tulevad maalitud portree värvidest", () => {
   const css = readCss();
   const hele = css.split('html[data-theme="tume"]')[0] ?? "";
 
-  assert.ok(hele.includes("#d1730f"), "oranž aktsent puudub");
+  assert.ok(hele.includes("#e07f1c"), "oranž aktsent puudub");
   assert.ok(hele.includes("#b23a88"), "magenta aktsent puudub");
   assert.ok(hele.includes("#2e93b8"), "türkiis aktsent puudub");
   assert.ok(hele.includes("#f2c230"), "kollane aktsent puudub");
