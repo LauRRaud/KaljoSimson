@@ -261,9 +261,10 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 .works__caption {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   margin-top: 14px;
+  text-align: center;
 }
 
 .works__caption strong {
@@ -278,7 +279,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 }
 
 .works__more .inline-link {
-  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-size: clamp(1.12rem, 1.4vw, 1.25rem);
 }
 
 /* ---------- tsitaadiriba ---------- */
