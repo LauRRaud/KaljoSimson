@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test \"tests/ui/*.test.js\""
+    "test": "node --test \"tests/ui/*.test.js\"",
+    "deploy": "git push && ssh -o BatchMode=yes ubuntu@217.146.72.147 \"bash /var/www/kaljosimson/scripts/server-deploy.sh\""
   },
   "dependencies": {
     "next": "16.2.4",
