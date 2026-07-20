@@ -44,6 +44,7 @@
 }
 
 .site-footer__role {
+  margin-top: 6px;
   color: var(--text-soft);
   font-size: 0.88rem;
   font-weight: 600;

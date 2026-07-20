@@ -37,11 +37,6 @@ export default async function HomePage({ searchParams }) {
 
       <section className="hero">
         <div className="hero__copy">
-          <p className="hero__eyebrow">
-            {getCopy(content.site.tagline, locale)}
-            <span aria-hidden="true" className="hero__eyebrow-dash" />
-            {t("Eesti", "Estonia")}
-          </p>
           <h1 className="hero__name">
             <span className="hero__name-word">{firstName}</span>
             <span className="hero__name-word hero__name-word--last">
