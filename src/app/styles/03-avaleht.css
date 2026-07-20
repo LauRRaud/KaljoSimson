@@ -89,7 +89,7 @@
   pointer-events: none;
   background:
     radial-gradient(40% 34% at 74% 24%, color-mix(in srgb, var(--accent-3) 52%, transparent), transparent 70%),
-    radial-gradient(46% 40% at 27% 73%, color-mix(in srgb, #e0490f 56%, transparent), transparent 70%);
+    radial-gradient(46% 40% at 22% 78%, color-mix(in srgb, #e0490f 56%, transparent), transparent 70%);
   filter: blur(46px);
   opacity: 0;
   animation: hero-plane-in 1200ms ease 260ms forwards;

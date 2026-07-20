@@ -213,12 +213,13 @@ html[data-theme="tume"] .theme-toggle__icon--sun {
   overflow-y: auto;
 }
 
-/* ülariba: keel + teema vasakul, sulge-nupp paremal */
+/* ülariba: keel + teema koos sulge-nupu kõrval paremal
+   (sulge-nupp jääb samasse nurka kus menüünupp) */
 .menu-overlay__top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-end;
+  gap: 16px;
   flex: 0 0 auto;
 }
 
