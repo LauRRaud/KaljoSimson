@@ -60,30 +60,7 @@ export default async function HomePage({ searchParams }) {
         </div>
 
         <div aria-hidden="true" className="hero__planes">
-          <span className="hero__stroke hero__stroke--turkiis">
-            <svg fill="none" viewBox="0 0 320 140">
-              <path
-                d="M6 96 C 48 40, 132 8, 236 18 C 282 22, 314 40, 312 58 C 310 74, 280 80, 244 74 C 168 62, 84 84, 30 118 C 12 122, 0 110, 6 96 Z"
-                fill="currentColor"
-              />
-            </svg>
-          </span>
-          <span className="hero__stroke hero__stroke--magenta">
-            <svg fill="none" viewBox="0 0 260 180">
-              <path
-                d="M22 130 C 10 84, 40 30, 96 14 C 150 -2, 222 18, 244 58 C 252 74, 240 92, 218 92 C 172 90, 120 96, 84 128 C 60 150, 34 152, 22 130 Z"
-                fill="currentColor"
-              />
-            </svg>
-          </span>
-          <span className="hero__stroke hero__stroke--kollane">
-            <svg fill="none" viewBox="0 0 140 120">
-              <path
-                d="M18 74 C 10 42, 40 12, 78 10 C 112 8, 134 34, 128 62 C 122 92, 88 112, 54 106 C 30 102, 24 94, 18 74 Z"
-                fill="currentColor"
-              />
-            </svg>
-          </span>
+          <span className="hero__glow" />
         </div>
 
         <figure className="hero__portrait">

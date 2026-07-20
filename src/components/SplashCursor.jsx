@@ -4,8 +4,8 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "ks-theme";
 const THEME_CHANGE_EVENT = "ks-theme-change";
-const LIGHT_SPLASH_COLOR_SCALE = 0.17;
-const DARK_SPLASH_COLOR_SCALE = 0.14;
+const LIGHT_SPLASH_COLOR_SCALE = 0.38;
+const DARK_SPLASH_COLOR_SCALE = 0.32;
 
 // Kaljo Simsoni profiiliportree värvid (türkiis taevas, magenta nägu,
 // oranž krae, kollane valgus, roheline maastik) — kursorijälg maalib
@@ -43,12 +43,12 @@ export default function SplashCursor({
   SIM_RESOLUTION = 150,
   DYE_RESOLUTION = 1024,
   CAPTURE_RESOLUTION = 512,
-  DENSITY_DISSIPATION = 2.5,
+  DENSITY_DISSIPATION = 1.5,
   VELOCITY_DISSIPATION = 1,
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 2,
-  SPLAT_RADIUS = 0.007,
+  SPLAT_RADIUS = 0.009,
   SPLAT_FORCE = 6600,
   SHADING = true,
   COLOR_UPDATE_SPEED = 5,

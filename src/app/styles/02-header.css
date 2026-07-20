@@ -55,7 +55,7 @@
   position: relative;
   padding-block: 6px;
   color: var(--text-soft);
-  font-size: 1.02rem;
+  font-size: 1.18rem;
   font-weight: 500;
   transition: color 240ms ease;
 }
@@ -98,10 +98,10 @@
 .language-switch__item {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   padding: 6px 4px;
   color: var(--text-soft);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   transition: color 240ms ease;
@@ -114,9 +114,9 @@
 .language-switch__chevron {
   width: 0;
   height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid currentColor;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid currentColor;
   opacity: 0.7;
 }
 
@@ -134,8 +134,8 @@
 .theme-toggle {
   display: inline-grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid var(--border);
   border-radius: 50%;
@@ -156,8 +156,8 @@
 
 .theme-toggle__icon {
   grid-area: 1 / 1;
-  width: 19px;
-  height: 19px;
+  width: 23px;
+  height: 23px;
   display: none;
 }
 

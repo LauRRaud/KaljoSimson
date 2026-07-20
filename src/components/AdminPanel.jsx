@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useRef, useState, useTransition } from "react";
-import { saveContentAction } from "@/app/admin/actions";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { changePasswordAction, saveContentAction } from "@/app/admin/actions";
 
 // Üks vorm kogu lehe sisu jaoks: tekstid (ET/EN), kontakt, kunstniku
 // profiil ja teosed koos piltide üleslaadimisega. Salvestus kirjutab
@@ -130,6 +130,72 @@ function ImageField({ label, value, onChange, onStatus }) {
         </label>
       </div>
     </div>
+  );
+}
+
+function ChangePasswordSection() {
+  const [state, formAction, pending] = useActionState(changePasswordAction, null);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    if (state?.ok) {
+      formRef.current?.reset();
+    }
+  }, [state]);
+
+  return (
+    <section className="admin-section">
+      <h2>Parooli vahetus</h2>
+      <form action={formAction} className="admin-password-form" ref={formRef}>
+        <div className="admin-grid-2">
+          <label className="admin-field">
+            <span className="admin-field__label">Praegune parool</span>
+            <input
+              autoComplete="current-password"
+              className="admin-input"
+              name="current"
+              required
+              type="password"
+            />
+          </label>
+          <span />
+          <label className="admin-field">
+            <span className="admin-field__label">Uus parool (vähemalt 8 märki)</span>
+            <input
+              autoComplete="new-password"
+              className="admin-input"
+              minLength={8}
+              name="next"
+              required
+              type="password"
+            />
+          </label>
+          <label className="admin-field">
+            <span className="admin-field__label">Uus parool uuesti</span>
+            <input
+              autoComplete="new-password"
+              className="admin-input"
+              minLength={8}
+              name="confirm"
+              required
+              type="password"
+            />
+          </label>
+        </div>
+        <div className="admin-footer">
+          <button className="cta cta--ghost" disabled={pending} type="submit">
+            {pending ? "Vahetan…" : "Vaheta parool"}
+          </button>
+          {state ? (
+            <span
+              className={`admin-status ${state.ok ? "admin-status--ok" : "admin-status--error"}`}
+            >
+              {state.message}
+            </span>
+          ) : null}
+        </div>
+      </form>
+    </section>
   );
 }
 
@@ -390,6 +456,8 @@ export default function AdminPanel({ initialContent, logoutAction }) {
           </article>
         ))}
       </section>
+
+      <ChangePasswordSection />
 
       <footer className="admin-footer">
         <button

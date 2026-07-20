@@ -92,7 +92,6 @@
   align-self: start;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
   padding: 0;
   border-radius: 0;
   background: var(--frame-active-metal);
@@ -123,9 +122,7 @@
 .portrait-shell__image {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: var(--portrait-position, center center);
+  height: auto;
 }
 
 /* ---------- teoste plokk ---------- */
@@ -163,8 +160,9 @@
   min-width: 0;
 }
 
+/* raam kohandub teose külgsuhtega — pilti EI lõigata kunagi */
 .gallery-grid .artwork-frame__window {
-  height: clamp(300px, 25vw, 430px);
+  height: auto;
   aspect-ratio: auto;
   min-height: unset;
 }
@@ -172,6 +170,12 @@
 .gallery-grid .artwork-frame__mount,
 .gallery-grid .artwork-frame__surface {
   width: 100%;
-  height: 100%;
+  height: auto;
   min-height: 0;
+}
+
+.gallery-grid .artwork-frame__image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }

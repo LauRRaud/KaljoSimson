@@ -59,3 +59,4 @@ next-env.d.ts
 # adminis muudetud sisu ja üles laaditud pildid (ainult serveris/lokaalselt)
 content/site-content.local.json
 /uploads
+content/admin-password.local.json
