@@ -45,13 +45,6 @@
   transition: background 240ms ease;
 }
 
-.gallery-room-page__back::before {
-  content: "\2190";
-  margin-right: 10px;
-  font-family: var(--font-body);
-  font-size: 0.94em;
-}
-
 .gallery-room-page__back:hover,
 .gallery-room-page__back:focus-visible {
   background: var(--glass-panel-bg-strong);

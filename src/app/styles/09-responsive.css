@@ -267,10 +267,6 @@
     font-size: 1rem;
   }
 
-  .gallery-room-page__back::before {
-    content: none;
-  }
-
   .gallery-room-speed {
     gap: 2px;
     padding: 5px 6px;
