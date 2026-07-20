@@ -24,9 +24,9 @@
 /* värvikriips nime kohal — sama žest mis hero eyebrow-dash */
 .site-footer__inner::before {
   content: "";
-  width: 68px;
+  width: 92px;
   height: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
   border-radius: 3px;
   background: linear-gradient(
     90deg,
