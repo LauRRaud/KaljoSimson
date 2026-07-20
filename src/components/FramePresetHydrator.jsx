@@ -15,7 +15,7 @@ function applyPreset(preset) {
   document.body?.setAttribute("data-frame-preset", preset);
 }
 
-export default function FramePresetHydrator({ defaultPreset = "gold" }) {
+export default function FramePresetHydrator({ defaultPreset = "bronze" }) {
   useEffect(() => {
     const storedPreset = window.localStorage.getItem(STORAGE_KEY);
     const nextPreset = isFramePreset(storedPreset) ? storedPreset : defaultPreset;

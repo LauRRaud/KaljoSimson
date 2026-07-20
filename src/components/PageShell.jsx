@@ -14,9 +14,9 @@ export default function PageShell({
   return (
     <div
       className={`site-shell ${shellClassName}`.trim()}
-      data-frame-preset={content?.site?.framePreset || "gold"}
+      data-frame-preset={content?.site?.framePreset || "bronze"}
     >
-      <FramePresetHydrator defaultPreset={content?.site?.framePreset || "gold"} />
+      <FramePresetHydrator defaultPreset={content?.site?.framePreset || "bronze"} />
       {showHeader ? <SiteHeader locale={locale} /> : null}
       <main className={`page-main ${mainClassName}`.trim()}>{children}</main>
       {showFooter ? <SiteFooter content={content} locale={locale} /> : null}

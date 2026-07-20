@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
     <html
       data-scroll-behavior="smooth"
       data-theme="hele"
-      data-frame-preset="gold"
+      data-frame-preset="bronze"
       lang="et"
       className={`${headingFont.variable} ${bodyFont.variable}`}
       suppressHydrationWarning

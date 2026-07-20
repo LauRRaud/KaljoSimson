@@ -57,7 +57,7 @@ export default function GalleryRoomExperience({
   artist,
   backHref,
   backLabel,
-  defaultFramePreset = "silver",
+  defaultFramePreset = "bronze",
   defaultRoomSpeed = "normal",
   locale = "et",
 }) {

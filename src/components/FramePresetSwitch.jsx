@@ -27,8 +27,8 @@ function applyPreset(preset) {
   document.body?.setAttribute("data-frame-preset", preset);
 }
 
-export default function FramePresetSwitch({ defaultPreset = "gold", locale = "et" }) {
-  const initialPreset = isFramePreset(defaultPreset) ? defaultPreset : "gold";
+export default function FramePresetSwitch({ defaultPreset = "bronze", locale = "et" }) {
+  const initialPreset = isFramePreset(defaultPreset) ? defaultPreset : "bronze";
   const [activePreset, setActivePreset] = useState(initialPreset);
 
   useEffect(() => {
