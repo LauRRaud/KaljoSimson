@@ -129,10 +129,6 @@
     width: min(100%, 420px);
   }
 
-  .hero__scroll-cue {
-    display: none;
-  }
-
   .works__grid {
     grid-template-columns: 1fr;
     row-gap: 40px;
@@ -155,8 +151,12 @@
     padding-left: 20px;
   }
 
-  .kontakt__row {
-    font-size: clamp(1.14rem, 5vw, 1.6rem);
+  .kontakt {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .kontakt__value {
     overflow-wrap: anywhere;
   }
 }

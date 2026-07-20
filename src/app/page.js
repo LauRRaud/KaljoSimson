@@ -74,9 +74,6 @@ export default async function HomePage({ searchParams }) {
           />
         </figure>
 
-        <p aria-hidden="true" className="hero__scroll-cue">
-          {t("Keri", "Scroll")}
-        </p>
       </section>
 
       <section className="works" id="looming">
@@ -125,26 +122,31 @@ export default async function HomePage({ searchParams }) {
       </section>
 
       <section className="kontakt" id="kontakt" data-reveal>
-        <p className="eyebrow">{getCopy(content.site.contactTitle, locale)}</p>
-        <h2 className="kontakt__title">{t("Võta ühendust", "Get in touch")}</h2>
-        <p className="section-copy kontakt__text">
-          {getCopy(content.site.contactText, locale)}
-        </p>
-        <div className="kontakt__rows">
-          <a className="kontakt__row" href={`mailto:${content.contact.email}`}>
-            {content.contact.email}
+        <div className="kontakt__intro">
+          <p className="eyebrow">{getCopy(content.site.contactTitle, locale)}</p>
+          <p className="section-copy kontakt__text">
+            {getCopy(content.site.contactText, locale)}
+          </p>
+        </div>
+
+        <div className="kontakt__details">
+          <a className="kontakt__item" href={`mailto:${content.contact.email}`}>
+            <span className="kontakt__label">{t("E-post", "Email")}</span>
+            <span className="kontakt__value">{content.contact.email}</span>
           </a>
-          <a className="kontakt__row" href={`tel:${phoneHref}`}>
-            {content.contact.phone}
+          <a className="kontakt__item" href={`tel:${phoneHref}`}>
+            <span className="kontakt__label">{t("Telefon", "Phone")}</span>
+            <span className="kontakt__value">{content.contact.phone}</span>
           </a>
           {content.contact.instagram && content.contact.instagramUrl ? (
             <a
-              className="kontakt__row"
+              className="kontakt__item"
               href={content.contact.instagramUrl}
               rel="noreferrer"
               target="_blank"
             >
-              {content.contact.instagram}
+              <span className="kontakt__label">Instagram</span>
+              <span className="kontakt__value">{content.contact.instagram}</span>
             </a>
           ) : null}
         </div>
