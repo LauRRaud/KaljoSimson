@@ -1,4 +1,4 @@
-/* jalus kahes astmes: keskel nimi + roll,
+/* jalus kahes astmes: keskel värvikriips + nimi + roll,
    all servas õrna joonega eraldatud riba — aasta vasakul, byline paremal */
 .site-footer {
   position: relative;
@@ -19,6 +19,21 @@
   width: var(--content-width);
   margin: 0 auto;
   text-align: center;
+}
+
+/* värvikriips nime kohal — sama žest mis hero eyebrow-dash */
+.site-footer__inner::before {
+  content: "";
+  width: 68px;
+  height: 4px;
+  margin-bottom: 12px;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent-2) 55%,
+    var(--accent-3)
+  );
 }
 
 .site-footer__name {
