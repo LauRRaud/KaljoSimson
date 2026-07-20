@@ -24,9 +24,22 @@ npm run build && npm start   # toodang
 
 ## Sisu muutmine
 
-Kõik tekstid (ET/EN), kontaktandmed ja teoste nimekiri on failis
-`content/site-content.json`. Teoste pildid elavad kaustas
-`public/Profiilid/Kaljo Simson/`. Pärast sisumuudatust tee uus build.
+Lihtsaim tee on **/admin** — parooliga kaitstud haldusvaade, kus saab muuta
+kõiki tekste (ET/EN), kontaktandmeid, kunstniku profiili ja teoseid ning
+laadida üles pilte. Muudatused salvestuvad faili
+`content/site-content.local.json` (gitist väljas) ja jõustuvad kohe, ilma
+uue build'ita. Üles laaditud pildid lähevad kausta `uploads/`.
+
+Parool ja sessioonivõti tulevad keskkonnamuutujatest (`.env.local`
+arenduses, serveris `.env`):
+
+```
+KS_ADMIN_PASSWORD=...
+KS_SESSION_SECRET=...
+```
+
+Lähteseis (gitis) on failis `content/site-content.json`; algsed teoste
+pildid kaustas `public/Profiilid/Kaljo Simson/`.
 
 **NB! Kohatäited, mis vajavad kliendi kinnitust:**
 
@@ -36,7 +49,7 @@ Kõik tekstid (ET/EN), kontaktandmed ja teoste nimekiri on failis
 
 ## Deploy
 
-Leht ei vaja andmebaasi ega keskkonnamuutujaid. Server: `/var/www/kaljosimson`,
+Leht ei vaja andmebaasi. Server: `/var/www/kaljosimson`,
 pm2 protsess `kaljosimson` (localhost:3040), nginx kuulab avalikul pordil 8081.
 Kuni domeeni ostuni on leht aadressil `http://217.146.72.147:8081`.
 

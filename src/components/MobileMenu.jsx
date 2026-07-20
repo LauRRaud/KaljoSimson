@@ -92,9 +92,6 @@ export default function MobileMenu({ locale = "et" }) {
                     onClick={close}
                     style={{ "--mi": index }}
                   >
-                    <span aria-hidden="true" className="menu-overlay__index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
                     {link.label}
                   </Link>
                 ))}

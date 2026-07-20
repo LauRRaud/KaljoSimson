@@ -9,19 +9,15 @@ function read(p) {
   return readFileSync(path.join(root, p), "utf8");
 }
 
-// Leht on ühe kunstniku visiitkaart: avaleht + /galerii + /kunstnik.
+// Leht on ühe kunstniku visiitkaart: avaleht + /galerii + /kunstnik + /admin.
 test("uued leheteed on olemas, vanad eemaldatud", () => {
   assert.ok(existsSync(path.join(root, "src/app/page.js")));
   assert.ok(existsSync(path.join(root, "src/app/galerii/page.js")));
   assert.ok(existsSync(path.join(root, "src/app/kunstnik/page.js")));
+  assert.ok(existsSync(path.join(root, "src/app/admin/page.js")));
+  assert.ok(existsSync(path.join(root, "src/app/api/upload/route.js")));
 
-  for (const removed of [
-    "src/app/studio",
-    "src/app/admin",
-    "src/app/artists",
-    "src/app/gallery",
-    "src/app/api",
-  ]) {
+  for (const removed of ["src/app/studio", "src/app/artists", "src/app/gallery"]) {
     assert.ok(!existsSync(path.join(root, removed)), `${removed} peab olema kustutatud`);
   }
 });

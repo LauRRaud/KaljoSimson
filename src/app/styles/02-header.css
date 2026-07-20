@@ -15,7 +15,13 @@
     background 320ms ease,
     border-color 320ms ease,
     padding 320ms ease,
-    box-shadow 320ms ease;
+    box-shadow 320ms ease,
+    transform 320ms ease;
+}
+
+/* alla kerides libiseb riba peitu; üles kerides tagasi */
+.topbar--hidden {
+  transform: translateY(-100%);
 }
 
 .topbar--scrolled {
@@ -193,13 +199,16 @@ html[data-theme="tume"] .theme-toggle__icon--sun {
   width: 62%;
 }
 
+/* katte polsterdus = päise oma, et sulgemisnupp istuks TÄPSELT
+   hamburgeri kohal (sama suurus, kuju ja nurgakaugus) */
 .menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 80;
   display: flex;
   flex-direction: column;
-  padding: calc(24px + env(safe-area-inset-top, 0px)) 28px 40px;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) clamp(18px, 2.6vw, 34px)
+    40px;
   background: var(--bg-solid);
   background-image: var(--bg);
   overflow-y: auto;
@@ -208,11 +217,12 @@ html[data-theme="tume"] .theme-toggle__icon--sun {
 .menu-overlay__close {
   position: relative;
   align-self: flex-end;
-  width: 46px;
-  height: 46px;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 50%;
+  border-radius: 12px;
   background: transparent;
   cursor: pointer;
 }
@@ -247,7 +257,6 @@ html[data-theme="tume"] .theme-toggle__icon--sun {
 .menu-overlay__link {
   display: flex;
   align-items: baseline;
-  gap: 16px;
   padding-block: 12px;
   font-family: var(--font-heading);
   font-size: clamp(2.4rem, 8.6vw, 3.4rem);
@@ -262,14 +271,6 @@ html[data-theme="tume"] .theme-toggle__icon--sun {
 
 .menu-overlay__link:active {
   color: var(--accent);
-}
-
-.menu-overlay__index {
-  color: var(--accent);
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
 }
 
 .menu-overlay__controls {

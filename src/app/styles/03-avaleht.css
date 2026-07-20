@@ -90,8 +90,8 @@
   animation: hero-rise 760ms cubic-bezier(0.22, 0.61, 0.36, 1) 480ms forwards;
 }
 
-/* värvipinnad portree taga — kummardus tema maalide kattuvatele
-   värviväljadele */
+/* maalilised pintslitõmbed portree taga — kummardus tema maalide
+   kattuvatele värviväljadele */
 .hero__planes {
   position: relative;
   grid-column: 2;
@@ -100,42 +100,45 @@
   pointer-events: none;
 }
 
-.hero__plane {
+.hero__stroke {
   position: absolute;
-  border-radius: 12px;
+  display: block;
   opacity: 0;
   animation: hero-plane-in 900ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
-.hero__plane--magenta {
-  top: 16%;
-  right: -4%;
-  width: 52%;
-  aspect-ratio: 1 / 1.1;
-  background: var(--accent-2);
-  transform: rotate(7deg);
-  animation-delay: 280ms;
-  --plane-opacity: 0.85;
+.hero__stroke svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-.hero__plane--turkiis {
-  bottom: 10%;
-  left: 2%;
-  width: 44%;
-  aspect-ratio: 1.2 / 1;
-  background: var(--accent-3);
-  transform: rotate(-9deg);
-  animation-delay: 380ms;
+.hero__stroke--turkiis {
+  top: 4%;
+  right: -10%;
+  width: 64%;
+  color: var(--accent-3);
+  transform: rotate(-8deg);
+  animation-delay: 280ms;
   --plane-opacity: 0.8;
 }
 
-.hero__plane--kollane {
-  top: 8%;
-  left: 16%;
-  width: 30%;
-  aspect-ratio: 1 / 1;
-  background: var(--accent-4);
-  transform: rotate(18deg);
+.hero__stroke--magenta {
+  bottom: 4%;
+  left: -12%;
+  width: 56%;
+  color: var(--accent-2);
+  transform: rotate(10deg);
+  animation-delay: 380ms;
+  --plane-opacity: 0.82;
+}
+
+.hero__stroke--kollane {
+  top: 24%;
+  left: 2%;
+  width: 26%;
+  color: var(--accent-4);
+  transform: rotate(-16deg);
   animation-delay: 470ms;
   --plane-opacity: 0.9;
 }
@@ -220,7 +223,7 @@
     animation: none;
   }
 
-  .hero__plane {
+  .hero__stroke {
     opacity: var(--plane-opacity, 0.85);
     animation: none;
   }
@@ -285,7 +288,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 .works__image-wrap {
   display: block;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow:
     0 14px 28px -18px rgba(0, 0, 0, 0.4),
     0 34px 60px -40px rgba(0, 0, 0, 0.35);

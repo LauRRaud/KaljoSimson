@@ -18,9 +18,9 @@
   --surface-strong: rgba(255, 253, 248, 0.92);
   --border: rgba(43, 34, 24, 0.16);
   --text: #201a14;
-  --text-soft: rgba(32, 26, 20, 0.74);
-  --text-faint: rgba(32, 26, 20, 0.5);
-  --artwork-caption-artist: rgba(32, 26, 20, 0.82);
+  --text-soft: rgba(32, 26, 20, 0.62);
+  --text-faint: rgba(32, 26, 20, 0.42);
+  --artwork-caption-artist: rgba(32, 26, 20, 0.78);
 
   --accent: #d1730f;
   --accent-2: #b23a88;
@@ -227,9 +227,9 @@ html[data-theme="tume"] {
   --surface-strong: rgba(255, 250, 242, 0.1);
   --border: rgba(243, 237, 226, 0.14);
   --text: #f3ede2;
-  --text-soft: rgba(243, 237, 226, 0.74);
-  --text-faint: rgba(243, 237, 226, 0.52);
-  --artwork-caption-artist: rgba(243, 237, 226, 0.84);
+  --text-soft: rgba(243, 237, 226, 0.8);
+  --text-faint: rgba(243, 237, 226, 0.6);
+  --artwork-caption-artist: rgba(243, 237, 226, 0.86);
 
   --accent: #f0921e;
   --accent-2: #cf5fa6;

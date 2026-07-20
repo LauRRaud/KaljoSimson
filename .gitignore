@@ -55,3 +55,7 @@ next-env.d.ts
 
 # claude code local files
 .claude/
+
+# adminis muudetud sisu ja üles laaditud pildid (ainult serveris/lokaalselt)
+content/site-content.local.json
+/uploads

@@ -1,4 +1,5 @@
 import { Archivo, Fraunces } from "next/font/google";
+import SiteAmbient from "@/components/SiteAmbient";
 import "./globals.css";
 
 // Enne esimest värvimist: teema (hele/tume) ja raamipreset
@@ -72,7 +73,10 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <SiteAmbient />
+        {children}
+      </body>
     </html>
   );
 }
