@@ -21,13 +21,17 @@ export default async function AdminPage({ searchParams }) {
         {/* Taastamise vorm on login-vormi kõrval, mitte sees — HTML ei luba pesastatud form'i. */}
         <div className="admin-login">
           <form action={loginAction} className="admin-login__form">
-            <p className="eyebrow">Kaljo Simson</p>
-            <h1>Admin</h1>
-            <p className="section-copy">
-              Sisu haldamiseks sisesta administraatori parool.
-            </p>
+            <header className="admin-login__head">
+              <p className="eyebrow">Kaljo Simson</p>
+              <h1 className="admin-login__title">Admin</h1>
+              <p className="admin-login__copy">
+                Sisu haldamiseks sisesta administraatori parool.
+              </p>
+            </header>
             {params?.error === "password" ? (
-              <p className="admin-error">Vale parool. Proovi uuesti.</p>
+              <p className="admin-alert" role="alert">
+                Vale parool. Proovi uuesti.
+              </p>
             ) : null}
             <label className="admin-field">
               <span className="admin-field__label">Parool</span>
@@ -40,7 +44,7 @@ export default async function AdminPage({ searchParams }) {
                 type="password"
               />
             </label>
-            <button className="cta cta--primary" type="submit">
+            <button className="cta cta--primary admin-login__submit" type="submit">
               Logi sisse
             </button>
           </form>
