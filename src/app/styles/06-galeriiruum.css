@@ -415,7 +415,7 @@
 }
 
 .gallery-room__marker-idx {
-  color: var(--gold);
+  color: var(--text);
   font-family: var(--font-heading);
   font-size: clamp(1.15rem, 1.7vw, 1.45rem);
   font-style: italic;
