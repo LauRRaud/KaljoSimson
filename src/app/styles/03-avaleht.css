@@ -300,6 +300,8 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 
 .kontakt__text {
   max-width: 44ch;
+  color: var(--text);
+  font-size: clamp(1.24rem, 1.52vw, 1.42rem);
 }
 
 .kontakt__details {
