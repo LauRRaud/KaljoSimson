@@ -141,9 +141,9 @@
   --content-width: min(1180px, calc(100vw - 48px));
   /* --font-heading ja --font-body defineerib next/font layout.js-is */
   --font-display: var(--font-heading);
-  --tracking-body: 0.008em;
-  --tracking-copy: 0.012em;
-  --tracking-heading: 0.01em;
+  --tracking-body: 0.022em;
+  --tracking-copy: 0.026em;
+  --tracking-heading: 0.014em;
   --tracking-label: 0.16em;
 }
 
