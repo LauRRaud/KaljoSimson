@@ -232,7 +232,8 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 }
 
 .works__more .inline-link {
-  font-size: clamp(1.12rem, 1.4vw, 1.25rem);
+  font-size: clamp(1.28rem, 1.62vw, 1.45rem);
+  font-weight: 500;
 }
 
 /* ---------- tsitaadiriba ---------- */
