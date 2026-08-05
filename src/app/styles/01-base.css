@@ -2,12 +2,20 @@
   box-sizing: border-box;
 }
 
+/* kerimisriba on peidus — leht kerib endiselt, aga riba ei lõhu
+   maalide serva. Sama võte on kasutusel lightboxi kõrvalpaneelil. */
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
   background: var(--bg-solid);
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--text) 34%, transparent) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 body {
