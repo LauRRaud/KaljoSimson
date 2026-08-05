@@ -55,7 +55,6 @@ export default async function HomePage({ searchParams }) {
         </div>
 
         <div className="hero__visual">
-          <span aria-hidden="true" className="hero__glow" />
           <figure className="hero__portrait">
             <img
               alt={artist.name}
