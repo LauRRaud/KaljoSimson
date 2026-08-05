@@ -43,22 +43,24 @@ pildid kaustas `public/Profiilid/Kaljo Simson/`.
 
 **NB! Kohatäited, mis vajavad kliendi kinnitust:**
 
-- `contact.email` (`info@kaljosimson.ee`) ja `contact.phone` on kohatäited
-- `site.domain` ja layout.js `metadataBase` (`https://kaljosimson.ee`)
+- `contact.email` (`info@kaljosimson.ee`) ja `contact.phone` on kohatäited —
+  domeen ise on olemas, aga e-posti postkast tuleb Zone'is eraldi luua
 - Teoste aastad/tehnikad/mõõdud on märgitud "täpsustamisel"
 
 ## Deploy
 
 Leht ei vaja andmebaasi. Server: `/var/www/kaljosimson`,
-pm2 protsess `kaljosimson` (localhost:3040), nginx kuulab avalikul pordil 8081.
-Kuni domeeni ostuni on leht aadressil `http://217.146.72.147:8081`.
+pm2 protsess `kaljosimson` (localhost:3040). Avalik aadress on
+**https://kaljosimson.ee** (ka `www.`); nginx server block on
+`/etc/nginx/sites-available/kaljosimson`, HTTPS-sertifikaat Let's Encryptist
+(certbot uuendab automaatselt). Port 8081 jääb varuks otseligipääsuks
+(`http://217.146.72.147:8081`).
 
 ```bash
 npm run deploy   # git push + serveripoolne build ja pm2 restart
 ```
 
-Kui domeen on olemas: lisa nginx'i server block (port 80/443, proxy_pass
-127.0.0.1:3040), certbot sertifikaadi jaoks, ja uuenda `metadataBase`
-failis src/app/layout.js ning `site.domain` sisufailis.
+DNS: domeen on Zone.ee-s, A-kirje `kaljosimson.ee` → `217.146.72.147`,
+`www` on CNAME apexile.
 
 Vana lehe (BeyondFrames) kuvatõmmised on viiteks kaustas `docs/vana-leht/`.
