@@ -10,11 +10,7 @@
 :root {
   /* — hele (vaikimisi) — */
   --bg-solid: #f7f3ec;
-  --bg:
-    radial-gradient(circle at 84% -8%, rgba(46, 147, 184, 0.09), transparent 42%),
-    radial-gradient(circle at -8% 30%, rgba(178, 58, 136, 0.06), transparent 36%),
-    radial-gradient(circle at 68% 112%, rgba(242, 194, 48, 0.08), transparent 40%),
-    linear-gradient(180deg, #f9f6f0 0%, #f4f0e7 100%);
+  --bg: linear-gradient(180deg, #f9f6f0 0%, #f4f0e7 100%);
   --surface-strong: rgba(255, 253, 248, 0.92);
   --border: rgba(43, 34, 24, 0.16);
   --text: #201a14;
@@ -220,10 +216,7 @@ body[data-frame-preset="bronze"],
    ------------------------------------------------------------ */
 html[data-theme="tume"] {
   --bg-solid: #15110f;
-  --bg:
-    radial-gradient(circle at 80% -12%, rgba(240, 118, 43, 0.1), transparent 42%),
-    radial-gradient(circle at -8% 36%, rgba(60, 189, 184, 0.07), transparent 38%),
-    linear-gradient(180deg, #191410 0%, #131010 100%);
+  --bg: linear-gradient(180deg, #191410 0%, #131010 100%);
   --surface-strong: rgba(255, 250, 242, 0.1);
   --border: rgba(243, 237, 226, 0.14);
   --text: #f3ede2;
