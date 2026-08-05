@@ -269,7 +269,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
   font-style: italic;
   font-weight: 500;
   line-height: 1.42;
-  color: var(--text);
+  color: var(--text-soft);
 }
 
 .statement__source {
