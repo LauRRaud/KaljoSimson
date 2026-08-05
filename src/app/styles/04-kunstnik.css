@@ -28,7 +28,7 @@
 }
 
 .profile-copy .section-copy {
-  font-size: clamp(1.14rem, 1.46vw, 1.34rem);
+  font-size: clamp(1.2rem, 1.54vw, 1.42rem);
   line-height: 1.68;
 }
 
@@ -52,7 +52,7 @@
 
 .profile-biography .section-copy {
   max-width: none;
-  font-size: clamp(1.04rem, 1.26vw, 1.18rem);
+  font-size: clamp(1.12rem, 1.36vw, 1.28rem);
   line-height: 1.74;
   hyphens: auto;
   overflow-wrap: normal;

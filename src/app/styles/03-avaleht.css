@@ -54,7 +54,7 @@
 .hero__lead {
   max-width: 44ch;
   color: var(--text-soft);
-  font-size: clamp(1.12rem, 1.5vw, 1.32rem);
+  font-size: clamp(1.18rem, 1.56vw, 1.4rem);
   line-height: 1.7;
   opacity: 0;
   animation: hero-rise 760ms cubic-bezier(0.22, 0.61, 0.36, 1) 360ms forwards;
@@ -317,7 +317,7 @@ html[data-reveal-ready] .works__item.is-revealed:nth-child(4n + 4) {
 
 .kontakt__label {
   color: var(--text-faint);
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;

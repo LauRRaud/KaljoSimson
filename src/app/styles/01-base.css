@@ -116,7 +116,7 @@ p {
 .section-copy {
   max-width: 62ch;
   color: var(--text-soft);
-  font-size: clamp(1.06rem, 1.3vw, 1.2rem);
+  font-size: clamp(1.14rem, 1.4vw, 1.3rem);
   line-height: 1.76;
   /* väldi üksikut sõna viimasel real */
   text-wrap: pretty;
