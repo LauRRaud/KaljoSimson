@@ -4,11 +4,6 @@
   position: relative;
   border-top: 1px solid var(--border);
   padding: clamp(32px, 5vh, 48px) 0 0;
-  background: radial-gradient(
-    58% 130% at 50% 100%,
-    color-mix(in srgb, var(--accent) 6%, transparent),
-    transparent 72%
-  );
 }
 
 .site-footer__inner {
