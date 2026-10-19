@@ -9,7 +9,7 @@ export default function SiteFooter({ content, locale = "et" }) {
       </div>
       <div className="site-footer__base">
         <p className="site-footer__year">© 2026</p>
-        <p className="site-footer__byline">by L. Raudsoo</p>
+        <p className="site-footer__byline">by Küberloome</p>
       </div>
     </footer>
   );
