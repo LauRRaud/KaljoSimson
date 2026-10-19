@@ -72,3 +72,12 @@
   font-size: 0.98rem;
   font-style: italic;
 }
+
+.site-footer__byline a {
+  transition: color 240ms ease;
+}
+
+.site-footer__byline a:hover,
+.site-footer__byline a:focus-visible {
+  color: var(--accent);
+}

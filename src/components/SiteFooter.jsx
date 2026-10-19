@@ -9,7 +9,12 @@ export default function SiteFooter({ content, locale = "et" }) {
       </div>
       <div className="site-footer__base">
         <p className="site-footer__year">© 2026</p>
-        <p className="site-footer__byline">by Küberloome</p>
+        <p className="site-footer__byline">
+          by{" "}
+          <a href="https://kyberloome.ee" rel="noreferrer" target="_blank">
+            Küberloome
+          </a>
+        </p>
       </div>
     </footer>
   );
